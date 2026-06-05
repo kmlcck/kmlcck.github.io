@@ -1,0 +1,1470 @@
+---
+layout: page
+title: "BufferBloat Nedir? Nasıl Çözülür?"
+date: 2026-06-05
+---
+
+<!doctype html>
+<html lang="tr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            İnternetim Neden Bu Kadar Yavaş? Suçlu Hızınız Değil, Bufferbloat
+        </title>
+        <style>
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    sans-serif;
+                max-width: 740px;
+                margin: 0 auto;
+                padding: 2rem 1.5rem;
+                color: #1a1a1a;
+                background: #fff;
+                line-height: 1.8;
+            }
+            h1 {
+                font-size: 28px;
+                font-weight: 600;
+                line-height: 1.3;
+                margin-bottom: 0.75rem;
+            }
+            h2 {
+                font-size: 21px;
+                font-weight: 600;
+                margin: 2.5rem 0 0.75rem;
+            }
+            p {
+                font-size: 16px;
+                margin-bottom: 1rem;
+            }
+            hr {
+                border: none;
+                border-top: 1px solid #e5e5e5;
+                margin: 2rem 0;
+            }
+            .subtitle {
+                font-size: 17px;
+                color: #555;
+                line-height: 1.7;
+                margin-bottom: 0;
+            }
+            .badge {
+                display: inline-block;
+                background: #e6f1fb;
+                color: #185fa5;
+                font-size: 12px;
+                font-weight: 600;
+                padding: 4px 12px;
+                border-radius: 20px;
+                margin-bottom: 1rem;
+            }
+            .analogy {
+                background: #f7f7f5;
+                border-radius: 10px;
+                border: 1px solid #e5e5e5;
+                padding: 1.1rem 1.3rem;
+                margin: 1.25rem 0;
+            }
+            .analogy .lbl {
+                font-size: 11px;
+                font-weight: 600;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.07em;
+                margin-bottom: 0.5rem;
+            }
+            .analogy p {
+                margin: 0;
+                font-size: 14px;
+            }
+            .callout {
+                background: #f0f6ff;
+                border-left: 3px solid #378add;
+                padding: 1rem 1.25rem;
+                margin: 1.5rem 0;
+                font-size: 14px;
+                color: #333;
+                line-height: 1.7;
+            }
+            .callout strong {
+                color: #111;
+            }
+            .grade-row {
+                display: flex;
+                gap: 10px;
+                margin: 1.5rem 0;
+            }
+            .g-card {
+                flex: 1;
+                border-radius: 8px;
+                padding: 1rem;
+                text-align: center;
+                border: 1px solid #e5e5e5;
+            }
+            .g-card .gl {
+                font-size: 11px;
+                color: #888;
+                margin-bottom: 5px;
+            }
+            .g-card .gv {
+                font-size: 30px;
+                font-weight: 700;
+            }
+            .g-card .gd {
+                font-size: 11px;
+                color: #888;
+                margin-top: 3px;
+            }
+            .metrics-row {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+                margin: 1.5rem 0;
+            }
+            .m-card {
+                background: #f7f7f5;
+                border-radius: 8px;
+                padding: 1rem;
+                text-align: center;
+            }
+            .m-lbl {
+                font-size: 12px;
+                color: #888;
+                margin-bottom: 5px;
+            }
+            .m-b {
+                font-size: 21px;
+                font-weight: 700;
+                color: #a32d2d;
+            }
+            .m-a {
+                font-size: 21px;
+                font-weight: 700;
+                color: #0f6e56;
+            }
+            .m-arr {
+                font-size: 13px;
+                color: #888;
+                margin: 2px 0;
+            }
+            .result-box {
+                background: #f0faf5;
+                border-radius: 10px;
+                border: 1px solid #9fe1cb;
+                padding: 1.1rem 1.3rem;
+                margin: 1.25rem 0;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+            .result-grade {
+                font-size: 52px;
+                font-weight: 700;
+                color: #0f6e56;
+                line-height: 1;
+                flex-shrink: 0;
+            }
+            .result-title {
+                font-size: 14px;
+                font-weight: 600;
+                color: #111;
+                margin-bottom: 3px;
+            }
+            .result-sub {
+                font-size: 13px;
+                color: #555;
+                line-height: 1.6;
+            }
+            .result-link {
+                font-size: 12px;
+                color: #185fa5;
+                margin-top: 5px;
+                display: block;
+            }
+            .legend {
+                display: flex;
+                gap: 20px;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+            }
+            .leg-item {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 12px;
+                color: #555;
+            }
+            .leg-sq {
+                width: 10px;
+                height: 10px;
+                border-radius: 2px;
+            }
+            .charts-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+                margin-bottom: 1.5rem;
+            }
+            .chart-wrap {
+                position: relative;
+                height: 200px;
+            }
+            .chart-lbl {
+                font-size: 12px;
+                font-weight: 600;
+                color: #555;
+                margin-bottom: 8px;
+            }
+            .step-list {
+                list-style: none;
+                padding: 0;
+                counter-reset: s;
+                margin: 1rem 0 1.5rem;
+            }
+            .step-list li {
+                counter-increment: s;
+                display: flex;
+                gap: 12px;
+                align-items: flex-start;
+                padding: 0.7rem 0;
+                border-bottom: 1px solid #eee;
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            .step-list li:last-child {
+                border-bottom: none;
+            }
+            .snum {
+                min-width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                background: #e6f1fb;
+                color: #185fa5;
+                font-size: 13px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                margin-top: 2px;
+            }
+            .screen-block {
+                margin: 1.5rem 0;
+            }
+            .screen-lbl {
+                font-size: 11px;
+                font-weight: 600;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.07em;
+                margin-bottom: 0.6rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .screen-lbl::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: #e5e5e5;
+            }
+            .screen-frame {
+                border: 1px solid #e5e5e5;
+                border-radius: 10px;
+                overflow: hidden;
+            }
+            .screen-bar {
+                background: #1a1a1a;
+                padding: 7px 14px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .screen-bar-title {
+                font-size: 12px;
+                color: #8faacc;
+                font-weight: 600;
+            }
+            .screen-bar-url {
+                font-size: 11px;
+                color: #555;
+                margin-left: auto;
+            }
+            .screen-img {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+            .ann-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-top: 0.75rem;
+            }
+            .ann {
+                background: #f7f7f5;
+                border-radius: 8px;
+                padding: 0.75rem 1rem;
+                display: flex;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            .ann-num {
+                min-width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background: #e6f1fb;
+                color: #185fa5;
+                font-size: 12px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+            .ann-text {
+                font-size: 12px;
+                color: #555;
+                line-height: 1.6;
+            }
+            .ann-text strong {
+                color: #111;
+            }
+            .sec-lbl {
+                font-size: 11px;
+                font-weight: 600;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.07em;
+                margin-bottom: 0.9rem;
+            }
+            .device-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                margin: 0.75rem 0 1.25rem;
+            }
+            .d-card {
+                background: #fff;
+                border: 1px solid #e5e5e5;
+                border-radius: 10px;
+                padding: 1rem 1.1rem;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .d-card.feat {
+                border-color: #378add;
+                border-width: 2px;
+            }
+            .d-card.top {
+                border-color: #1d9e75;
+                border-width: 2px;
+            }
+            .d-head {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 8px;
+            }
+            .d-name {
+                font-size: 14px;
+                font-weight: 600;
+            }
+            .d-sub {
+                font-size: 11px;
+                color: #888;
+                margin-top: 1px;
+            }
+            .db {
+                font-size: 11px;
+                font-weight: 600;
+                padding: 3px 9px;
+                border-radius: 20px;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            .db-sbc {
+                background: #e1f5ee;
+                color: #0f6e56;
+            }
+            .db-router {
+                background: #e6f1fb;
+                color: #185fa5;
+            }
+            .db-best {
+                background: #faeeda;
+                color: #854f0b;
+            }
+            .db-new {
+                background: #eeedfe;
+                color: #3c3489;
+            }
+            .specs {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .sp {
+                font-size: 11px;
+                color: #555;
+                background: #f7f7f5;
+                border: 1px solid #e5e5e5;
+                padding: 3px 8px;
+                border-radius: 20px;
+            }
+            .sp.hi {
+                color: #185fa5;
+                background: #e6f1fb;
+                border-color: #b5d4f4;
+            }
+            .sqm-wrap {
+                margin-top: 2px;
+            }
+            .sqm-lr {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 4px;
+            }
+            .sqm-lbl {
+                font-size: 11px;
+                color: #888;
+            }
+            .sqm-val {
+                font-size: 12px;
+                font-weight: 700;
+            }
+            .sqm-track {
+                height: 6px;
+                background: #eee;
+                border-radius: 3px;
+                overflow: hidden;
+            }
+            .sqm-fill {
+                height: 100%;
+                border-radius: 3px;
+            }
+            .d-note {
+                font-size: 12px;
+                color: #555;
+                line-height: 1.6;
+                border-top: 1px solid #eee;
+                padding-top: 7px;
+            }
+            .warn-box {
+                background: #faeeda;
+                border-radius: 8px;
+                padding: 0.9rem 1.1rem;
+                margin: 1rem 0;
+                font-size: 13px;
+                color: #633806;
+                line-height: 1.6;
+            }
+            .warn-box strong {
+                color: #412402;
+            }
+            .tip-row {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                margin: 1rem 0 0.5rem;
+            }
+            .t-card {
+                background: #f7f7f5;
+                border-radius: 8px;
+                padding: 0.9rem 1rem;
+            }
+            .t-title {
+                font-size: 13px;
+                font-weight: 600;
+                margin-bottom: 3px;
+            }
+            .t-desc {
+                font-size: 12px;
+                color: #555;
+                line-height: 1.5;
+            }
+            .check-list {
+                list-style: none;
+                padding: 0;
+                margin: 0.75rem 0 1.25rem;
+            }
+            .check-list li {
+                display: flex;
+                gap: 10px;
+                align-items: flex-start;
+                font-size: 14px;
+                line-height: 1.6;
+                padding: 0.3rem 0;
+            }
+            .check-list li .ck {
+                color: #1d9e75;
+                font-size: 16px;
+                margin-top: 1px;
+                flex-shrink: 0;
+            }
+            .cta-box {
+                background: #f7f7f5;
+                border-radius: 10px;
+                border: 1px solid #e5e5e5;
+                padding: 1.5rem;
+                margin: 2rem 0 1rem;
+            }
+            .cta-box h3 {
+                font-size: 16px;
+                font-weight: 600;
+                margin: 0 0 0.5rem;
+            }
+            .cta-box p {
+                margin: 0 0 1rem;
+                font-size: 14px;
+                color: #555;
+            }
+            .cta-btn {
+                display: inline-block;
+                padding: 9px 20px;
+                font-size: 14px;
+                font-weight: 600;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                cursor: pointer;
+                background: #fff;
+                color: #111;
+                text-decoration: none;
+            }
+            .tag-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 1.5rem;
+            }
+            .tag {
+                font-size: 12px;
+                color: #555;
+                background: #f7f7f5;
+                border: 1px solid #e5e5e5;
+                padding: 4px 10px;
+                border-radius: 20px;
+            }
+            @media (max-width: 600px) {
+                .device-grid,
+                .charts-row,
+                .ann-row,
+                .tip-row {
+                    grid-template-columns: 1fr;
+                }
+                .grade-row {
+                    flex-direction: column;
+                }
+                .metrics-row {
+                    grid-template-columns: 1fr;
+                }
+                .result-box {
+                    flex-direction: column;
+                    text-align: center;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <span class="badge">Ağ & Teknoloji</span>
+        <h1>
+            İnternetim neden bu kadar yavaş? Suçlu hızınız değil, bufferbloat
+        </h1>
+        <p class="subtitle">
+            Evde 500 Mbit internet aboneliğiniz var ama video konferansta
+            sesiniz donuyor. Hız testinde sorun yok görünüyor. Peki ne oluyor?
+        </p>
+
+        <hr />
+
+        <p>
+            Şöyle bir senaryo düşünün: Önemli bir toplantıda ekranınızı
+            paylaşıyorsunuz, aynı anda evinizden biri Netflix izliyor. Aniden
+            sesiniz kesilmeye başlıyor, görüntünüz donuyor. Telefonunuzdan hız
+            testine bakıyorsunuz: 480 Mbit. Her şey normal görünüyor. Ama hiçbir
+            şey normal değil.
+        </p>
+        <p>
+            Bu soruna <strong>bufferbloat</strong> deniyor. Milyonlarca insanın
+            yaşadığı bu problemin sebebi hız değil, zamanlama.
+        </p>
+
+        <h2>Bufferbloat nedir?</h2>
+        <p>
+            Modem ve router'lar, gelen veriyi işleyemeden önce kısa süreliğine
+            bir bellekte (buffer) tutar. Bu tamamen normaldir. Sorun, bu
+            belleğin gereğinden büyük olmasında.
+        </p>
+        <div class="analogy">
+            <div class="lbl">Gerçek hayat benzetmesi</div>
+            <p>
+                Bir süpermarketin kasasını düşünün. Normalde 3-4 kişilik kuyruk
+                varken işler hızlı ilerler. Ama kasa "daha verimli olalım" diye
+                50 kişilik kuyruk tutmaya başlarsa, kasaya ilk giren kişi de çok
+                uzun bekler. İşlem hızı değişmemiştir; ama bekleme süresi
+                dramatik şekilde artmıştır.
+            </p>
+        </div>
+        <p>
+            Büyük buffer → çok veri kuyruğa girer → her paket uzun süre bekler →
+            görüntü donması, ses kesilmesi, oyunda yüksek ping. Hız testleri
+            bunu ölçmez çünkü sadece toplam kapasiteye bakar, gecikmeye değil.
+        </p>
+
+        <h2>Nasıl test edersiniz?</h2>
+        <p>
+            <strong>waveform.com/tools/bufferbloat</strong> adresine giderek
+            ücretsiz test yapabilirsiniz. Bu test hem boşta hem yük altındaki
+            gecikmenizi ölçer ve A'dan F'ye not verir.
+        </p>
+        <div class="grade-row">
+            <div class="g-card">
+                <div class="gl">Çoğu ev modemi</div>
+                <div class="gv" style="color: #a32d2d">C / D</div>
+                <div class="gd">Yük altında gecikme yükseliyor</div>
+            </div>
+            <div class="g-card">
+                <div class="gl">Ortalama</div>
+                <div class="gv" style="color: #854f0b">B</div>
+                <div class="gd">Kabul edilebilir ama optimize değil</div>
+            </div>
+            <div class="g-card">
+                <div class="gl">SQM + CAKE ile</div>
+                <div class="gv" style="color: #0f6e56">A+</div>
+                <div class="gd">Yük altında bile düşük gecikme</div>
+            </div>
+        </div>
+
+        <h2>Somut fark ne kadar?</h2>
+        <p>
+            Aşağıdaki grafikler aynı 500 Mbit hatta, tam yük altında gecikmenin
+            nasıl değiştiğini gösteriyor.
+        </p>
+        <div class="legend">
+            <span class="leg-item"
+                ><span class="leg-sq" style="background: #e24b4a"></span>Yük
+                altında gecikme</span
+            >
+            <span class="leg-item"
+                ><span class="leg-sq" style="background: #1d9e75"></span>Boşta
+                gecikme (referans)</span
+            >
+        </div>
+        <div class="charts-row">
+            <div>
+                <div class="chart-lbl">SQM olmadan — tipik ev router</div>
+                <div class="chart-wrap">
+                    <canvas
+                        id="cBefore"
+                        role="img"
+                        aria-label="SQM olmadan yük altında gecikme 180ms'ye çıkıyor"
+                        >SQM olmadan: boşta 8ms, yük altında 180ms.</canvas
+                    >
+                </div>
+            </div>
+            <div>
+                <div class="chart-lbl">SQM + CAKE sonrası</div>
+                <div class="chart-wrap">
+                    <canvas
+                        id="cAfter"
+                        role="img"
+                        aria-label="SQM + CAKE ile yük altında gecikme 9ms'de sabit kalıyor"
+                        >SQM + CAKE ile: boşta 8ms, yük altında 9ms.</canvas
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="metrics-row">
+            <div class="m-card">
+                <div class="m-lbl">Boşta gecikme</div>
+                <div class="m-a">8 ms</div>
+                <div class="m-arr">her iki durumda</div>
+            </div>
+            <div class="m-card">
+                <div class="m-lbl">Yük altında (önce)</div>
+                <div class="m-b">180 ms</div>
+                <div class="m-arr">+172ms artış</div>
+            </div>
+            <div class="m-card">
+                <div class="m-lbl">Yük altında (sonra)</div>
+                <div class="m-a">9 ms</div>
+                <div class="m-arr">+1ms artış</div>
+            </div>
+        </div>
+        <div class="callout">
+            <strong>Not:</strong> Hız neredeyse hiç değişmez. Her iki durumda da
+            470-480 Mbit indirme hızına ulaşılıyor. Değişen tek şey paketin
+            kuyruğa girip çıkma süresi — yani kalite.
+        </div>
+
+        <h2>Gerçek dünya sonucu: A+</h2>
+        <p>
+            Aşağıdaki sonuç, OpenWrt üzerinde SQM + CAKE konfigürasyonu
+            uygulanmış bir hattan alınmıştır.
+        </p>
+        <div class="result-box">
+            <div class="result-grade">A+</div>
+            <div>
+                <div class="result-title">
+                    Bufferbloat testi — SQM + CAKE sonrası
+                </div>
+                <div class="result-sub">
+                    Yük altında gecikme artışı minimum düzeyde. Download/upload
+                    tam kapasitede çalışırken bile ping stabil kalmış.
+                </div>
+                <a
+                    class="result-link"
+                    href="https://www.waveform.com/tools/bufferbloat?test-id=7f7f5edf-4852-4353-b859-cd658b2af5e3"
+                    target="_blank"
+                    >Sonucu görmek için: waveform.com ↗</a
+                >
+            </div>
+        </div>
+
+        <hr />
+
+        <h2>Çözüm: SQM ve CAKE algoritması</h2>
+        <p>
+            <strong>SQM (Smart Queue Management)</strong>, yani akıllı kuyruk
+            yönetimi, trafiği önceliklendirerek buffer'ın şişmesini önler.
+            İçindeki en gelişmiş algoritma ise <strong>CAKE</strong> (Common
+            Applications Kept Enhanced).
+        </p>
+        <p>
+            CAKE trafiği küçük, adil dilimler halinde yönetir. Bir uygulama çok
+            bant genişliği kullanmaya başladığında diğerlerinin önüne geçmesine
+            izin vermez. Sonuç: birisi film indirirken diğeri sorunsuz video
+            toplantısı yapabilir.
+        </p>
+        <div class="callout">
+            <strong>Neden modemimde bu özellik yok?</strong> ISP'lerin sağladığı
+            çoğu modem maliyet tasarrufu için basit FIFO kuyruk sistemi
+            kullanır. SQM gibi gelişmiş özellikler genellikle sadece kurumsal
+            ekipmanlarda veya açık kaynak firmware'lerde bulunur.
+        </div>
+
+        <h2>OpenWrt ile kurulum</h2>
+        <ol class="step-list">
+            <li>
+                <span class="snum">1</span
+                ><span
+                    >Cihazınızın OpenWrt destekleyip desteklemediğini
+                    <strong>openwrt.org/toh</strong> adresinden kontrol
+                    edin.</span
+                >
+            </li>
+            <li>
+                <span class="snum">2</span
+                ><span
+                    >OpenWrt arayüzünden (LuCI)
+                    <strong>luci-app-sqm</strong> paketini yükleyin: Sistem →
+                    Yazılım Yöneticisi.</span
+                >
+            </li>
+            <li>
+                <span class="snum">3</span
+                ><span
+                    >Ağ → SQM QoS menüsünden WAN arayüzünüzü seçin. Hızları ISP
+                    değerinizin <strong>%90-95'i</strong> olarak girin.</span
+                >
+            </li>
+            <li>
+                <span class="snum">4</span
+                ><span
+                    >Kuyruk algoritması olarak <strong>CAKE</strong> seçin. DSL
+                    hattı kullanıyorsanız overhead seçeneğini hat tipinize
+                    (PTM/ATM) göre ayarlayın.</span
+                >
+            </li>
+            <li>
+                <span class="snum">5</span
+                ><span
+                    >Waveform testini tekrar çalıştırın. Çoğu kullanıcı ilk
+                    denemede C/D'den A/A+'ya geçiyor.</span
+                >
+            </li>
+        </ol>
+
+        <h2>OpenWrt arayüzünden içeri bakış</h2>
+        <p>
+            Gerçek bir NanoPi R5S üzerinde çalışan ImmortalWrt kurulumundan
+            alınan ekran görüntüleri.
+        </p>
+
+        <div class="screen-block">
+            <div class="screen-lbl">Sistem durumu</div>
+            <div class="screen-frame">
+                <div class="screen-bar">
+                    <span class="screen-bar-title">Immo-R5S — Status</span>
+                    <span class="screen-bar-url"
+                        >ImmortalWrt 24.10.6 · Kernel 6.6.133</span
+                    >
+                </div>
+                <img
+                    src="/assets/images/openwrt-status.png"
+                    alt="ImmortalWrt Sistem Durumu"
+                    width="100%"
+                />
+            </div>
+            <div class="ann-row">
+                <div class="ann">
+                    <span class="ann-num">1</span>
+                    <div class="ann-text">
+                        <strong>CPU %0, RAM %2</strong> — Router olarak
+                        çalışırken cihaz neredeyse hiç yüklenmiyor. Kalan
+                        kapasite VPN, DNS filtreleme gibi servisler için
+                        kullanılabilir.
+                    </div>
+                </div>
+                <div class="ann">
+                    <span class="ann-num">2</span>
+                    <div class="ann-text">
+                        <strong>Uptime: 1 gün 19 saat</strong> — Kesintisiz
+                        stabil çalışıyor. Load average 0.00; tüm trafik yönetimi
+                        CPU'yu neredeyse hiç zorlamıyor.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-block">
+            <div class="screen-lbl">SQM konfigürasyonu</div>
+            <div class="screen-frame">
+                <div class="screen-bar">
+                    <span class="screen-bar-title"
+                        >Immo-R5S — Smart Queue Management</span
+                    >
+                    <span class="screen-bar-url">Network → SQM QoS</span>
+                </div>
+                <img
+                    src="/assets/images/openwrt-sqm.png"
+                    alt="OpenWrt SQM Ayarları"
+                    width="100%"
+                />
+            </div>
+            <div class="ann-row">
+                <div class="ann">
+                    <span class="ann-num">1</span>
+                    <div class="ann-text">
+                        <strong>Interface: eth1</strong> — WAN bağlantısının
+                        geldiği port. SQM yalnızca bu arayüze uygulanıyor.
+                    </div>
+                </div>
+                <div class="ann">
+                    <span class="ann-num">2</span>
+                    <div class="ann-text">
+                        <strong>Download: 440 Mbit / Upload: 34 Mbit</strong> —
+                        ISP hızının %88-90'ı. Bu boşluk CAKE'in kuyruk yönetimi
+                        için kritik.
+                    </div>
+                </div>
+                <div class="ann">
+                    <span class="ann-num">3</span>
+                    <div class="ann-text">
+                        <strong>Kurulum bu kadar basit</strong> — Arayüz seç,
+                        hızları gir, kaydet. Queue Discipline sekmesinden CAKE
+                        algoritması seçilir.
+                    </div>
+                </div>
+                <div class="ann">
+                    <span class="ann-num">4</span>
+                    <div class="ann-text">
+                        <strong>Upload şekillendirmesi önemli</strong> —
+                        Upload'un bufferbloat'a katkısı genellikle download'dan
+                        daha büyük olur. Her ikisini de ayarlamak şart.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout">
+            <strong>Neden hız tam değil de %90?</strong> SQM'nin çalışabilmesi
+            için hattın hiçbir zaman fiziksel limiti doldurmaması gerekir. Hat
+            tamamen dolarsa CAKE devreye giremez ve queue yine şişer. %90-95
+            aralığı maksimum throughput ile bufferbloat kontrolü arasındaki
+            altın oran.
+        </div>
+
+        <hr />
+
+        <h2>Hangi donanımı kullanmalısınız?</h2>
+        <p>
+            OpenWrt destekli bir cihaz seçerken iki yol var: hazır router almak
+            ya da SBC üzerine kurmak. Her cihaz için maksimum SQM/CAKE
+            throughput değerleri aşağıda.
+        </p>
+
+        <hr />
+        <p class="sec-lbl">Hazır router — Wi-Fi 6, kolay kurulum</p>
+        <div class="device-grid">
+            <div class="d-card feat">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">Xiaomi AX3000T</div>
+                        <div class="d-sub">
+                            MT7981B / Wi-Fi 6 / OpenWrt snapshot
+                        </div>
+                    </div>
+                    <span class="db db-router">Router</span>
+                </div>
+                <div class="specs">
+                    <span class="sp">MT7981B</span
+                    ><span class="sp hi">Wi-Fi 6 AX3000</span
+                    ><span class="sp">256MB RAM</span
+                    ><span class="sp">~35$</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">Maks. SQM/CAKE</span
+                        ><span class="sqm-val" style="color: #185fa5"
+                            >~200 Mbps</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div
+                            class="sqm-fill"
+                            style="width: 13%; background: #378add"
+                        ></div>
+                    </div>
+                </div>
+                <div class="d-note">
+                    Fiyat/Wi-Fi 6 dengesi için iyi başlangıç. OpenWrt snapshot
+                    kanalında. 500 Mbps üzeri SQM için CPU yetersiz kalır.
+                </div>
+            </div>
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">Imou HX21</div>
+                        <div class="d-sub">
+                            MT7981B / Wi-Fi 6 / OpenWrt & ImmortalWrt
+                        </div>
+                    </div>
+                    <span class="db db-router">Router</span>
+                </div>
+                <div class="specs">
+                    <span class="sp">MT7981B</span
+                    ><span class="sp hi">Wi-Fi 6 AX3000</span
+                    ><span class="sp">256MB RAM</span
+                    ><span class="sp">~30$</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">Maks. SQM/CAKE</span
+                        ><span class="sqm-val" style="color: #185fa5"
+                            >~200 Mbps</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div
+                            class="sqm-fill"
+                            style="width: 13%; background: #378add"
+                        ></div>
+                    </div>
+                </div>
+                <div class="d-note">
+                    En uygun fiyatlı Wi-Fi 6 seçeneği. OpenWrt ana dalına Kasım
+                    2025'te girdi. SQM tavanı 200 Mbps civarında.
+                </div>
+            </div>
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">GL.iNet GL-MT3000 (Beryl AX)</div>
+                        <div class="d-sub">
+                            MT7981B / Wi-Fi 6 / Fabrikadan OpenWrt
+                        </div>
+                    </div>
+                    <span class="db db-best">Kolay başlangıç</span>
+                </div>
+                <div class="specs">
+                    <span class="sp">MT7981B</span
+                    ><span class="sp hi">Wi-Fi 6 AX3000</span
+                    ><span class="sp">512MB RAM</span
+                    ><span class="sp">~85$</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">Maks. SQM/CAKE</span
+                        ><span class="sqm-val" style="color: #185fa5"
+                            >~250 Mbps</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div
+                            class="sqm-fill"
+                            style="width: 17%; background: #378add"
+                        ></div>
+                    </div>
+                </div>
+                <div class="d-note">
+                    Fabrikadan OpenWrt tabanlı, sıfır kurulum. SQM arayüzü
+                    hazır. Düşük hat veya teknik olmayan kullanıcılar için
+                    ideal.
+                </div>
+            </div>
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">GL.iNet GL-MT6000 (Flint 2)</div>
+                        <div class="d-sub">
+                            MT7986A / Wi-Fi 6 / Fabrikadan OpenWrt
+                        </div>
+                    </div>
+                    <span class="db db-router">Router</span>
+                </div>
+                <div class="specs">
+                    <span class="sp">MT7986A</span
+                    ><span class="sp hi">Wi-Fi 6 AX6000</span
+                    ><span class="sp">512MB RAM</span
+                    ><span class="sp">~110$</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">Maks. SQM/CAKE</span
+                        ><span class="sqm-val" style="color: #0f6e56"
+                            >~500 Mbps</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div
+                            class="sqm-fill"
+                            style="width: 33%; background: #1d9e75"
+                        ></div>
+                    </div>
+                </div>
+                <div class="d-note">
+                    Tek paket çözüm isteyenler için en iyi router. Güçlü MT7986A
+                    CPU ile 500 Mbps SQM rahatlıkla karşılanır. 2x 2.5G port
+                    dahil.
+                </div>
+            </div>
+        </div>
+        <div class="callout">
+            <strong>MT7981B SQM sınırı:</strong> Xiaomi AX3000T, Imou HX21 ve
+            GL-MT3000 aynı çift çekirdekli MT7981B SoC'u kullanır. CAKE ~200-250
+            Mbps'te tıkanır. 500 Mbps üzeri hatlar için SBC tercih edilmeli.
+        </div>
+
+        <hr />
+        <p class="sec-lbl">SBC — tam kontrol, maksimum SQM performansı</p>
+        <p>
+            SBC'ler Wi-Fi sunmaz ama işlemci gücü açısından router'ları geride
+            bırakır. Ayrı bir access point ile birlikte en yüksek SQM
+            performansını bu platformda elde edersiniz.
+        </p>
+        <div class="device-grid">
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">Radxa Zero 3E</div>
+                        <div class="d-sub">RK3566 @1.6GHz / OpenWrt 24.10</div>
+                    </div>
+                    <span class="db db-sbc">SBC</span>
+                </div>
+                <div class="specs">
+                    <span class="sp">4x A55</span
+                    ><span class="sp hi">1x Gigabit</span
+                    ><span class="sp">4GB RAM</span><span class="sp">~40$</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">Maks. SQM/CAKE</span
+                        ><span class="sqm-val" style="color: #854f0b"
+                            >~400 Mbps</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div
+                            class="sqm-fill"
+                            style="width: 27%; background: #ba7517"
+                        ></div>
+                    </div>
+                </div>
+                <div class="d-note">
+                    Kompakt ve ekonomik. IRQ affinity ile 500 Mbps hatta yeterli
+                    performans.
+                </div>
+            </div>
+            <div class="d-card feat">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">NanoPi R5S</div>
+                        <div class="d-sub">RK3568B2 @2GHz / OpenWrt resmi</div>
+                    </div>
+                    <span class="db db-sbc">SBC</span>
+                </div>
+                <div class="specs">
+                    <span class="sp">4x A55</span
+                    ><span class="sp hi">2x 2.5G + 1G</span
+                    ><span class="sp">4GB RAM</span><span class="sp">~80$</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">Maks. SQM/CAKE</span
+                        ><span class="sqm-val" style="color: #0f6e56"
+                            >~600 Mbps</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div
+                            class="sqm-fill"
+                            style="width: 40%; background: #1d9e75"
+                        ></div>
+                    </div>
+                </div>
+                <div class="d-note">
+                    En dengeli seçim. 2.5G portları, resmi OpenWrt ve IRQ
+                    affinity ile 600 Mbps. 500 Mbps hat için rahat marjla
+                    çalışır.
+                </div>
+            </div>
+            <div class="d-card top">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">NanoPi R76S</div>
+                        <div class="d-sub">
+                            RK3576 / OpenWrt snapshot (Ağu 2025)
+                        </div>
+                    </div>
+                    <span class="db db-new">Yeni nesil</span>
+                </div>
+                <div class="specs">
+                    <span class="sp">4x A72 + 4x A53</span
+                    ><span class="sp hi">2x 2.5G PCIe</span
+                    ><span class="sp">4GB RAM</span><span class="sp">~90$</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">Maks. SQM/CAKE</span
+                        ><span class="sqm-val" style="color: #0f6e56"
+                            >~1000+ Mbps*</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div
+                            class="sqm-fill"
+                            style="width: 67%; background: #1d9e75"
+                        ></div>
+                    </div>
+                </div>
+                <div class="d-note">
+                    4x Cortex-A72 çekirdeği güçlü SQM kapasitesi sağlar. *CPU
+                    performansına dayalı tahmin.
+                </div>
+            </div>
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">NanoPi R6S</div>
+                        <div class="d-sub">
+                            RK3588S / OpenWrt resmi (Şub 2025)
+                        </div>
+                    </div>
+                    <span class="db db-sbc">SBC</span>
+                </div>
+                <div class="specs">
+                    <span class="sp">4x A76 + 4x A55</span
+                    ><span class="sp hi">2x 2.5G + 1G</span
+                    ><span class="sp">8GB RAM</span
+                    ><span class="sp">~130$</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">Maks. SQM/CAKE</span
+                        ><span class="sqm-val" style="color: #0f6e56"
+                            >1400+ Mbps</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div
+                            class="sqm-fill"
+                            style="width: 93%; background: #1d9e75"
+                        ></div>
+                    </div>
+                </div>
+                <div class="d-note">
+                    En yüksek doğrulanmış SQM kapasitesi. IRQ affinity sonrası
+                    1400+ Mbps. Multi-gigabit hat için.
+                </div>
+            </div>
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">Bananapi BPI-R3 Mini</div>
+                        <div class="d-sub">MT7986A / OpenWrt resmi</div>
+                    </div>
+                    <span class="db db-sbc">SBC</span>
+                </div>
+                <div class="specs">
+                    <span class="sp">MT7986A</span
+                    ><span class="sp hi">2x 2.5G SFP</span
+                    ><span class="sp">2GB RAM</span><span class="sp">~75$</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">Maks. SQM/CAKE</span
+                        ><span class="sqm-val" style="color: #0f6e56"
+                            >~500 Mbps</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div
+                            class="sqm-fill"
+                            style="width: 33%; background: #1d9e75"
+                        ></div>
+                    </div>
+                </div>
+                <div class="d-note">
+                    SFP portlarıyla fiber hat kullananlar için ideal. MT7986A
+                    ile 500 Mbps SQM rahatça karşılanır.
+                </div>
+            </div>
+        </div>
+        <div class="warn-box">
+            <strong>SBC kullanıcıları için:</strong> SBC'lerin büyük
+            çoğunluğunda Wi-Fi yoktur. SBC'yi yalnızca router/firewall olarak
+            kurup ayrı bir access point (TP-Link EAP, Ubiquiti UniFi vb.) ile
+            Wi-Fi sağlamak en sağlıklı yöntemdir.
+        </div>
+
+        <div class="tip-row" style="margin-top: 1.5rem">
+            <div class="t-card">
+                <div class="t-title">100–300 Mbps hat</div>
+                <div class="t-desc">
+                    GL-MT3000 veya Imou HX21 yeterli. Kolay kurulum, Wi-Fi
+                    dahil.
+                </div>
+            </div>
+            <div class="t-card">
+                <div class="t-title">300–700 Mbps hat</div>
+                <div class="t-desc">
+                    NanoPi R5S veya R76S en dengeli seçim. Güvenli marjla
+                    çalışır.
+                </div>
+            </div>
+            <div class="t-card">
+                <div class="t-title">1 Gbps ve üzeri</div>
+                <div class="t-desc">
+                    NanoPi R6S veya x86 mini-PC. IRQ tuning ile 1400+ Mbps CAKE.
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <h2>İleri seviye: IRQ affinity ve doğrudan tc konfigürasyonu</h2>
+        <p>
+            SQM arayüzü çoğu kullanıcı için yeterlidir. Ama daha düşük gecikme
+            ve yüksek CPU verimliliği isteyenler için iki ek adım var:
+        </p>
+        <ul class="check-list">
+            <li>
+                <span class="ck">✓</span
+                ><span
+                    ><strong>IRQ affinity pinning:</strong> Ağ kesme
+                    sinyallerini belirli CPU çekirdeklerine sabitlemek paket
+                    işlemeyi hızlandırır. Çok çekirdekli SBC'lerde (R5S, R76S,
+                    R6S) belirgin fark yaratır.</span
+                >
+            </li>
+            <li>
+                <span class="ck">✓</span
+                ><span
+                    ><strong>tc + CAKE doğrudan konfigürasyonu:</strong> SQM
+                    arayüzünü bypass edip tc komutunu doğrudan çalıştırmak
+                    overhead hesaplama ve scheduler parametreleri üzerinde tam
+                    kontrol sağlar. DSL hatlarında PTM/ATM overhead'ini elle
+                    girmek gecikmeyi daha da düşürür.</span
+                >
+            </li>
+        </ul>
+        <div class="callout">
+            Bu adımlar zorunlu değil. Standart SQM + CAKE kurulumu bile çoğu
+            kullanıcıda D notundan A+'ya geçişi sağlar. İleri konfigürasyonlar
+            ancak zaten iyi çalışan kurulumu daha da mükemmelleştirmek için
+            gerekli.
+        </div>
+
+        <hr />
+
+        <h2>Sonuç</h2>
+        <p>
+            İnternet problemlerinin büyük çoğunluğu aslında hız sorunu değil,
+            zamanlama sorunudur. ISP'niz size hız satıyor, ama gecikme
+            kalitesini garanti etmiyor. Bu kontrolü elinize almak için gereken
+            araçlar açık kaynak ve ücretsiz.
+        </p>
+        <ul class="check-list">
+            <li>
+                <span class="ck">✓</span
+                ><span>Önce waveform.com ile bufferbloat testinizi yapın.</span>
+            </li>
+            <li>
+                <span class="ck">✓</span
+                ><span
+                    >Notunuz C veya altındaysa ve donanımınız OpenWrt
+                    destekliyorsa SQM + CAKE kurulumu deneyin.</span
+                >
+            </li>
+            <li>
+                <span class="ck">✓</span
+                ><span
+                    >Desteklemiyorsa GL.iNet veya NanoPi R5S gibi destekleyen
+                    bir cihazla değiştirmeyi düşünün.</span
+                >
+            </li>
+            <li>
+                <span class="ck">✓</span
+                ><span
+                    >Evinizde birden fazla kişi aynı anda interneti yoğun
+                    kullanıyorsa bu fark çok daha belirgin olacak.</span
+                >
+            </li>
+        </ul>
+        <p>Ağınız sizin, kontrol de sizin olsun.</p>
+
+        <div class="cta-box">
+            <h3>Siz de bufferbloat testiyle başlayın</h3>
+            <p>
+                waveform.com/tools/bufferbloat adresine giderek ağınızı ücretsiz
+                test edin. Notunuz nedir? Yorumlarda paylaşın!
+            </p>
+            <a
+                class="cta-btn"
+                href="https://www.waveform.com/tools/bufferbloat"
+                target="_blank"
+                >Bufferbloat testini yap ↗</a
+            >
+        </div>
+
+        <div class="tag-row">
+            <span class="tag">#NetworkOptimization</span>
+            <span class="tag">#OpenWrt</span>
+            <span class="tag">#BufferBloat</span>
+            <span class="tag">#SQM</span>
+            <span class="tag">#HomeNetwork</span>
+            <span class="tag">#NanoPi</span>
+            <span class="tag">#SBC</span>
+            <span class="tag">#Networking</span>
+            <span class="tag">#IT</span>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+        <script>
+            const labels = [
+                "0s",
+                "2s",
+                "4s",
+                "6s",
+                "8s",
+                "10s",
+                "12s",
+                "14s",
+                "16s",
+                "18s",
+                "20s",
+                "22s",
+                "24s",
+                "26s",
+                "28s",
+                "30s",
+            ];
+            const idle = [8, 8, 8, 9, 8, 8, 8, 9, 8, 8, 8, 8, 9, 8, 8, 8];
+            const before = [
+                8, 9, 12, 45, 120, 165, 178, 182, 175, 180, 176, 179, 183, 178,
+                180, 177,
+            ];
+            const after = [8, 8, 9, 9, 9, 8, 9, 9, 8, 9, 8, 9, 9, 8, 9, 8];
+            const opts = (maxY) => ({
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: (c) => c.parsed.y + "ms" } },
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            font: { size: 11 },
+                            color: "#888",
+                            maxTicksLimit: 8,
+                            autoSkip: true,
+                        },
+                        grid: { color: "rgba(0,0,0,0.06)" },
+                    },
+                    y: {
+                        min: 0,
+                        max: maxY,
+                        ticks: {
+                            font: { size: 11 },
+                            color: "#888",
+                            callback: (v) => v + "ms",
+                            maxTicksLimit: 5,
+                        },
+                        grid: { color: "rgba(0,0,0,0.06)" },
+                    },
+                },
+            });
+            new Chart(document.getElementById("cBefore"), {
+                type: "line",
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            data: before,
+                            borderColor: "#e24b4a",
+                            backgroundColor: "rgba(226,75,74,0.07)",
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            tension: 0.3,
+                            fill: true,
+                        },
+                        {
+                            data: idle,
+                            borderColor: "#1d9e75",
+                            borderWidth: 1.5,
+                            borderDash: [4, 3],
+                            pointRadius: 0,
+                            tension: 0.1,
+                            fill: false,
+                        },
+                    ],
+                },
+                options: opts(220),
+            });
+            new Chart(document.getElementById("cAfter"), {
+                type: "line",
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            data: after,
+                            borderColor: "#1d9e75",
+                            backgroundColor: "rgba(29,158,117,0.07)",
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            tension: 0.3,
+                            fill: true,
+                        },
+                        {
+                            data: idle,
+                            borderColor: "#1d9e75",
+                            borderWidth: 1.5,
+                            borderDash: [4, 3],
+                            pointRadius: 0,
+                            tension: 0.1,
+                            fill: false,
+                        },
+                    ],
+                },
+                options: opts(220),
+            });
+        </script>
+    </body>
+</html>
