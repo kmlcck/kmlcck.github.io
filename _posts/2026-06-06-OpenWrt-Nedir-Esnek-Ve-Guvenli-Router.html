@@ -1,0 +1,65 @@
+---
+layout: post
+title: "OpenWrt Nedir? Esnek ve Güvenli Router Özgürlüğü"
+date: 2026-06-06
+categories: [Teknoloji, Ağ Yönetimi]
+tags: [OpenWrt, Router, Linux, Güvenlik]
+---
+
+<p>Evlerimizde veya ofislerimizde kullandığımız modem ve router cihazları, internete açılan kapılarımızdır. Ancak üreticilerin bu cihazlarla birlikte sunduğu varsayılan yazılımlar (firmware) genellikle kısıtlı özelliklere sahiptir, nadiren güncellenir ve ciddi güvenlik açıkları barındırabilir. İşte tam bu noktada devreye <strong>OpenWrt</strong> giriyor.</p>
+
+<p>Bu yazıda, "OpenWrt nedir?", "Neden kullanılmalıdır?" ve "Cihazınıza ne gibi avantajlar sağlar?" sorularına yakından bakacağız.</p>
+
+<hr>
+
+## OpenWrt Nedir?
+
+<p><strong>OpenWrt</strong>, gömülü cihazlar (özellikle ev router'ları) için geliştirilmiş, Linux tabanlı bir açık kaynaklı işletim sistemidir. Cihazınızın üretici tarafından sınırlandırılmış orijinal yazılımını tamamen silip yerine OpenWrt kurduğunuzda, router'ınızı adeta mini bir Linux sunucusuna dönüştürmüş olursunuz.</p>
+
+<p>Tek bir kalıpla her şeyi sunmak yerine, OpenWrt paket yönetimi felsefesiyle çalışır. Yani sadece ihtiyacınız olan özellikleri (VPN, reklam engelleme, depolama paylaşımı vb.) cihaza yükleyerek sistem kaynaklarını optimize edebilirsiniz.</p>
+
+<hr>
+
+## Neden OpenWrt Kullanmalısınız? Avantajları Nelerdir?
+
+<p>Sıradan bir kullanıcıdan profesyonel bir ağ yöneticisine kadar OpenWrt'ye geçmek için pek çok haklı sebep var:</p>
+
+### 1. Gelişmiş Güvenlik ve Düzenli Güncellemeler
+<p>Üreticiler, sattıkları router modellerine genellikle birkaç yıl destek verir ve ardından güncellemeyi keserler. OpenWrt ise küresel bir topluluk tarafından sürekli geliştirilir. Yeni keşfedilen güvenlik açıkları (örneğin Linux çekirdek açıkları) günler, hatta saatler içinde yamalanır.</p>
+
+### 2. Muazzam Eklenti ve Paket Desteği (opkg)
+<p>OpenWrt'nin içinde <strong>opkg</strong> adında bir paket yöneticisi bulunur. Tıpkı Ubuntu'daki <code>apt</code> veya akıllı telefonunuzdaki uygulama mağazası gibi, router'ınıza binlerce farklı yazılımı tek tıkla kurabilirsiniz:</p>
+<ul>
+    <li><strong>AdGuard Home / Pi-hole:</strong> Ağ düzeyinde reklam ve izleyici engelleme.</li>
+    <li><strong>OpenVPN / WireGuard:</strong> Router seviyesinde VPN kurarak evdeki tüm cihazları tek seferde güvenli hale getirme.</li>
+    <li><strong>Samba / FTP:</strong> Router'ın USB portuna harici disk bağlayarak kendi bulut depolama sisteminizi (NAS) oluşturma.</li>
+</ul>
+
+### 3. SQM (Smart Queue Management) ile Ping Sorunlarına Son
+<p>Evde biri video izlerken veya dosya indirirken oyunlarda pinginiz mi fırlıyor? <strong>Bufferbloat</strong> adı verilen bu sorunu OpenWrt'nin SQM (Akıllı Sıra Yönetimi) algoritmaları sayesinde tamamen çözebilirsiniz. Bant genişliğini adil dağıtarak yoğun kullanımda bile gecikme sürelerini (ping) minimumda tutar.</p>
+
+### 4. Ebeveyn Kontrolü ve Misafir Ağı
+<p>Çocuklarınızın internete erişim saatlerini kısıtlayabilir, belirli web sitelerini engelleyebilirsiniz. Ayrıca ana ağınızın şifresini vermeden, gelen misafirler için tamamen izole edilmiş güvenli bir "Misafir Wi-Fi" ağı oluşturabilirsiniz.</p>
+
+<hr>
+
+## LuCI: Kullanıcı Dostu Arayüz
+
+<p>OpenWrt ilk günlerinde tamamen komut satırı (CLI) üzerinden yönetiliyordu. Ancak günümüzde <strong>LuCI</strong> adı verilen gelişmiş bir web arayüzü ile birlikte geliyor. Tarayıcınız üzerinden (genellikle <code>192.168.1.1</code> adresinden) router'ınızın tüm ayarlarını görsel bir panelden kolayca yönetebilirsiniz. Tabii ki meraklıları için SSH ile bağlanıp terminal özgürlüğünün tadını çıkarmak da her zaman bir seçenek!</p>
+
+<hr>
+
+## OpenWrt Kurmadan Önce Dikkat Edilmesi Gerekenler
+
+<p>OpenWrt dünyasına adım atmaya karar verdiyseniz, şu iki önemli noktayı unutmamalısınız:</p>
+
+<blockquote>
+    <strong>1. Cihaz Uyumluluğu:</strong> Her router OpenWrt'yi desteklemez. Kurulum yapmadan önce mutlaka <a href="https://openwrt.org/toh/start" target="_blank">OpenWrt Table of Hardware (ToH)</a> listesinden cihazınızın marka ve modelini kontrol etmelisiniz.<br><br>
+    <strong>2. Risk Faktörü (Bricking):</strong> Kurulum aşamasında yanlış bir yazılım yüklemek cihazınızı tamamen kullanılmaz hale getirebilir ("brick"). Bu yüzden cihazınıza özel yükleme rehberlerini adım adım ve dikkatlice takip etmelisiniz.
+</blockquote>
+
+## Sonuç
+
+<p>OpenWrt, eskiyen veya özellikleri yetersiz kalan router cihazlarınıza adeta yeniden hayat verir. Size ağınız üzerinde tam bir şeffaflık, güvenlik ve özgürlük sunar. Eğer teknolojiyi kurcalamayı seviyor ve internet altyapınızdan maksimum performans almak istiyorsanız, OpenWrt kesinlikle denemeye değer bir deneyimdir.</p>
+
+<p><em>Bir sonraki yazımızda, uyumlu bir router'a adım adım OpenWrt kurulumunu ve ilk yapılması gereken temel ayarları inceleyeceğiz. Takipte kalın!</em></p>
