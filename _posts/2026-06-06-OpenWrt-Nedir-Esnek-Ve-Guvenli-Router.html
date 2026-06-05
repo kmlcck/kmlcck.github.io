@@ -6,60 +6,886 @@ categories: [Teknoloji, Ağ Yönetimi]
 tags: [OpenWrt, Router, Linux, Güvenlik]
 ---
 
-<p>Evlerimizde veya ofislerimizde kullandığımız modem ve router cihazları, internete açılan kapılarımızdır. Ancak üreticilerin bu cihazlarla birlikte sunduğu varsayılan yazılımlar (firmware) genellikle kısıtlı özelliklere sahiptir, nadiren güncellenir ve ciddi güvenlik açıkları barındırabilir. İşte tam bu noktada devreye <strong>OpenWrt</strong> giriyor.</p>
+<!doctype html>
+<html lang="tr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OpenWrt Nedir? Esnek ve Güvenli Router Özgürlüğü</title>
+        <meta
+            name="description"
+            content="ISP modeminin sınırları, OpenWrt güvenlik avantajları, VPN, VLAN, SQM/CAKE ve desteklenen donanımlar. IT profesyonelleri için kapsamlı rehber."
+        />
+        <style>
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    sans-serif;
+                max-width: 740px;
+                margin: 0 auto;
+                padding: 2rem 1.5rem;
+                color: #1a1a1a;
+                background: #fff;
+                line-height: 1.8;
+            }
+            h1 {
+                font-size: 28px;
+                font-weight: 600;
+                line-height: 1.3;
+                margin-bottom: 0.75rem;
+            }
+            h2 {
+                font-size: 21px;
+                font-weight: 600;
+                margin: 2.5rem 0 0.75rem;
+            }
+            h3 {
+                font-size: 17px;
+                font-weight: 600;
+                margin: 1.75rem 0 0.5rem;
+            }
+            p {
+                font-size: 16px;
+                margin-bottom: 1rem;
+            }
+            hr {
+                border: none;
+                border-top: 1px solid #e5e5e5;
+                margin: 2rem 0;
+            }
+            code {
+                font-family:
+                    "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
+                    monospace;
+                font-size: 13px;
+                background: #f5f5f2;
+                border: 1px solid #e5e5e5;
+                padding: 2px 6px;
+                border-radius: 4px;
+            }
+            pre {
+                background: #f5f5f2;
+                border: 1px solid #e5e5e5;
+                border-radius: 8px;
+                padding: 1rem 1.1rem;
+                font-family: "SFMono-Regular", Consolas, monospace;
+                font-size: 13px;
+                line-height: 1.7;
+                overflow-x: auto;
+                margin: 1rem 0 1.5rem;
+            }
+            .badge {
+                display: inline-block;
+                background: #e6f1fb;
+                color: #185fa5;
+                font-size: 12px;
+                font-weight: 600;
+                padding: 4px 12px;
+                border-radius: 20px;
+                margin-bottom: 1rem;
+            }
+            .subtitle {
+                font-size: 17px;
+                color: #555;
+                line-height: 1.7;
+            }
+            .callout {
+                background: #f0f6ff;
+                border-left: 3px solid #378add;
+                padding: 1rem 1.25rem;
+                margin: 1.5rem 0;
+                font-size: 14px;
+                color: #333;
+                line-height: 1.7;
+                border-radius: 0 6px 6px 0;
+            }
+            .callout strong {
+                color: #111;
+            }
+            .warn {
+                background: #fef9ec;
+                border-left: 3px solid #e0a020;
+                padding: 1rem 1.25rem;
+                margin: 1.5rem 0;
+                font-size: 14px;
+                color: #7a5000;
+                line-height: 1.7;
+                border-radius: 0 6px 6px 0;
+            }
+            .warn strong {
+                color: #5a3800;
+            }
+            .compare-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin: 1rem 0 1.5rem;
+            }
+            .cmp-card {
+                border-radius: 10px;
+                padding: 1rem 1.1rem;
+                border: 1px solid #e5e5e5;
+            }
+            .cmp-card.isp {
+                background: #f7f7f5;
+            }
+            .cmp-card.owrt {
+                background: #fff;
+                border-color: #378add;
+                border-width: 2px;
+            }
+            .cmp-label {
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.07em;
+                margin-bottom: 0.75rem;
+            }
+            .cmp-card.isp .cmp-label {
+                color: #888;
+            }
+            .cmp-card.owrt .cmp-label {
+                color: #185fa5;
+            }
+            .cmp-row {
+                display: flex;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 0.35rem 0;
+                border-bottom: 1px solid #eee;
+                font-size: 13px;
+                color: #555;
+                line-height: 1.5;
+            }
+            .cmp-row:last-child {
+                border-bottom: none;
+            }
+            .cmp-row .ic {
+                flex-shrink: 0;
+                font-weight: 700;
+                margin-top: 1px;
+            }
+            .ic-bad {
+                color: #c0392b;
+            }
+            .ic-good {
+                color: #1d9e75;
+            }
+            .feature-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin: 1rem 0 1.5rem;
+            }
+            .f-card {
+                background: #fff;
+                border: 1px solid #e5e5e5;
+                border-radius: 10px;
+                padding: 1rem 1.1rem;
+            }
+            .f-card.accent {
+                border-color: #378add;
+                border-width: 2px;
+            }
+            .f-title {
+                font-size: 14px;
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+            .f-desc {
+                font-size: 12px;
+                color: #555;
+                line-height: 1.6;
+            }
+            .f-tag {
+                display: inline-block;
+                font-size: 10px;
+                font-weight: 600;
+                padding: 2px 7px;
+                border-radius: 10px;
+                margin-top: 6px;
+            }
+            .tag-adv {
+                background: #e1f5ee;
+                color: #0f6e56;
+            }
+            .tag-sec {
+                background: #fceaea;
+                color: #a32d2d;
+            }
+            .tag-net {
+                background: #e6f1fb;
+                color: #185fa5;
+            }
+            .tag-perf {
+                background: #faeeda;
+                color: #854f0b;
+            }
+            .step-list {
+                list-style: none;
+                padding: 0;
+                counter-reset: s;
+                margin: 1rem 0 1.5rem;
+            }
+            .step-list li {
+                counter-increment: s;
+                display: flex;
+                gap: 12px;
+                align-items: flex-start;
+                padding: 0.7rem 0;
+                border-bottom: 1px solid #eee;
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            .step-list li:last-child {
+                border-bottom: none;
+            }
+            .snum {
+                min-width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                background: #e6f1fb;
+                color: #185fa5;
+                font-size: 13px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                margin-top: 2px;
+            }
+            .pkg-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin: 1rem 0 1.5rem;
+            }
+            .pkg {
+                background: #f7f7f5;
+                border-radius: 8px;
+                padding: 0.75rem 1rem;
+            }
+            .pkg-name {
+                font-size: 13px;
+                font-weight: 600;
+                margin-bottom: 2px;
+            }
+            .pkg-desc {
+                font-size: 12px;
+                color: #555;
+                line-height: 1.5;
+            }
+            .sec-lbl {
+                font-size: 11px;
+                font-weight: 700;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.07em;
+                margin: 1.25rem 0 0.75rem;
+            }
+            .hw-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin: 0.5rem 0 1.25rem;
+            }
+            .hw-card {
+                background: #fff;
+                border: 1px solid #e5e5e5;
+                border-radius: 10px;
+                padding: 0.9rem 1rem;
+            }
+            .hw-card.rec {
+                border-color: #378add;
+                border-width: 2px;
+            }
+            .hw-name {
+                font-size: 13px;
+                font-weight: 600;
+                margin-bottom: 2px;
+            }
+            .hw-sub {
+                font-size: 11px;
+                color: #888;
+                margin-bottom: 8px;
+            }
+            .hw-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                margin-bottom: 6px;
+            }
+            .hw-tag {
+                font-size: 10px;
+                padding: 2px 7px;
+                border-radius: 10px;
+                border: 1px solid #e5e5e5;
+                color: #555;
+            }
+            .hw-tag.hi {
+                color: #185fa5;
+                background: #e6f1fb;
+                border-color: #b5d4f4;
+            }
+            .hw-note {
+                font-size: 11px;
+                color: #666;
+                line-height: 1.5;
+            }
+            .ref-box {
+                background: #f0f6ff;
+                border-radius: 8px;
+                padding: 0.75rem 1rem;
+                margin: 0.75rem 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 13px;
+                color: #555;
+            }
+            .ref-box a {
+                color: #185fa5;
+            }
+            .cta-box {
+                background: #f7f7f5;
+                border-radius: 10px;
+                border: 1px solid #e5e5e5;
+                padding: 1.5rem;
+                margin: 2rem 0 1rem;
+            }
+            .cta-box h3 {
+                font-size: 16px;
+                font-weight: 600;
+                margin: 0 0 0.5rem;
+            }
+            .cta-box p {
+                margin: 0 0 1rem;
+                font-size: 14px;
+                color: #555;
+            }
+            .cta-btn {
+                display: inline-block;
+                padding: 9px 20px;
+                font-size: 14px;
+                font-weight: 600;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                background: #fff;
+                color: #111;
+                text-decoration: none;
+            }
+            .tag-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 1.5rem;
+            }
+            .tag {
+                font-size: 12px;
+                color: #555;
+                background: #f7f7f5;
+                border: 1px solid #e5e5e5;
+                padding: 4px 10px;
+                border-radius: 20px;
+            }
+            @media (max-width: 600px) {
+                .compare-grid,
+                .feature-grid,
+                .hw-grid,
+                .pkg-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <span class="badge">OpenWrt · Ağ Yönetimi</span>
+        <h1>OpenWrt nedir? Esnek ve güvenli router özgürlüğü</h1>
+        <p class="subtitle">
+            ISP'nin sağladığı modem bir kara kutu gibi çalışır: firmware
+            güncellemesi gelmez, logları göremezsiniz, trafik nereye gidiyor
+            bilmezsiniz. OpenWrt bu kara kutuyu açar.
+        </p>
 
-<p>Bu yazıda, "OpenWrt nedir?", "Neden kullanılmalıdır?" ve "Cihazınıza ne gibi avantajlar sağlar?" sorularına yakından bakacağız.</p>
+        <hr />
 
-<hr>
+        <p>
+            OpenWrt, 2004 yılında Linksys WRT54G router'ının kaynak kodunun
+            sızdırılmasıyla başlayan ve bugün 1.500'ü aşkın cihazı destekleyen
+            açık kaynak bir Linux tabanlı router işletim sistemidir. Temel Linux
+            araçları, opkg paket yöneticisi, netfilter/nftables firewall stack'i
+            ve LuCI web arayüzü ile gelir. Fabrika firmware'den farkı şu: her
+            şey yapılandırılabilir, her paket kaynak kodundan derlenmiştir, her
+            bağlantı loglanabilir.
+        </p>
 
-## OpenWrt Nedir?
+        <h2>ISP modeminin sınırları ve neden değiştirilmeli</h2>
+        <p>
+            Operatörlerin sağladığı ekipmanlar tasarım gereği kısıtlıdır. Bu bir
+            ihmal değil, bilinçli bir tercih.
+        </p>
 
-<p><strong>OpenWrt</strong>, gömülü cihazlar (özellikle ev router'ları) için geliştirilmiş, Linux tabanlı bir açık kaynaklı işletim sistemidir. Cihazınızın üretici tarafından sınırlandırılmış orijinal yazılımını tamamen silip yerine OpenWrt kurduğunuzda, router'ınızı adeta mini bir Linux sunucusuna dönüştürmüş olursunuz.</p>
+        <div class="compare-grid">
+            <div class="cmp-card isp">
+                <div class="cmp-label">ISP modem / router</div>
+                <div class="cmp-row">
+                    <span class="ic ic-bad">✗</span
+                    ><span>Firmware güncellemesi ISP'ye bağlı</span>
+                </div>
+                <div class="cmp-row">
+                    <span class="ic ic-bad">✗</span
+                    ><span>CVE yaması ortalama 6–18 ay gecikir</span>
+                </div>
+                <div class="cmp-row">
+                    <span class="ic ic-bad">✗</span
+                    ><span>TR-069 ile uzaktan yönetim açık</span>
+                </div>
+                <div class="cmp-row">
+                    <span class="ic ic-bad">✗</span
+                    ><span>DNS log'u ISP sunucularına gider</span>
+                </div>
+                <div class="cmp-row">
+                    <span class="ic ic-bad">✗</span
+                    ><span>VLAN, QoS, VPN desteği yok/kısıtlı</span>
+                </div>
+                <div class="cmp-row">
+                    <span class="ic ic-bad">✗</span
+                    ><span>Bufferbloat kontrolü yok</span>
+                </div>
+            </div>
+            <div class="cmp-card owrt">
+                <div class="cmp-label">OpenWrt</div>
+                <div class="cmp-row">
+                    <span class="ic ic-good">✓</span
+                    ><span>Topluluk tarafından aktif güncelleme</span>
+                </div>
+                <div class="cmp-row">
+                    <span class="ic ic-good">✓</span
+                    ><span>CVE yaması günler/haftalar içinde</span>
+                </div>
+                <div class="cmp-row">
+                    <span class="ic ic-good">✓</span
+                    ><span>TR-069 devre dışı, tam kontrol sende</span>
+                </div>
+                <div class="cmp-row">
+                    <span class="ic ic-good">✓</span
+                    ><span>DoT/DoH ile şifreli DNS çözümlemesi</span>
+                </div>
+                <div class="cmp-row">
+                    <span class="ic ic-good">✓</span
+                    ><span>802.1Q VLAN, WireGuard, OpenVPN</span>
+                </div>
+                <div class="cmp-row">
+                    <span class="ic ic-good">✓</span
+                    ><span>SQM + CAKE ile bufferbloat çözümü</span>
+                </div>
+            </div>
+        </div>
 
-<p>Tek bir kalıpla her şeyi sunmak yerine, OpenWrt paket yönetimi felsefesiyle çalışır. Yani sadece ihtiyacınız olan özellikleri (VPN, reklam engelleme, depolama paylaşımı vb.) cihaza yükleyerek sistem kaynaklarını optimize edebilirsiniz.</p>
+        <div class="callout">
+            <strong>TR-069 nedir?</strong> ISP'lerin modem/router'ı uzaktan
+            yapılandırmasını sağlayan protokol. Teoride cihaz güncelleme için
+            kullanılır; pratikte arka kapı olarak da işlev görür. OpenWrt'de bu
+            servis yoktur.
+        </div>
 
-<hr>
+        <h2>Güvenlik ve gizlilik avantajları</h2>
 
-## Neden OpenWrt Kullanmalısınız? Avantajları Nelerdir?
+        <h3>Firewall: nftables tabanlı tam kontrol</h3>
+        <p>
+            OpenWrt 22.03 itibarıyla iptables yerine nftables kullanır. Zone
+            tabanlı firewall modeli (LAN → WAN, WAN → LAN, DMZ) varsayılan
+            olarak gelir. "Least privilege" ağ segmentasyonu doğrudan
+            uygulanabilir:
+        </p>
 
-<p>Sıradan bir kullanıcıdan profesyonel bir ağ yöneticisine kadar OpenWrt'ye geçmek için pek çok haklı sebep var:</p>
+        <pre>
+nft add rule inet fw4 forward iifname "br-iot" oifname "br-lan" drop
+nft add rule inet fw4 forward iifname "br-iot" oifname "wan" accept</pre
+        >
 
-### 1. Gelişmiş Güvenlik ve Düzenli Güncellemeler
-<p>Üreticiler, sattıkları router modellerine genellikle birkaç yıl destek verir ve ardından güncellemeyi keserler. OpenWrt ise küresel bir topluluk tarafından sürekli geliştirilir. Yeni keşfedilen güvenlik açıkları (örneğin Linux çekirdek açıkları) günler, hatta saatler içinde yamalanır.</p>
+        <p>
+            Bu kural IoT segmentini LAN'dan izole eder, yalnızca internet
+            erişimine izin verir. Kurumsal firewall konfigürasyonuyla aynı
+            mantık, ev/küçük ofis düzeyinde donanımda çalışır.
+        </p>
 
-### 2. Muazzam Eklenti ve Paket Desteği (opkg)
-<p>OpenWrt'nin içinde <strong>opkg</strong> adında bir paket yöneticisi bulunur. Tıpkı Ubuntu'daki <code>apt</code> veya akıllı telefonunuzdaki uygulama mağazası gibi, router'ınıza binlerce farklı yazılımı tek tıkla kurabilirsiniz:</p>
-<ul>
-    <li><strong>AdGuard Home / Pi-hole:</strong> Ağ düzeyinde reklam ve izleyici engelleme.</li>
-    <li><strong>OpenVPN / WireGuard:</strong> Router seviyesinde VPN kurarak evdeki tüm cihazları tek seferde güvenli hale getirme.</li>
-    <li><strong>Samba / FTP:</strong> Router'ın USB portuna harici disk bağlayarak kendi bulut depolama sisteminizi (NAS) oluşturma.</li>
-</ul>
+        <h3>DNS: şifreli çözümleme ve yerel filtreleme</h3>
+        <p>
+            Varsayılan dnsmasq'a ek olarak <code>unbound</code> veya
+            <code>smartdns</code> paketleriyle DNS-over-TLS/HTTPS uygulanabilir.
+            <code>adblock</code> paketi ile DNS-level reklam ve tracking
+            engelleme mümkündür; pi-hole benzeri fonksiyon ayrı donanım
+            gerektirmeden router'ın kendisinde çalışır.
+        </p>
 
-### 3. SQM (Smart Queue Management) ile Ping Sorunlarına Son
-<p>Evde biri video izlerken veya dosya indirirken oyunlarda pinginiz mi fırlıyor? <strong>Bufferbloat</strong> adı verilen bu sorunu OpenWrt'nin SQM (Akıllı Sıra Yönetimi) algoritmaları sayesinde tamamen çözebilirsiniz. Bant genişliğini adil dağıtarak yoğun kullanımda bile gecikme sürelerini (ping) minimumda tutar.</p>
+        <pre>
+# /etc/config/unbound
+config unbound
+    option dns_over_tls '1'
+    option tls_upstream '1:853'
+    list tls_upstream_cert '/etc/ssl/certs/ca-certificates.crt'</pre
+        >
 
-### 4. Ebeveyn Kontrolü ve Misafir Ağı
-<p>Çocuklarınızın internete erişim saatlerini kısıtlayabilir, belirli web sitelerini engelleyebilirsiniz. Ayrıca ana ağınızın şifresini vermeden, gelen misafirler için tamamen izole edilmiş güvenli bir "Misafir Wi-Fi" ağı oluşturabilirsiniz.</p>
+        <h3>VPN: WireGuard ve OpenVPN</h3>
+        <p>
+            OpenWrt'de WireGuard kernel modülü olarak çalışır;
+            <code>wireguard-tools</code> ve
+            <code>luci-app-wireguard</code> paketleriyle hem server hem client
+            modu konfigüre edilir. Split-tunnel örneği:
+        </p>
 
-<hr>
+        <pre>
+ip route add 10.0.0.0/8 dev wg0
+ip route add 192.168.0.0/16 dev wg0</pre
+        >
 
-## LuCI: Kullanıcı Dostu Arayüz
+        <div class="warn">
+            <strong>Dikkat:</strong> WireGuard ve SQM aynı anda çalışırken CPU
+            yükü önemli ölçüde artar. 500 Mbps hatta WireGuard + SQM için en az
+            RK3568 sınıfı bir SoC (NanoPi R5S gibi) gerekir.
+        </div>
 
-<p>OpenWrt ilk günlerinde tamamen komut satırı (CLI) üzerinden yönetiliyordu. Ancak günümüzde <strong>LuCI</strong> adı verilen gelişmiş bir web arayüzü ile birlikte geliyor. Tarayıcınız üzerinden (genellikle <code>192.168.1.1</code> adresinden) router'ınızın tüm ayarlarını görsel bir panelden kolayca yönetebilirsiniz. Tabii ki meraklıları için SSH ile bağlanıp terminal özgürlüğünün tadını çıkarmak da her zaman bir seçenek!</p>
+        <h2>Öne çıkan özellikler</h2>
+        <div class="feature-grid">
+            <div class="f-card accent">
+                <div class="f-title">SQM + CAKE</div>
+                <div class="f-desc">
+                    Active Queue Management ile bufferbloat eliminasyonu. Hat
+                    kapasitesinin %90-95'inde çalışarak yükleme altında
+                    gecikmeyi boşta seviyesinde tutar.
+                </div>
+                <span class="f-tag tag-perf">Performans</span>
+            </div>
+            <div class="f-card">
+                <div class="f-title">802.1Q VLAN</div>
+                <div class="f-desc">
+                    Yazılım tanımlı ağ segmentasyonu. IoT, misafir, iş
+                    segmentleri arasında tam izolasyon veya kontrollü inter-VLAN
+                    routing uygulanabilir.
+                </div>
+                <span class="f-tag tag-net">Ağ</span>
+            </div>
+            <div class="f-card">
+                <div class="f-title">Adblock / DNS filtreleme</div>
+                <div class="f-desc">
+                    DNS-level reklam ve tracking engelleme. 500.000+ domain
+                    içeren blocklist'ler otomatik güncellenir. Tüm ağ cihazları
+                    kapsanır.
+                </div>
+                <span class="f-tag tag-sec">Güvenlik</span>
+            </div>
+            <div class="f-card">
+                <div class="f-title">WireGuard VPN</div>
+                <div class="f-desc">
+                    Kernel-space WireGuard. OpenVPN'e kıyasla 3-4 kat daha
+                    yüksek throughput, %60 daha düşük CPU kullanımı.
+                    Site-to-site veya road warrior konfigürasyonu.
+                </div>
+                <span class="f-tag tag-sec">Güvenlik</span>
+            </div>
+            <div class="f-card">
+                <div class="f-title">Bandwidth monitoring</div>
+                <div class="f-desc">
+                    <code>nlbwmon</code> ile cihaz bazlı bant genişliği
+                    kullanımı. Hangi cihaz ne kadar trafik tüketiyor, hangi
+                    protokol, hangi saat aralığında.
+                </div>
+                <span class="f-tag tag-adv">Görünürlük</span>
+            </div>
+            <div class="f-card">
+                <div class="f-title">Dinamik DNS + Let's Encrypt</div>
+                <div class="f-desc">
+                    <code>ddns-scripts</code> ile Cloudflare/Route53
+                    entegrasyonu. <code>acme.sh</code> ile wildcard SSL. Ev veya
+                    küçük ofis sunucularına gerçek HTTPS.
+                </div>
+                <span class="f-tag tag-adv">Altyapı</span>
+            </div>
+            <div class="f-card">
+                <div class="f-title">SSH + UCI + ubus</div>
+                <div class="f-desc">
+                    Tüm konfigürasyon SSH üzerinden scriptlenebilir.
+                    <code>ubus</code> RPC ile otomasyon. Ansible/Salt ile
+                    infrastructure-as-code entegrasyonu mümkün.
+                </div>
+                <span class="f-tag tag-adv">Otomasyon</span>
+            </div>
+            <div class="f-card">
+                <div class="f-title">opkg paket yöneticisi</div>
+                <div class="f-desc">
+                    7.000+ paket. Snort IDS, HAProxy, Prometheus node-exporter,
+                    Zeek, netflow collector gibi üretim araçları kurulabilir.
+                </div>
+                <span class="f-tag tag-adv">Esneklik</span>
+            </div>
+        </div>
 
-<hr>
+        <hr />
 
-## OpenWrt Kurmadan Önce Dikkat Edilmesi Gerekenler
+        <h2>Kurulum adımları</h2>
+        <ol class="step-list">
+            <li>
+                <span class="snum">1</span
+                ><span
+                    ><strong>Cihaz desteğini doğrula:</strong>
+                    <code>openwrt.org/toh</code> adresinden cihazını bul.
+                    "Supported Current Release" sütununda 23.05 veya 24.10
+                    yazıyorsa tam destek var demektir. "snapshot" yazıyorsa
+                    kararlı sürüm henüz yok.</span
+                >
+            </li>
+            <li>
+                <span class="snum">2</span
+                ><span
+                    ><strong>Doğru image'ı indir:</strong>
+                    <code>sysupgrade</code> image'ı mevcut OpenWrt'den upgrade
+                    için, <code>factory</code> image'ı fabrika firmware
+                    üzerinden ilk kurulum içindir. SHA256 hash'ini mutlaka
+                    doğrula.</span
+                >
+            </li>
+            <li>
+                <span class="snum">3</span
+                ><span
+                    ><strong>Yükleme yöntemi:</strong> Cihaza göre web arayüzü,
+                    TFTP, <code>mtd</code> komutu veya hardware serial değişir.
+                    Bazı Xiaomi modelleri için önce telnet açma adımı gerekir.
+                    TOH sayfasındaki "Installation" bağlantısını takip et.</span
+                >
+            </li>
+            <li>
+                <span class="snum">4</span
+                ><span
+                    ><strong>İlk erişim ve temel güvenlik:</strong>
+                    <code>192.168.1.1</code> adresine bağlan. Root şifresi set
+                    et, SSH public key ekle, WAN'dan LuCI erişimini kapat. Bu üç
+                    adım atlanamazlar.</span
+                >
+            </li>
+            <li>
+                <span class="snum">5</span
+                ><span
+                    ><strong>SQM kurulumu:</strong>
+                    <code>opkg update && opkg install luci-app-sqm</code>.
+                    Network → SQM QoS menüsünden WAN arayüzünü seç, hızları ISP
+                    değerinin %90-95'i olarak gir, algoritma olarak CAKE
+                    seç.</span
+                >
+            </li>
+        </ol>
 
-<p>OpenWrt dünyasına adım atmaya karar verdiyseniz, şu iki önemli noktayı unutmamalısınız:</p>
+        <div class="callout">
+            <strong>SBC kullanıcıları için:</strong> NanoPi R5S, R76S gibi
+            cihazlarda <code>FriendlyWrt</code> (OpenWrt fork) veya ImmortalWrt
+            tercih edilebilir. Ana OpenWrt ile özellik eşdeğeri ama donanım
+            optimizasyonları içerir.
+        </div>
 
-<blockquote>
-    <strong>1. Cihaz Uyumluluğu:</strong> Her router OpenWrt'yi desteklemez. Kurulum yapmadan önce mutlaka <a href="https://openwrt.org/toh/start" target="_blank">OpenWrt Table of Hardware (ToH)</a> listesinden cihazınızın marka ve modelini kontrol etmelisiniz.<br><br>
-    <strong>2. Risk Faktörü (Bricking):</strong> Kurulum aşamasında yanlış bir yazılım yüklemek cihazınızı tamamen kullanılmaz hale getirebilir ("brick"). Bu yüzden cihazınıza özel yükleme rehberlerini adım adım ve dikkatlice takip etmelisiniz.
-</blockquote>
+        <hr />
 
-## Sonuç
+        <h2>Temel paketler — kurulum sonrası</h2>
+        <div class="pkg-grid">
+            <div class="pkg">
+                <div class="pkg-name">luci-app-sqm</div>
+                <div class="pkg-desc">
+                    SQM/CAKE grafik arayüzü. Bufferbloat çözümü için şart.
+                </div>
+            </div>
+            <div class="pkg">
+                <div class="pkg-name">luci-app-wireguard</div>
+                <div class="pkg-desc">WireGuard VPN yapılandırma arayüzü.</div>
+            </div>
+            <div class="pkg">
+                <div class="pkg-name">adblock</div>
+                <div class="pkg-desc">
+                    DNS-level reklam/tracking engelleme. 500K+ domain.
+                </div>
+            </div>
+            <div class="pkg">
+                <div class="pkg-name">unbound / smartdns</div>
+                <div class="pkg-desc">
+                    DNS-over-TLS/HTTPS, DoQ desteği, cache optimizasyonu.
+                </div>
+            </div>
+            <div class="pkg">
+                <div class="pkg-name">nlbwmon</div>
+                <div class="pkg-desc">
+                    Cihaz bazlı bant genişliği kullanım istatistikleri.
+                </div>
+            </div>
+            <div class="pkg">
+                <div class="pkg-name">tcpdump / nmap</div>
+                <div class="pkg-desc">Yerinde paket analizi ve ağ keşfi.</div>
+            </div>
+            <div class="pkg">
+                <div class="pkg-name">ddns-scripts-cloudflare</div>
+                <div class="pkg-desc">
+                    Dinamik IP → DNS kaydı otomatik güncelleme.
+                </div>
+            </div>
+            <div class="pkg">
+                <div class="pkg-name">acme.sh</div>
+                <div class="pkg-desc">
+                    Let's Encrypt wildcard SSL sertifikası otomasyonu.
+                </div>
+            </div>
+        </div>
 
-<p>OpenWrt, eskiyen veya özellikleri yetersiz kalan router cihazlarınıza adeta yeniden hayat verir. Size ağınız üzerinde tam bir şeffaflık, güvenlik ve özgürlük sunar. Eğer teknolojiyi kurcalamayı seviyor ve internet altyapınızdan maksimum performans almak istiyorsanız, OpenWrt kesinlikle denemeye değer bir deneyimdir.</p>
+        <hr />
 
-<p><em>Bir sonraki yazımızda, uyumlu bir router'a adım adım OpenWrt kurulumunu ve ilk yapılması gereken temel ayarları inceleyeceğiz. Takipte kalın!</em></p>
+        <h2>Desteklenen donanımlar — önerilen seçimler</h2>
+        <p>
+            Donanım seçiminde iki kritik faktör: WAN/LAN port kapasitesi ve
+            SQM/CAKE CPU yükü. Özellikle 500 Mbps üzeri hatlarda CPU sınırına
+            çabuk ulaşılır.
+        </p>
+
+        <div class="sec-lbl">Router — Wi-Fi entegre</div>
+        <div class="hw-grid">
+            <div class="hw-card">
+                <div class="hw-name">GL.iNet GL-MT6000 (Flint 2)</div>
+                <div class="hw-sub">MT7986A / Fabrikadan OpenWrt tabanlı</div>
+                <div class="hw-tags">
+                    <span class="hw-tag hi">Wi-Fi 6 AX6000</span
+                    ><span class="hw-tag">2x 2.5G</span
+                    ><span class="hw-tag">~500 Mbps SQM</span
+                    ><span class="hw-tag">~110$</span>
+                </div>
+                <div class="hw-note">
+                    Hazır çözüm isteyenler için. Fabrikadan OpenWrt tabanlı,
+                    kutudan çıktığı gibi çalışır.
+                </div>
+            </div>
+            <div class="hw-card">
+                <div class="hw-name">Imou HX21 / Xiaomi AX3000T</div>
+                <div class="hw-sub">MT7981B / OpenWrt resmi/snapshot</div>
+                <div class="hw-tags">
+                    <span class="hw-tag hi">Wi-Fi 6 AX3000</span
+                    ><span class="hw-tag">~200 Mbps SQM</span
+                    ><span class="hw-tag">30-35$</span>
+                </div>
+                <div class="hw-note">
+                    Düşük hat veya SQM olmadan kullanım için uygun fiyatlı
+                    seçenek.
+                </div>
+            </div>
+        </div>
+
+        <div class="sec-lbl">SBC — maksimum performans</div>
+        <div class="hw-grid">
+            <div class="hw-card rec">
+                <div class="hw-name">NanoPi R5S</div>
+                <div class="hw-sub">RK3568B2 @2GHz / OpenWrt resmi</div>
+                <div class="hw-tags">
+                    <span class="hw-tag hi">2x 2.5G + 1G</span
+                    ><span class="hw-tag">~600 Mbps SQM</span
+                    ><span class="hw-tag">~80$</span>
+                </div>
+                <div class="hw-note">
+                    500 Mbps hat için en dengeli seçim. IRQ affinity pinning ile
+                    rahat marj.
+                </div>
+            </div>
+            <div class="hw-card">
+                <div class="hw-name">NanoPi R76S</div>
+                <div class="hw-sub">RK3576 4x A72 / OpenWrt snapshot</div>
+                <div class="hw-tags">
+                    <span class="hw-tag hi">2x 2.5G PCIe</span
+                    ><span class="hw-tag">~1000+ Mbps SQM</span
+                    ><span class="hw-tag">~90$</span>
+                </div>
+                <div class="hw-note">
+                    Yeni nesil A72 çekirdekleri. WireGuard + SQM kombinasyonu
+                    için yeterli güç.
+                </div>
+            </div>
+            <div class="hw-card">
+                <div class="hw-name">NanoPi R6S</div>
+                <div class="hw-sub">RK3588S 4x A76 / OpenWrt resmi</div>
+                <div class="hw-tags">
+                    <span class="hw-tag hi">2x 2.5G + 1G</span
+                    ><span class="hw-tag">1400+ Mbps SQM</span
+                    ><span class="hw-tag">~130$</span>
+                </div>
+                <div class="hw-note">
+                    Multi-gigabit hat + WireGuard + SQM + IDS paralel
+                    çalıştırabilir.
+                </div>
+            </div>
+            <div class="hw-card">
+                <div class="hw-name">Radxa Zero 3E</div>
+                <div class="hw-sub">RK3566 @1.6GHz / OpenWrt 24.10</div>
+                <div class="hw-tags">
+                    <span class="hw-tag hi">1x Gigabit</span
+                    ><span class="hw-tag">~400 Mbps SQM</span
+                    ><span class="hw-tag">~40$</span>
+                </div>
+                <div class="hw-note">
+                    Ekonomik başlangıç. USB ethernet ile ikinci port
+                    eklenebilir.
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <h2>Önceki makaleyle bağlantı: bufferbloat sorunu</h2>
+        <p>
+            OpenWrt'nin en hızlı fark yaratan özelliği SQM + CAKE
+            konfigürasyonudur. Önceki makalede detaylı incelediğimiz bufferbloat
+            sorununun tek gerçek çözümü aktif kuyruk yönetimidir. Fabrika
+            firmware'lerde bu özellik bulunmaz.
+        </p>
+
+        <div class="ref-box">
+            <span>→</span>
+            <span
+                >Bufferbloat sorununun detaylı analizi, önce/sonra grafikleri ve
+                gerçek test sonuçları için:
+                <a
+                    href="https://kmlcck.github.io/2026/06/05/BufferBloat.html"
+                    target="_blank"
+                    >İnternetim Neden Bu Kadar Yavaş? Suçlu Hızınız Değil,
+                    Bufferbloat</a
+                ></span
+            >
+        </div>
+
+        <div class="callout">
+            <strong>Özet:</strong> OpenWrt yalnızca router yazılımı değil, ağ
+            altyapısı üzerinde tam kontrol sağlayan bir platformdur. Güvenlik
+            açıklarının kapatılma hızı, trafik görünürlüğü, DNS gizliliği ve QoS
+            kabiliyetleri açısından ISP ekipmanıyla karşılaştırılamaz. IT
+            ortamındaki "her katman kendi kontrolünde olmalı" prensibini ağ
+            katmanına taşır.
+        </div>
+
+        <div class="cta-box">
+            <h3>Tam interaktif versiyon</h3>
+            <p>
+                Bu makalenin grafik ve donanım karşılaştırmaları dahil tam
+                versiyonu kmlcck.github.io üzerinde yayında.
+            </p>
+            <a
+                class="cta-btn"
+                href="https://kmlcck.github.io/2026/06/05/BufferBloat.html"
+                target="_blank"
+                >Bufferbloat makalesini oku ↗</a
+            >
+        </div>
+
+        <div class="tag-row">
+            <span class="tag">#OpenWrt</span>
+            <span class="tag">#NetworkSecurity</span>
+            <span class="tag">#Linux</span>
+            <span class="tag">#Homelab</span>
+            <span class="tag">#SQM</span>
+            <span class="tag">#WireGuard</span>
+            <span class="tag">#VLAN</span>
+            <span class="tag">#SysAdmin</span>
+            <span class="tag">#IT</span>
+            <span class="tag">#NanoPi</span>
+        </div>
+    </body>
+</html>
