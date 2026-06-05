@@ -4,15 +4,18 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+#This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
+#You can find the source code for Minima at GitHub:
+#[jekyll][jekyll-organization] /
+#[minima](https://github.com/jekyll/minima)
+#
+#You can find the source code for Jekyll at GitHub:
+#[jekyll][jekyll-organization] /
+#[jekyll](https://github.com/jekyll/jekyll)
+#
+#
+#[jekyll-organization]: https://github.com/jekyll
 
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
+Merhaba ve Hoş Geldiniz! Bu web sitesi, Sistem ve Çözümler hakkında teknik makaleleri, incelemeleri ve açık kaynaklı projelerimin detaylarını barındıran bir platformdur.Amacım, öğrendiğim bilgileri toplulukla paylaşmak ve güncel yazılım trendleri hakkında Türkçe kaynak oluşturmaktır. Makalelere üstteki menüden veya aşağıdaki listeden ulaşabilirsiniz. Keyifli okumalar!
 
-
-[jekyll-organization]: https://github.com/jekyll
