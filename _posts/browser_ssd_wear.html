@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarayıcılar ve SSD Ömrü: Gizli Aşındırıcılar — kmlcck.github.io</title>
+<meta name="description" content="Firefox 15 saniyede bir disk yazar. Chrome Gemini Nano'yu arka planda indirir. Electron log'larını asla durdurmaz. TBW hesaplayıcı ve çözümler.">
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:740px;margin:0 auto;padding:2rem 1.5rem;color:#1a1a1a;background:#fff;line-height:1.8;}
+  h1{font-size:28px;font-weight:600;line-height:1.3;margin-bottom:.75rem;}
+  h2{font-size:21px;font-weight:600;margin:2.5rem 0 .75rem;}
+  h3{font-size:17px;font-weight:600;margin:1.75rem 0 .5rem;}
+  p{font-size:16px;margin-bottom:1rem;}
+  hr{border:none;border-top:1px solid #e5e5e5;margin:2rem 0;}
+  code{font-family:'SFMono-Regular',Consolas,monospace;font-size:13px;background:#f5f5f2;border:1px solid #e5e5e5;padding:2px 6px;border-radius:4px;}
+  pre{background:#f5f5f2;border:1px solid #e5e5e5;border-radius:8px;padding:1rem 1.1rem;font-family:'SFMono-Regular',Consolas,monospace;font-size:13px;line-height:1.7;overflow-x:auto;margin:1rem 0 1.5rem;}
+  pre .cm{color:#888;}
+  .badge{display:inline-block;background:#e6f1fb;color:#185fa5;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:1rem;}
+  .subtitle{font-size:17px;color:#555;line-height:1.7;}
+  .callout{background:#f0f6ff;border-left:3px solid #378add;padding:1rem 1.25rem;margin:1.5rem 0;font-size:14px;color:#333;line-height:1.7;border-radius:0 6px 6px 0;}
+  .callout strong{color:#111;}
+  .warn{background:#fef9ec;border-left:3px solid #e0a020;padding:1rem 1.25rem;margin:1.5rem 0;font-size:14px;color:#7a5000;line-height:1.7;border-radius:0 6px 6px 0;}
+  .danger-box{background:#fef0f0;border-left:3px solid #e24b4a;padding:1rem 1.25rem;margin:1.5rem 0;font-size:14px;color:#a32d2d;line-height:1.7;border-radius:0 6px 6px 0;}
+  .tbw-calc{background:#fafaf8;border:1px solid #e5e5e5;border-radius:12px;padding:1.5rem;margin:1.5rem 0;}
+  .tbw-calc h3{margin-top:0;}
+  .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1.25rem;}
+  .calc-field label{font-size:12px;color:#555;display:block;margin-bottom:6px;font-weight:600;}
+  .calc-field input,.calc-field select{width:100%;font-size:14px;padding:7px 10px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#1a1a1a;}
+  .calc-result{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1rem;}
+  .calc-card{background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:.9rem 1rem;text-align:center;}
+  .calc-val{font-size:22px;font-weight:600;}
+  .calc-lbl{font-size:11px;color:#888;margin-top:3px;}
+  .calc-note{font-size:12px;color:#888;margin-top:1rem;line-height:1.6;}
+  .write-table{width:100%;border-collapse:collapse;margin:1rem 0 1.5rem;font-size:13px;}
+  .write-table th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#888;padding:.6rem .75rem;border-bottom:1px solid #e5e5e5;text-align:left;}
+  .write-table td{padding:.6rem .75rem;border-bottom:1px solid #eee;color:#1a1a1a;vertical-align:middle;}
+  .write-table tr:last-child td{border-bottom:none;}
+  .severity{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;}
+  .sev-low{background:#e1f5ee;color:#0f6e56;}
+  .sev-med{background:#faeeda;color:#854f0b;}
+  .sev-high{background:#fceaea;color:#a32d2d;}
+  .bar-vis{margin:1rem 0 1.5rem;}
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .bar-label{font-size:12px;color:#555;width:145px;flex-shrink:0;text-align:right;}
+  .bar-track{flex:1;height:20px;background:#f5f5f2;border-radius:4px;overflow:hidden;border:1px solid #e5e5e5;}
+  .bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600;color:#fff;white-space:nowrap;}
+  .bar-val{font-size:12px;color:#555;width:80px;flex-shrink:0;}
+  .fix-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:1rem 0 1.5rem;}
+  .fix-card{background:#fafaf8;border:1px solid #e5e5e5;border-radius:10px;padding:1rem;}
+  .fix-title{font-size:13px;font-weight:600;margin-bottom:4px;}
+  .fix-desc{font-size:12px;color:#555;line-height:1.6;}
+  .fix-impact{font-size:11px;font-weight:600;margin-top:6px;padding:2px 8px;border-radius:10px;display:inline-block;background:#e1f5ee;color:#0f6e56;}
+  .check-list{list-style:none;padding:0;margin:.75rem 0 1.25rem;}
+  .check-list li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.6;padding:.3rem 0;}
+  .ck{color:#1d9e75;font-weight:700;flex-shrink:0;}
+  .ref-box{background:#f0f6ff;border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-size:13px;color:#555;display:flex;gap:10px;}
+  .cta-box{background:#f7f7f5;border-radius:10px;border:1px solid #e5e5e5;padding:1.5rem;margin:2rem 0 1rem;}
+  .cta-box h3{font-size:16px;font-weight:600;margin:0 0 .5rem;}
+  .cta-box p{margin:0 0 1rem;font-size:14px;color:#555;}
+  .cta-btn{display:inline-block;padding:9px 20px;font-size:14px;font-weight:600;border:1px solid #ccc;border-radius:8px;background:#fff;color:#111;text-decoration:none;}
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.5rem;}
+  .tag{font-size:12px;color:#555;background:#f7f7f5;border:1px solid #e5e5e5;padding:4px 10px;border-radius:20px;}
+  @media(max-width:600px){
+    .calc-grid,.calc-result,.fix-grid{grid-template-columns:1fr;}
+    .bar-label{width:90px;}
+  }
+</style>
+</head>
+<body>
+
+<span class="badge">SSD · Tarayıcı · Disk I/O</span>
+<h1>Tarayıcılar ve SSD ömrü: gizli aşındırıcılar</h1>
+<p class="subtitle">Firefox 15 saniyede bir disk yazar. Chrome yerel AI modelini arka planda indirir. Electron uygulamaları log'larını asla durdurmaz. Bunların hiçbirini fark etmezsiniz — ta ki SMART verisi konuşana kadar.</p>
+
+<hr>
+
+<p>Modern SSD'lerde NAND flash hücrelerinin sınırlı yazma dayanımı vardır. Üretici bu değeri TBW (Total Bytes Written) olarak garanti belgesi üzerinde belirtir. Garanti, TBW aşıldığında genellikle geçersiz sayılır. Sorun şu: ortalama bir geliştirici makinesinde tarayıcılar, Electron uygulamaları ve önbellek mekanizmaları sessiz sedasız TBW'yi aşıyor.</p>
+
+<h2>SSD TBW nedir, ne kadar sürer?</h2>
+
+<table class="write-table">
+  <tr><th>Model / Kapasite</th><th>TBW</th><th>Günlük yazma (5 yıl)</th><th>Kullanım</th></tr>
+  <tr><td>Samsung 870 EVO 250GB</td><td>150 TBW</td><td>82 GB/gün</td><td>Orta yük</td></tr>
+  <tr><td>WD Blue SN570 500GB</td><td>300 TBW</td><td>164 GB/gün</td><td>Yüksek yük</td></tr>
+  <tr><td>Samsung 980 Pro 1TB</td><td>600 TBW</td><td>329 GB/gün</td><td>Çok yüksek</td></tr>
+  <tr><td>SK Hynix P41 512GB</td><td>310 TBW</td><td>170 GB/gün</td><td>Yüksek yük</td></tr>
+  <tr><td>Crucial MX500 500GB</td><td>180 TBW</td><td>99 GB/gün</td><td>Orta yük</td></tr>
+</table>
+
+<div class="tbw-calc">
+  <h3 style="margin-top:0;margin-bottom:1rem;">TBW hesaplayıcı</h3>
+  <div class="calc-grid">
+    <div class="calc-field">
+      <label>SSD kapasitesi (GB)</label>
+      <input type="number" id="ssd-cap" value="500" min="60" max="4000" step="10" oninput="calcTBW()">
+    </div>
+    <div class="calc-field">
+      <label>TBW (üretici garantisi)</label>
+      <input type="number" id="tbw-val" value="300" min="30" max="3000" step="10" oninput="calcTBW()">
+    </div>
+    <div class="calc-field">
+      <label>Tahmini günlük yazma (GB)</label>
+      <input type="number" id="daily-write" value="15" min="1" max="500" step="1" oninput="calcTBW()">
+    </div>
+    <div class="calc-field">
+      <label>Mevcut yazma (TBW)</label>
+      <input type="number" id="current-tbw" value="0" min="0" max="3000" step="1" oninput="calcTBW()">
+    </div>
+  </div>
+  <div class="calc-result">
+    <div class="calc-card">
+      <div class="calc-val" id="res-years" style="color:#0f6e56;">54.8</div>
+      <div class="calc-lbl">Kalan ömür (yıl)</div>
+    </div>
+    <div class="calc-card">
+      <div class="calc-val" id="res-used">0%</div>
+      <div class="calc-lbl">TBW kullanımı</div>
+    </div>
+    <div class="calc-card">
+      <div class="calc-val" id="res-daily">15 GB</div>
+      <div class="calc-lbl">Günlük yazma</div>
+    </div>
+  </div>
+  <p class="calc-note" id="calc-status">SMART verisini CrystalDiskInfo (Windows) veya <code>smartctl -a /dev/nvme0</code> (Linux) ile okuyun. "Total Bytes Written" değerini yukarıya girin.</p>
+</div>
+
+<h2>Firefox: 15 saniyede bir storage.sqlite</h2>
+
+<p>Firefox, tarama oturumu verilerini <code>$PROFILE/storage.sqlite</code> dosyasına varsayılan olarak her 15 saniyede bir yazar. Bu davranış <code>browser.sessionstore.interval</code> parametresiyle kontrol edilir.</p>
+
+<div class="bar-vis">
+  <div class="bar-row">
+    <span class="bar-label">storage.sqlite</span>
+    <div class="bar-track"><div class="bar-fill" style="width:12%;background:#2a78d6;">~2-8 KB/yazma</div></div>
+    <span class="bar-val">5.7 MB/saat</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">places.sqlite WAL</span>
+    <div class="bar-track"><div class="bar-fill" style="width:28%;background:#2a78d6;">~10-40 KB/yazma</div></div>
+    <span class="bar-val">28 MB/saat</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">sessionstore-backups</span>
+    <div class="bar-track"><div class="bar-fill" style="width:45%;background:#e34948;">değişken</div></div>
+    <span class="bar-val">~100 MB/gün</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">disk cache (toplam)</span>
+    <div class="bar-track"><div class="bar-fill" style="width:75%;background:#e34948;">350 MB limit</div></div>
+    <span class="bar-val">1-3 GB/gün</span>
+  </div>
+</div>
+
+<pre><span class="cm"># Linux — Firefox profil dizinindeki yazmaları izle</span>
+inotifywait -m -r ~/.mozilla/firefox/*.default-release \
+  -e close_write --format '%T %w%f %e' --timefmt '%H:%M:%S' | \
+  grep -E 'sqlite|json|jsonlz4'
+
+<span class="cm"># Çıktı örneği:</span>
+<span class="cm"># 14:32:15 /home/user/.mozilla/firefox/xxxxx/storage.sqlite CLOSE_WRITE</span>
+<span class="cm"># 14:32:30 /home/user/.mozilla/firefox/xxxxx/storage.sqlite CLOSE_WRITE</span>
+<span class="cm"># 14:32:45 /home/user/.mozilla/firefox/xxxxx/storage.sqlite CLOSE_WRITE</span></pre>
+
+<pre><span class="cm"># Windows — PowerShell ile yazma zamanı farkı</span>
+$before = (Get-Item "$env:APPDATA\Mozilla\Firefox\Profiles\*\storage.sqlite").LastWriteTime
+Start-Sleep 60
+$after = (Get-Item "$env:APPDATA\Mozilla\Firefox\Profiles\*\storage.sqlite").LastWriteTime
+"Son yazma farkı: $(($after - $before).TotalSeconds) saniye"</pre>
+
+<h3>Firefox optimizasyon ayarları (about:config)</h3>
+<pre><span class="cm"># Session kayıt intervalini artır (ms) — varsayılan: 15000</span>
+browser.sessionstore.interval = 60000
+
+<span class="cm"># Disk cache'i kapat, RAM cache kullan</span>
+browser.cache.disk.enable = false
+browser.cache.memory.enable = true
+browser.cache.memory.capacity = 524288  <span class="cm"># 512MB</span>
+
+<span class="cm"># SQLite WAL checkpoint periyodunu uzat</span>
+storage.sqlite.wal-checkpoint-interval = 3600000  <span class="cm"># 1 saat</span>
+
+<span class="cm"># Media cache disk'e yazmasın</span>
+media.cache_size = 0
+media.cache_readahead_limit = 0</pre>
+
+<div class="callout"><strong>places.sqlite ve WAL modu:</strong> Firefox geçmiş ve yer imleri için SQLite WAL (Write-Ahead Logging) kullanır. WAL checkpoint işlemleri yoğun disk yazmasına neden olabilir. WAL dosyası büyüdükçe checkpoint sıklaşır. <code>PRAGMA wal_checkpoint(TRUNCATE)</code> komutu ile elle tetiklenebilir.</div>
+
+<h2>Chrome: Gemini Nano ve yerel AI indirmesi</h2>
+
+<p>Chrome 127+ ile birlikte Google, Gemini Nano modelini kullanıcıya bildirmeden yerel depolama alanına indirir. Model boyutu 1.7-3.5 GB arasında değişir.</p>
+
+<pre><span class="cm"># Model konumları</span>
+<span class="cm"># Windows</span>
+%LOCALAPPDATA%\Google\Chrome\User Data\OptimizationGuide\
+
+<span class="cm"># Linux</span>
+~/.config/google-chrome/OptimizationGuide/
+
+<span class="cm"># macOS</span>
+~/Library/Application Support/Google/Chrome/OptimizationGuide/
+
+<span class="cm"># Boyut kontrolü (Linux/macOS)</span>
+du -sh ~/.config/google-chrome/OptimizationGuide/
+
+<span class="cm"># Windows PowerShell</span>
+(Get-ChildItem "$env:LOCALAPPDATA\Google\Chrome\User Data\OptimizationGuide" `
+  -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB</pre>
+
+<table class="write-table">
+  <tr><th>Kaynak</th><th>Yazma miktarı</th><th>Kontrol</th><th>Etki</th></tr>
+  <tr><td>Disk cache (Default)</td><td>1-5 GB/gün</td><td><code>--disk-cache-size=0</code></td><td><span class="severity sev-high">Yüksek</span></td></tr>
+  <tr><td>Gemini Nano model</td><td>1.7-3.5 GB (tek seferlik)</td><td>Policy ile</td><td><span class="severity sev-med">Orta</span></td></tr>
+  <tr><td>Crash reports</td><td>10-50 MB/gün</td><td>Policy ile</td><td><span class="severity sev-low">Düşük</span></td></tr>
+  <tr><td>Update cache</td><td>50-200 MB/güncelleme</td><td>Kontrol yok</td><td><span class="severity sev-low">Düşük</span></td></tr>
+  <tr><td>Service Worker cache</td><td>100-500 MB/gün</td><td>Site bazlı</td><td><span class="severity sev-med">Orta</span></td></tr>
+</table>
+
+<pre><span class="cm"># Chrome disk cache'i RAM'e taşı</span>
+<span class="cm"># Windows shortcut parametresi</span>
+chrome.exe --disk-cache-dir="\\.\NUL" --disk-cache-size=1
+
+<span class="cm"># Linux — tmpfs üzerine yönlendir</span>
+google-chrome --disk-cache-dir=/tmp/chrome-cache --disk-cache-size=524288000
+
+<span class="cm"># Gemini Nano'yu enterprise policy ile devre dışı bırak</span>
+<span class="cm"># Windows — registry</span>
+reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v "OnDeviceModelAllowed" /t REG_DWORD /d 0 /f
+
+<span class="cm"># Linux — /etc/opt/chrome/policies/managed/ai-policy.json</span>
+{
+  "OnDeviceModelAllowed": false,
+  "OptimizationGuideFetchingEnabled": false
+}</pre>
+
+<div class="warn"><strong>OptimizationGuide:</strong> Chrome'un optimizasyon rehberi servisi (<code>chrome://optimization-guide-internals</code>) sayfa yükleme tahminleri için arka planda veri indirir ve yazar. Kurumsal ortamlarda <code>OptimizationGuideFetchingEnabled: false</code> policy'si disk yazmasını belirgin şekilde azaltır.</div>
+
+<h2>Electron uygulamaları: sessiz log akışı</h2>
+
+<p>VS Code, Slack, Discord, Teams — hepsi Chromium tabanlı Electron framework'ü üzerinde çalışır. Her biri kendi log mekanizmasını ayrı ayrı yönetir.</p>
+
+<table class="write-table">
+  <tr><th>Uygulama</th><th>Log dizini</th><th>Günlük yazma</th><th>Etki</th></tr>
+  <tr><td>VS Code</td><td><code>~/.config/Code/logs/</code></td><td>50-200 MB</td><td><span class="severity sev-med">Orta</span></td></tr>
+  <tr><td>Microsoft Teams</td><td><code>%APPDATA%\Microsoft\Teams\logs.txt</code></td><td>200-800 MB</td><td><span class="severity sev-high">Yüksek</span></td></tr>
+  <tr><td>Slack</td><td><code>~/.config/Slack/logs/</code></td><td>50-150 MB</td><td><span class="severity sev-med">Orta</span></td></tr>
+  <tr><td>Discord</td><td><code>%APPDATA%\discord\logs/</code></td><td>30-100 MB</td><td><span class="severity sev-low">Düşük</span></td></tr>
+</table>
+
+<pre><span class="cm"># Linux — uygulamaların disk yazmasını izle</span>
+sudo iotop -ao -d 5 | grep -E 'chrome|code|slack|teams|discord'
+
+<span class="cm"># dstat ile saniyede yazma miktarı</span>
+dstat -d --top-io-adv 5
+
+<span class="cm"># Windows — process bazlı IO istatistikleri</span>
+Get-Process | Sort-Object -Property WorkingSet -Descending |
+  Select-Object Name,
+    @{N='IO Write (MB)';E={[math]::Round($_.IOWriteOperationCount/1MB,2)}} |
+  Format-Table -AutoSize
+
+<span class="cm"># smartctl ile TBW durumu (NVMe)</span>
+sudo smartctl -a /dev/nvme0 | grep -E 'Data Units Written|Total Bytes Written'</pre>
+
+<hr>
+
+<h2>Çözümler: RAM disk ve tmpfs</h2>
+
+<div class="fix-grid">
+  <div class="fix-card">
+    <div class="fix-title">Linux — tmpfs ile profil (psd)</div>
+    <div class="fix-desc">Tarayıcı profilini ve cache'i RAM üzerine mount et. profile-sync-daemon (psd) bunu otomatize eder ve kapatma sırasında diske sync eder.</div>
+    <span class="fix-impact">Disk yazması %80-95 azalır</span>
+  </div>
+  <div class="fix-card">
+    <div class="fix-title">Windows — ImDisk RAM disk</div>
+    <div class="fix-desc">ImDisk Toolkit ile sanal RAM disk oluştur. Tarayıcı cache dizinini sembolik link ile RAM disk'e yönlendir.</div>
+    <span class="fix-impact">Cache yazmayı tamamen ortadan kaldırır</span>
+  </div>
+  <div class="fix-card">
+    <div class="fix-title">Firefox about:config</div>
+    <div class="fix-desc">Disk cache'i kapat, sessionstore intervalini artır, WAL checkpoint periyodunu uzat.</div>
+    <span class="fix-impact">%60-70 yazma azalması</span>
+  </div>
+  <div class="fix-card">
+    <div class="fix-title">Chrome enterprise policy</div>
+    <div class="fix-desc">Gemini Nano, OptimizationGuide ve crash reporter'ı policy ile devre dışı bırak.</div>
+    <span class="fix-impact">1-3 GB model indirmesini engeller</span>
+  </div>
+</div>
+
+<pre><span class="cm"># Linux — profile-sync-daemon kurulumu</span>
+sudo pacman -S profile-sync-daemon   <span class="cm"># Arch</span>
+sudo apt install profile-sync-daemon <span class="cm"># Debian/Ubuntu</span>
+
+<span class="cm"># ~/.config/psd/psd.conf</span>
+BROWSERS=(firefox chromium)
+USE_OVERLAYFS="yes"
+
+systemctl --user enable psd
+systemctl --user start psd
+psd p  <span class="cm"># durum kontrolü</span></pre>
+
+<pre><span class="cm"># Linux — manuel tmpfs cache (/etc/fstab)</span>
+tmpfs /home/user/.cache/mozilla      tmpfs uid=1000,gid=1000,size=512M,mode=0700 0 0
+tmpfs /home/user/.cache/google-chrome tmpfs uid=1000,gid=1000,size=512M,mode=0700 0 0
+
+<span class="cm"># Windows — ImDisk ile sembolik link</span>
+<span class="cm"># 1. ImDisk ile R: sürücüsü oluştur (512MB)</span>
+imdisk -a -s 512M -m R: -p "/fs:ntfs /q /y"
+
+<span class="cm"># 2. Chrome cache'i yönlendir</span>
+$cache = "$env:LOCALAPPDATA\Google\Chrome\User Data\Default\Cache"
+Remove-Item $cache -Recurse -Force
+New-Item -ItemType SymbolicLink -Path $cache -Target "R:\ChromeCache" -Force</pre>
+
+<div class="danger-box"><strong>RAM disk riski:</strong> Tarayıcı profili RAM disk'te tutulurken sisteminiz beklenmedik şekilde kapanırsa (güç kesintisi, BSOD) o oturumun verileri kaybolabilir. profile-sync-daemon bu riski overlay FS ile minimize eder. Windows'ta ImDisk kullanıyorsanız düzenli sync veya UPS kesinlikle önerilir.</div>
+
+<h2>Genel SSD koruma kontrol listesi</h2>
+<ul class="check-list">
+  <li><span class="ck">✓</span><span>CrystalDiskInfo (Windows) veya <code>smartctl</code> (Linux) ile TBW durumunu aylık kontrol et</span></li>
+  <li><span class="ck">✓</span><span>Firefox disk cache'ini kapat, RAM cache'i 512MB olarak ayarla</span></li>
+  <li><span class="ck">✓</span><span>Chrome'da Gemini Nano ve OptimizationGuide policy ile kısıtla</span></li>
+  <li><span class="ck">✓</span><span>Teams log dizinini periyodik olarak temizle veya log seviyesini düşür</span></li>
+  <li><span class="ck">✓</span><span>Linux'ta psd veya tmpfs mount ile tarayıcı cache'ini RAM'e taşı</span></li>
+  <li><span class="ck">✓</span><span>Windows'ta ImDisk ile cache için RAM disk oluştur</span></li>
+  <li><span class="ck">✓</span><span>Geliştirici makinesinde SSD'nin TBW garantisini not al; %80 dolduğunda değiştirmeyi planla</span></li>
+  <li><span class="ck">✓</span><span>Docker build cache ve npm/pip cache dizinlerini SSD yerine HDD'ye yönlendir</span></li>
+</ul>
+
+<div class="ref-box">→ Windows 11'de SSD ömrünü uzatmak için SysMain ve Defender tuning rehberi: <a href="https://kmlcck.github.io" target="_blank">kmlcck.github.io ↗</a></div>
+
+<div class="cta-box">
+  <h3>Tam interaktif versiyon</h3>
+  <p>TBW hesaplayıcı ve tüm config örnekleri dahil tam versiyon kmlcck.github.io üzerinde yayında.</p>
+  <a class="cta-btn" href="https://kmlcck.github.io" target="_blank">kmlcck.github.io ↗</a>
+</div>
+
+<div class="tag-row">
+  <span class="tag">#SSD</span>
+  <span class="tag">#Firefox</span>
+  <span class="tag">#Chrome</span>
+  <span class="tag">#Electron</span>
+  <span class="tag">#GeminiNano</span>
+  <span class="tag">#DiskIO</span>
+  <span class="tag">#Performance</span>
+  <span class="tag">#SysAdmin</span>
+  <span class="tag">#Linux</span>
+  <span class="tag">#Windows</span>
+</div>
+
+<script>
+function calcTBW() {
+  const tbw = parseFloat(document.getElementById('tbw-val').value) || 300;
+  const daily = parseFloat(document.getElementById('daily-write').value) || 15;
+  const current = parseFloat(document.getElementById('current-tbw').value) || 0;
+  const remaining = Math.max(0, tbw - current);
+  const years = remaining / (daily * 365 / 1000);
+  const pct = Math.min(100, Math.round((current / tbw) * 100));
+  const yEl = document.getElementById('res-years');
+  yEl.textContent = years > 99 ? '99+' : years.toFixed(1);
+  yEl.style.color = years < 1 ? '#a32d2d' : years < 3 ? '#854f0b' : '#0f6e56';
+  document.getElementById('res-used').textContent = pct + '%';
+  document.getElementById('res-daily').textContent = (parseFloat(document.getElementById('daily-write').value) || 15) + ' GB';
+  const note = document.getElementById('calc-status');
+  if (pct >= 80) {
+    note.textContent = 'SSD TBW garantisinin %' + pct + "'ine ulaşıldı. Yedekleme ve değiştirme planı yapın.";
+    note.style.color = '#a32d2d';
+  } else if (pct >= 50) {
+    note.textContent = "TBW'nin yarısından fazlası kullanıldı. Tarama alışkanlıklarını gözden geçirin.";
+    note.style.color = '#854f0b';
+  } else {
+    note.textContent = "SMART verisini CrystalDiskInfo (Windows) veya smartctl -a /dev/nvme0 (Linux) ile okuyun. 'Total Bytes Written' değerini yukarıya girin.";
+    note.style.color = '#888';
+  }
+}
+calcTBW();
+</script>
+
+</body>
+</html>
