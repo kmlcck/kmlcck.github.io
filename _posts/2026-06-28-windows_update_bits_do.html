@@ -1,0 +1,433 @@
+---
+layout: page
+title: "Windows Update'in Gizli Ağ ve Disk Tüketimi "
+date: 2026-06-28
+---
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows Update'in Gizli Ağ ve Disk Tüketimi </title>
+<meta name="description" content="Windows Update'in Gizli Ağ ve Disk Tüketimi: BITS ve Delivery Optimization Kısıtlama — kmlcck.github.io">
+<meta property="og:title" content="Windows Update'in Gizli Ağ ve Disk Tüketimi">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f6f8fa;
+    --bg-code:#f6f8fa;
+    --line:#d8dee4;
+    --text:#1f2328;
+    --text-dim:#59636e;
+    --link:#0969da;
+    --accent:#8250df;
+    --ok:#1a7f37;
+    --warn:#cf222e;
+    --amber:#9a6700;
+    --mono:ui-monospace,'SFMono-Regular','Cascadia Code',Consolas,monospace;
+    --sans:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);}
+  body{font-size:16px;line-height:1.6;}
+  a{color:var(--link);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .topnav{
+    border-bottom:1px solid var(--line);
+    padding:14px 24px;
+    display:flex;gap:20px;align-items:center;
+    font-size:14px;
+  }
+  .topnav .brand{font-weight:600;color:var(--text);}
+
+  main{max-width:740px;margin:0 auto;padding:32px 24px 64px;}
+
+  .post-meta{font-size:13px;color:var(--text-dim);margin-bottom:8px;}
+  .post-meta .sep{margin:0 6px;}
+
+  h1{font-size:31px;font-weight:700;margin:6px 0 24px;line-height:1.25;}
+
+  .lede{font-size:17px;color:var(--text-dim);margin:0 0 28px;}
+  .lede code{background:var(--bg-code);padding:2px 5px;border-radius:4px;font-family:var(--mono);font-size:0.9em;color:var(--text);}
+
+  hr{border:none;border-top:1px solid var(--line);margin:32px 0;}
+
+  h2{font-size:22px;font-weight:600;margin:36px 0 14px;padding-bottom:6px;border-bottom:1px solid var(--line);}
+  h3{font-size:17px;font-weight:600;margin:24px 0 10px;}
+
+  p{margin:0 0 14px;}
+  code{
+    font-family:var(--mono);font-size:0.88em;background:var(--bg-code);
+    color:#cf222e;padding:2px 6px;border-radius:4px;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:14px;}
+  thead th{
+    text-align:left;font-weight:600;padding:8px 12px;
+    border-bottom:2px solid var(--line);background:var(--bg-soft);
+  }
+  tbody td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:var(--bg-soft);}
+
+  pre{
+    background:var(--bg-code);border:1px solid var(--line);border-radius:6px;
+    padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:13px;
+    line-height:1.5;margin:0 0 20px;
+  }
+  pre .c1{color:#6e7781;}
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;margin:0 0 20px;
+  }
+  .stat-card{border:1px solid var(--line);border-radius:6px;padding:14px;background:var(--bg-soft);}
+  .stat-card .stat-label{font-size:13px;color:var(--text-dim);margin-bottom:4px;}
+  .stat-card .stat-value{font-size:18px;font-weight:700;font-family:var(--mono);}
+  .stat-card .stat-sub{font-size:12px;color:var(--text-dim);margin-top:2px;}
+
+  .calc-box{border:1px solid var(--line);border-radius:8px;padding:20px;margin:0 0 24px;background:var(--bg-soft);}
+  .calc-box h3{margin-top:0;}
+  .calc-field{margin-bottom:14px;}
+  .calc-field label{display:block;font-size:13px;color:var(--text-dim);margin-bottom:4px;}
+  .calc-field input,.calc-field select{
+    width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:5px;
+    font-family:var(--mono);font-size:14px;background:#fff;
+  }
+  .calc-result{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap;}
+  .calc-result .result-box{
+    flex:1;min-width:140px;border:1px solid var(--line);border-radius:6px;
+    padding:12px;text-align:center;background:#fff;
+  }
+  .calc-result .result-value{font-size:20px;font-weight:700;color:var(--accent);font-family:var(--mono);}
+  .calc-result .result-label{font-size:12px;color:var(--text-dim);margin-top:2px;}
+  .calc-note{font-size:12px;color:var(--text-dim);margin-top:14px;}
+
+  .callout{
+    border-left:3px solid var(--accent);background:var(--bg-soft);
+    padding:12px 16px;border-radius:0 6px 6px 0;margin:0 0 20px;font-size:14.5px;
+  }
+  .callout strong{color:var(--accent);}
+
+  .solution-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 24px;}
+  .solution-card{border:1px solid var(--line);border-radius:8px;padding:16px;}
+  .solution-card h4{margin:0 0 8px;font-size:15px;}
+  .solution-card p{font-size:13.5px;color:var(--text-dim);margin:0 0 10px;}
+  .solution-card .impact{
+    font-size:12.5px;font-weight:600;color:var(--ok);
+    background:#dafbe1;display:inline-block;padding:2px 8px;border-radius:4px;
+  }
+
+  .checklist{list-style:none;margin:0 0 28px;padding:0;}
+  .checklist li{
+    position:relative;padding:7px 0 7px 26px;border-bottom:1px solid var(--line);font-size:14.5px;
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li::before{content:'✓';position:absolute;left:0;color:var(--ok);font-weight:700;}
+
+  .tags{margin:32px 0;font-size:13px;color:var(--text-dim);}
+  .tags span{margin-right:10px;}
+
+  .cta-line{font-size:14.5px;margin:24px 0;}
+
+  .full-version{
+    border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin:24px 0;background:var(--bg-soft);
+  }
+  .full-version h3{margin-top:0;}
+
+  footer.site{
+    border-top:1px solid var(--line);margin-top:48px;padding-top:24px;font-size:13.5px;color:var(--text-dim);
+  }
+  footer.site .gh{margin-top:6px;display:block;}
+  footer.site .desc{margin-top:10px;line-height:1.6;}
+
+  @media (max-width:600px){
+    .solution-grid{grid-template-columns:1fr;}
+    .stat-grid{grid-template-columns:repeat(2,1fr);}
+    h1{font-size:25px;}
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <div class="post-meta">Windows Update'in Gizli Ağ ve Disk Tüketimi — kmlcck.github.io<span class="sep">·</span>BITS · Delivery Optimization · PowerShell</div>
+
+  <h1>Windows Update'in gizli ağ ve disk tüketimi: BITS ve Delivery Optimization</h1>
+
+  <p class="lede">
+    Bağlantınız aniden yavaşlar, disk ışığı sürekli yanar, ama Task Manager'da "Windows Update"
+    diye bir şey görünmez — çünkü iş <code>svchost.exe</code> arkasında <code>DoSvc</code> ve
+    <code>BITS</code> servisleri tarafından yürütülür. Üstelik komşu bilgisayarınız da sizin
+    indirdiğiniz güncellemeyi internetten değil, sizin makinenizden çekebilir. Bunun farkına
+    varmak için sayaç okumanız gerekir; arayüzde hiçbir uyarı yoktur.
+  </p>
+
+  <hr>
+
+  <p>
+    Windows Update içeriği iki ayrı mekanizmayla dağıtılır: <strong>Delivery Optimization (DO)</strong>
+    peer-to-peer model ile güncelleme parçalarını yerel ağdaki veya internetteki diğer Windows
+    cihazlarından çeker; <strong>BITS (Background Intelligent Transfer Service)</strong> ise
+    geleneksel arka plan indirme motorudur ve WSUS/SCCM ortamlarında halen aktif rol oynar.
+    İkisi de varsayılan olarak "akıllı" bant genişliği ayarlamasına güvenir — yani siz video
+    izlerken bile arka planda GB'lerce veri taşıyabilirler.
+  </p>
+
+  <h2>Hangi servis ne tüketiyor: genel tablo</h2>
+
+  <table>
+    <thead>
+      <tr><th>Mekanizma</th><th>Varsayılan davranış</th><th>Tipik etki</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Delivery Optimization (indirme)</td><td>Arka plan: bant genişliğinin %45'i, ön plan: %90'ı</td><td>Yüksek</td></tr>
+      <tr><td>Delivery Optimization (yükleme/peer'a verme)</td><td>Diğer cihazlara da içerik dağıtır</td><td>Orta-Yüksek</td></tr>
+      <tr><td>BITS arka plan transferi</td><td>Sınırsız, GPO ile kısıtlanmadıkça</td><td>Yüksek (WSUS/SCCM ortamları)</td></tr>
+      <tr><td>DO yerel cache (disk)</td><td><code>C:\Windows\SoftwareDistribution\DeliveryOptimization</code></td><td>Orta</td></tr>
+      <tr><td>Windows Update disk taraması/indeksleme</td><td>Güncelleme sonrası bütünlük denetimi</td><td>Düşük-Orta</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Ölçüm: Delivery Optimization performans anlık görüntüsü</h3>
+  <p>
+    Windows'un kendi <code>Get-DeliveryOptimizationPerfSnap</code> ve
+    <code>Get-DeliveryOptimizationStatus</code> cmdlet'leri, dosyanın hangi kaynaktan
+    (HTTP, peer, Microsoft Connected Cache) geldiğini ve ne kadar bant genişliği kullanıldığını
+    doğrudan rapor eder.
+  </p>
+
+  <pre><span class="c1"># do-network-snapshot.ps1 — Delivery Optimization genel görünüm</span>
+Get-DeliveryOptimizationPerfSnap | Format-List
+
+<span class="c1"># Aktif indirme/yükleme işlerinin detayı</span>
+Get-DeliveryOptimizationStatus | Format-Table FileId, Status, PercentPeerCaching, BytesTotal, BytesFromPeers, BytesFromHttp -AutoSize
+
+<span class="c1"># Bu ay toplam ne kadar veri taşındı (download + upload)</span>
+Get-DeliveryOptimizationPerfSnapThisMonth | Format-List</pre>
+
+  <pre><span class="c1"># Örnek çıktı</span>
+NumberOfFiles            : 14
+TotalBytesDownloaded      : 3221225472
+TotalBytesUploaded        : 891289600
+DownloadHttpBytes         : 1073741824
+DownloadPeerBytes         : 2147483648
+PercentPeerCaching        : 66.6</pre>
+
+  <div class="callout">
+    <strong>Dikkat çeken nokta:</strong> Yukarıdaki örnekte indirilen verinin <code>%66.6</code>'sı
+    peer'lerden gelmiş — yani bu makine internetten az veri çekmiş, ama karşılığında
+    <code>891 MB</code> veriyi başka cihazlara <em>yüklemiş</em>. Bu yükleme trafiği, özellikle
+    sınırlı yukarı bant genişliğine sahip bağlantılarda fark edilmeyen bir tüketimdir.
+  </div>
+
+  <h3>Darboğaz/tüketim hesaplayıcı</h3>
+
+  <div class="calc-box">
+    <div class="calc-field">
+      <label for="bwInput">Toplam internet bant genişliğiniz (Mbps)</label>
+      <input type="number" id="bwInput" value="50" step="1" oninput="calcDO()">
+    </div>
+    <div class="calc-field">
+      <label for="bgPctInput">DO arka plan kullanım yüzdesi (varsayılan: 45)</label>
+      <input type="number" id="bgPctInput" value="45" step="1" oninput="calcDO()">
+    </div>
+    <div class="calc-field">
+      <label for="hoursInput">Güncelleme indirme süresi (dakika)</label>
+      <input type="number" id="hoursInput" value="20" step="1" oninput="calcDO()">
+    </div>
+
+    <div class="calc-result">
+      <div class="result-box">
+        <div class="result-value" id="mbpsOut">—</div>
+        <div class="result-label">Arka plan kullanımı (Mbps)</div>
+      </div>
+      <div class="result-box">
+        <div class="result-value" id="dataOut">—</div>
+        <div class="result-label">Tahmini toplam veri (MB)</div>
+      </div>
+    </div>
+    <p class="calc-note">
+      Bu hesaplama, DO'nun varsayılan yüzde tabanlı dinamik ayarlamasını basitleştirilmiş olarak
+      gösterir. Gerçek değerler ağ koşullarına göre anlık değişir;
+      <code>Get-DeliveryOptimizationPerfSnap</code> ile gerçek tüketimi doğrulayın.
+    </p>
+  </div>
+
+  <h2>Process ve servis bazlı disk/ağ etkisini izleme</h2>
+
+  <p>
+    Delivery Optimization kendi servisi (<code>DoSvc</code>) üzerinden çalıştığı için process
+    listesinde ayrı bir uygulama olarak görünmez; ağ kullanımını <code>Get-NetTCPConnection</code>
+    veya doğrudan DO sayaçlarıyla izlemek gerekir.
+  </p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">DoSvc</div>
+      <div class="stat-value">Arka plan</div>
+      <div class="stat-sub">Delivery Optimization servisi</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">BITS</div>
+      <div class="stat-value">Arka plan</div>
+      <div class="stat-sub">WSUS/SCCM indirmeleri</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Cache dizini</div>
+      <div class="stat-value">~1-5 GB</div>
+      <div class="stat-sub">DeliveryOptimization klasörü</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Port 7680</div>
+      <div class="stat-value">TCP/UDP</div>
+      <div class="stat-sub">Peer-to-peer iletişimi</div>
+    </div>
+  </div>
+
+  <pre><span class="c1"># do-cache-size.ps1 — DO yerel cache disk kullanımı</span>
+$doCache = "$env:SystemRoot\SoftwareDistribution\DeliveryOptimization"
+if (Test-Path $doCache) {
+    $size = (Get-ChildItem $doCache -Recurse -ErrorAction SilentlyContinue |
+        Measure-Object -Property Length -Sum).Sum / 1MB
+    "{0:N1} MB — {1}" -f $size, $doCache
+}
+
+<span class="c1"># Aktif BITS işlerini listele (varsa WSUS/SCCM indirmeleri)</span>
+Get-BitsTransfer -AllUsers | Select-Object DisplayName, JobState, BytesTotal, BytesTransferred
+
+<span class="c1"># Peer bağlantı detaylarını gör (kimlerle veri paylaşıyorsunuz)</span>
+Get-DeliveryOptimizationStatus -PeerInfo</pre>
+
+  <hr>
+
+  <h2>Çözümler: ölçtükten sonra kısıtlama</h2>
+
+  <div class="solution-grid">
+    <div class="solution-card">
+      <h4>DO bant genişliğini sabitle</h4>
+      <p>Yüzde tabanlı dinamik ayarlama yerine KB/s cinsinden sabit bir tavan koy.</p>
+      <span class="impact">Anlık tepe tüketimi engeller</span>
+    </div>
+    <div class="solution-card">
+      <h4>Peer yüklemesini kapat</h4>
+      <p>Download Mode'u LAN-only veya HTTP-only yaparak diğer cihazlara veri yüklemeyi durdur.</p>
+      <span class="impact">Yukarı bant genişliğini korur</span>
+    </div>
+    <div class="solution-card">
+      <h4>BITS'i zaman aralığıyla sınırla</h4>
+      <p>GPO/registry üzerinden mesai saatlerinde düşük, gece yüksek limit tanımla.</p>
+      <span class="impact">WSUS/SCCM ortamlarında etkili</span>
+    </div>
+    <div class="solution-card">
+      <h4>DO cache boyutunu sınırla</h4>
+      <p>Maksimum cache boyutunu disk kapasitesine göre küçült.</p>
+      <span class="impact">Disk alanı şişmesini önler</span>
+    </div>
+  </div>
+
+  <h3>1. Delivery Optimization bant genişliğini KB/s olarak sabitle</h3>
+  <pre><span class="c1"># Arka plan indirmeyi 1000 KB/s, ön planı 5000 KB/s ile sınırla</span>
+Set-DOMaxBackgroundBandwidth -MaxBackgroundBandwidth 1000
+Set-DOMaxForegroundBandwidth -MaxForegroundBandwidth 5000
+
+<span class="c1"># Alternatif: yüzde tabanlı sınırlama (varsayılan: arka plan %45, ön plan %90)</span>
+Set-DOPercentageMaxBackgroundBandwidth -MaxBackgroundBandwidthPercentage 15
+Set-DOPercentageMaxForegroundBandwidth -MaxForegroundBandwidthPercentage 50
+
+<span class="c1"># Varsayılana sıfırlamak için</span>
+Set-DOMaxBackgroundBandwidth -Reset
+Set-DOPercentageMaxBackgroundBandwidth -Reset
+
+<span class="c1"># Aktif ayarları doğrula</span>
+Get-DOPercentageMaxBackgroundBandwidth
+Get-DOPercentageMaxForegroundBandwidth
+Get-DODownloadMode</pre>
+
+  <h3>2. Peer-to-peer yüklemesini sınırla veya kapat</h3>
+  <pre><span class="c1"># DODownloadMode değerleri: 0=HTTP only (peer kapalı), 1=LAN, 2=Group, 3=Internet</span>
+New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" `
+    -Name "DODownloadMode" -Value 0 -Type DWord
+
+<span class="c1"># Yalnızca yerel ağdaki cihazlarla paylaş (internet peering kapalı)</span>
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" `
+    -Name "DODownloadMode" -Value 1 -Type DWord
+
+<span class="c1"># Değişikliği uygulamak için servisi yeniden başlat</span>
+Restart-Service -Name DoSvc -Force</pre>
+
+  <h3>3. BITS'i zaman aralığına göre sınırla</h3>
+  <pre><span class="c1"># Mesai saatlerinde (08-17) 20 Kbps, dışında 5000 Kbps ile sınırla</span>
+$bitsPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\BITS"
+New-Item -Path $bitsPath -Force | Out-Null
+
+Set-ItemProperty -Path $bitsPath -Name "EnableBITSMaxBandwidth"     -Value 1     -Type DWord
+Set-ItemProperty -Path $bitsPath -Name "MaxBandwidthValidFrom"      -Value 8     -Type DWord
+Set-ItemProperty -Path $bitsPath -Name "MaxBandwidthValidTo"        -Value 17    -Type DWord
+Set-ItemProperty -Path $bitsPath -Name "MaxTransferRateOnSchedule"  -Value 20    -Type DWord
+Set-ItemProperty -Path $bitsPath -Name "MaxTransferRateOffSchedule" -Value 5000  -Type DWord
+Set-ItemProperty -Path $bitsPath -Name "UseSystemMaximum"           -Value 1     -Type DWord
+
+Restart-Service -Name BITS -Force</pre>
+
+  <h3>4. DO cache boyutunu disk kapasitesine göre sınırla</h3>
+  <pre><span class="c1"># Cache'i maksimum 5 GB ile sınırla (varsayılan davranış disk doluluğuna göre dinamiktir)</span>
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" `
+    -Name "DOAbsoluteMaxCacheSize" -Value 5 -Type DWord
+
+<span class="c1"># Mevcut cache'i hemen temizle</span>
+Delete-DeliveryOptimizationCache -Force</pre>
+
+  <div class="callout">
+    <strong>Sıralama önerisi:</strong> Önce ölçüm scriptiyle hangi mekanizmanın (DO mu BITS mi)
+    asıl tüketici olduğunu doğrulayın. Çoğu ev/küçük ofis ortamında asıl sorun DO peer yüklemesidir;
+    BITS sınırlaması esas olarak WSUS/SCCM kullanan kurumsal ortamlarda anlamlıdır.
+  </div>
+
+  <h2>Genel Windows Update ağ/disk tüketimi kontrol listesi</h2>
+
+  <ul class="checklist">
+    <li><code>Get-DeliveryOptimizationPerfSnap</code> ile aylık toplam indirme/yükleme miktarını kontrol et</li>
+    <li><code>PercentPeerCaching</code> yüksekse, yüklediğiniz veri miktarını <code>BytesUploaded</code> ile doğrula</li>
+    <li>Sınırlı yukarı bant genişliğinde <code>DODownloadMode</code>'u 0 (HTTP-only) veya 1 (LAN-only) yap</li>
+    <li>DO arka plan/ön plan bant genişliğini <code>Set-DOPercentageMaxBackgroundBandwidth</code> ile ortamına göre ayarla</li>
+    <li>WSUS/SCCM kullanılan ortamlarda BITS zaman aralığı sınırlamasını mesai saatlerine göre kur</li>
+    <li>DO yerel cache dizininin disk kullanımını periyodik olarak ölç, gerekirse <code>DOAbsoluteMaxCacheSize</code> ile sınırla</li>
+    <li>Port 7680 (TCP/UDP) üzerindeki peer trafiğini güvenlik duvarı loglarıyla çapraz kontrol et</li>
+    <li>Değişiklikleri GPO/registry ile kalıcı hale getir; tekil PowerShell komutları yeniden başlatmada sıfırlanabilir</li>
+  </ul>
+
+  <p class="cta-line">→ PowerShell ile disk I/O darboğazı tespiti üzerine ilgili rehber: <a href="#">kmlcck.github.io ↗</a></p>
+
+  <div class="full-version">
+    <h3>Tam interaktif versiyon</h3>
+    <p>Tüketim hesaplayıcı ve tüm GPO/registry örnekleri dahil tam versiyon kmlcck.github.io üzerinde yayında.</p>
+    <a href="#">kmlcck.github.io ↗</a>
+  </div>
+
+  <div class="tags">
+    <span>#PowerShell</span><span>#WindowsUpdate</span><span>#BITS</span><span>#DeliveryOptimization</span><span>#Networking</span><span>#SysAdmin</span>
+  </div>
+</main>
+
+<script>
+function calcDO(){
+  const bw = parseFloat(document.getElementById('bwInput').value) || 0;
+  const pct = parseFloat(document.getElementById('bgPctInput').value) || 0;
+  const minutes = parseFloat(document.getElementById('hoursInput').value) || 0;
+
+  const usedMbps = bw * (pct / 100);
+  const dataMB = (usedMbps / 8) * 60 * minutes; // Mbps -> MB/s -> toplam MB
+
+  document.getElementById('mbpsOut').textContent = usedMbps.toFixed(1) + ' Mbps';
+  document.getElementById('dataOut').textContent = dataMB.toFixed(0) + ' MB';
+}
+calcDO();
+</script>
+
+</body>
+</html>
