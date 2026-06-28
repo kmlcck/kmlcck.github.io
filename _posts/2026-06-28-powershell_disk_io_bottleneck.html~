@@ -443,12 +443,6 @@ Register-ScheduledTask -TaskName 'DiskIO-Daily-Report' -Action $action -Trigger 
   <div class="tags">
     <span>#PowerShell</span><span>#Windows</span><span>#DiskIO</span><span>#Performance</span><span>#SysAdmin</span><span>#Troubleshooting</span>
   </div>
-
-  <footer class="site">
-    <strong>KMLCCK | Sistem ve Ağ Notları</strong>
-    <a class="gh" href="#">github.com/kmlcck</a>
-    <p class="desc">Windows Server, Linux, WSL, Alpine Linux ve Ağ teknolojileri üzerine teknik incelemeler, Powershell scriptleri ve kişisel gelişim notları.</p>
-  </footer>
 </main>
 
 <script>
