@@ -1,0 +1,485 @@
+---
+layout: page
+title: "PowerShell ile Disk I/O Darboğazı Tespiti"
+date: 2026-06-28
+---
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PowerShell ile Disk I/O Darboğazı Tespiti</title>
+<meta name="description" content="PowerShell ile Disk I/O Darboğazı Tespiti — kmlcck.github.io">
+<meta property="og:title" content="PowerShell ile Disk I/O Darboğazı Tespiti">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f6f8fa;
+    --bg-code:#f6f8fa;
+    --line:#d8dee4;
+    --text:#1f2328;
+    --text-dim:#59636e;
+    --link:#0969da;
+    --accent:#8250df;
+    --ok:#1a7f37;
+    --warn:#cf222e;
+    --mono:ui-monospace,'SFMono-Regular','Cascadia Code',Consolas,monospace;
+    --sans:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);}
+  body{font-size:16px;line-height:1.6;}
+  a{color:var(--link);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .topnav{
+    border-bottom:1px solid var(--line);
+    padding:14px 24px;
+    display:flex;gap:20px;align-items:center;
+    font-size:14px;
+  }
+  .topnav .brand{font-weight:600;color:var(--text);}
+
+  main{max-width:740px;margin:0 auto;padding:32px 24px 64px;}
+
+  .post-meta{
+    font-size:13px;color:var(--text-dim);margin-bottom:8px;
+  }
+  .post-meta .sep{margin:0 6px;}
+
+  h1{font-size:32px;font-weight:700;margin:6px 0 24px;line-height:1.25;}
+
+  .lede{
+    font-size:17px;color:var(--text-dim);margin:0 0 28px;
+  }
+  .lede code{background:var(--bg-code);padding:2px 5px;border-radius:4px;font-family:var(--mono);font-size:0.9em;color:var(--text);}
+
+  hr{border:none;border-top:1px solid var(--line);margin:32px 0;}
+
+  h2{font-size:22px;font-weight:600;margin:36px 0 14px;padding-bottom:6px;border-bottom:1px solid var(--line);}
+  h3{font-size:17px;font-weight:600;margin:24px 0 10px;}
+
+  p{margin:0 0 14px;}
+  code{
+    font-family:var(--mono);font-size:0.88em;background:var(--bg-code);
+    color:#cf222e;padding:2px 6px;border-radius:4px;
+  }
+
+  table{
+    width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:14px;
+  }
+  thead th{
+    text-align:left;font-weight:600;padding:8px 12px;
+    border-bottom:2px solid var(--line);background:var(--bg-soft);
+  }
+  tbody td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:var(--bg-soft);}
+
+  pre{
+    background:var(--bg-code);border:1px solid var(--line);border-radius:6px;
+    padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:13px;
+    line-height:1.5;margin:0 0 20px;
+  }
+  pre .c1{color:#6e7781;}
+
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;margin:0 0 20px;
+  }
+  .stat-card{
+    border:1px solid var(--line);border-radius:6px;padding:14px;background:var(--bg-soft);
+  }
+  .stat-card .stat-label{font-size:13px;color:var(--text-dim);margin-bottom:4px;}
+  .stat-card .stat-value{font-size:18px;font-weight:700;font-family:var(--mono);}
+  .stat-card .stat-sub{font-size:12px;color:var(--text-dim);margin-top:2px;}
+
+  .calc-box{
+    border:1px solid var(--line);border-radius:8px;padding:20px;margin:0 0 24px;background:var(--bg-soft);
+  }
+  .calc-box h3{margin-top:0;}
+  .calc-field{margin-bottom:14px;}
+  .calc-field label{display:block;font-size:13px;color:var(--text-dim);margin-bottom:4px;}
+  .calc-field input{
+    width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:5px;
+    font-family:var(--mono);font-size:14px;background:#fff;
+  }
+  .calc-result{
+    display:flex;gap:16px;margin-top:16px;flex-wrap:wrap;
+  }
+  .calc-result .result-box{
+    flex:1;min-width:140px;border:1px solid var(--line);border-radius:6px;
+    padding:12px;text-align:center;background:#fff;
+  }
+  .calc-result .result-value{font-size:22px;font-weight:700;color:var(--accent);font-family:var(--mono);}
+  .calc-result .result-label{font-size:12px;color:var(--text-dim);margin-top:2px;}
+  .calc-note{font-size:12px;color:var(--text-dim);margin-top:14px;}
+
+  .callout{
+    border-left:3px solid var(--accent);background:var(--bg-soft);
+    padding:12px 16px;border-radius:0 6px 6px 0;margin:0 0 20px;font-size:14.5px;
+  }
+  .callout strong{color:var(--accent);}
+
+  .solution-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 24px;
+  }
+  .solution-card{
+    border:1px solid var(--line);border-radius:8px;padding:16px;
+  }
+  .solution-card h4{margin:0 0 8px;font-size:15px;}
+  .solution-card p{font-size:13.5px;color:var(--text-dim);margin:0 0 10px;}
+  .solution-card .impact{
+    font-size:12.5px;font-weight:600;color:var(--ok);
+    background:#dafbe1;display:inline-block;padding:2px 8px;border-radius:4px;
+  }
+
+  .checklist{list-style:none;margin:0 0 28px;padding:0;}
+  .checklist li{
+    position:relative;padding:7px 0 7px 26px;border-bottom:1px solid var(--line);font-size:14.5px;
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li::before{
+    content:'✓';position:absolute;left:0;color:var(--ok);font-weight:700;
+  }
+
+  .tags{margin:32px 0;font-size:13px;color:var(--text-dim);}
+  .tags span{margin-right:10px;}
+
+  .cta-line{font-size:14.5px;margin:24px 0;}
+
+  .full-version{
+    border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin:24px 0;background:var(--bg-soft);
+  }
+  .full-version h3{margin-top:0;}
+
+  footer.site{
+    border-top:1px solid var(--line);margin-top:48px;padding-top:24px;font-size:13.5px;color:var(--text-dim);
+  }
+  footer.site .gh{margin-top:6px;display:block;}
+  footer.site .desc{margin-top:10px;line-height:1.6;}
+
+  @media (max-width:600px){
+    .solution-grid{grid-template-columns:1fr;}
+    .stat-grid{grid-template-columns:repeat(2,1fr);}
+    h1{font-size:26px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <span class="brand">KMLCCK | Sistem ve Ağ Notları</span>
+  <a href="#">Hakkımda</a>
+</div>
+
+<main>
+  <div class="post-meta">PowerShell ile Disk I/O Darboğazı Tespiti — kmlcck.github.io<span class="sep">·</span>PowerShell · Disk I/O · Performans</div>
+
+  <h1>PowerShell ile disk I/O darboğazı tespiti</h1>
+
+  <p class="lede">
+    Sunucu "yavaş" diye şikayet geliyor, Task Manager'da CPU %12, RAM yarı boş.
+    Sorun çoğu zaman ekranda görünmez — disk kuyruğunda birikir.
+    <code>Avg. Disk Queue Length</code> 1'in üzerine çıktığı anda, her işlem disk için
+    sırada bekler ve bu, kullanıcının hissettiği "yavaşlığın" gerçek kaynağıdır.
+  </p>
+
+  <hr>
+
+  <p>
+    Windows performans sayaçları arasında en çok kafa karıştıran grup disk sayaçlarıdır,
+    çünkü bazıları doğrudan ölçüm, bazıları türetilmiş (derived) değerdir. Sorun şu:
+    CPU ve RAM grafikleri sakin görünürken, disk kuyruğu sessizce birikip uygulama yanıt
+    sürelerini saniyelere taşıyabilir.
+  </p>
+
+  <h2>Disk I/O sayaçları nedir, ne anlatır?</h2>
+
+  <table>
+    <thead>
+      <tr><th>Sayaç</th><th>Ne ölçer</th><th>Sorun eşiği</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>Avg. Disk Queue Length</code></td><td>Diskte bekleyen ortalama istek sayısı</td><td>&gt; 2 (sürekli)</td></tr>
+      <tr><td><code>Avg. Disk sec/Transfer</code></td><td>İstek başına ortalama gecikme</td><td>&gt; 15-20 ms (HDD), &gt; 1-2 ms (SSD)</td></tr>
+      <tr><td><code>Current Disk Queue Length</code></td><td>Anlık bekleyen istek sayısı</td><td>Trend önemli, anlık tepe değil</td></tr>
+      <tr><td><code>% Idle Time</code></td><td>Diskin boşta geçirdiği zaman oranı</td><td>&lt; %20 sürekli ise darboğaz olası</td></tr>
+      <tr><td><code>Disk Transfers/sec</code></td><td>Saniyedeki okuma+yazma işlemi</td><td>Disk modeline göre değişir</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Darboğaz eşik hesaplayıcı</h3>
+
+  <div class="calc-box">
+    <div class="calc-field">
+      <label for="queueInput">Ölçülen Avg. Disk Queue Length</label>
+      <input type="number" id="queueInput" value="3.4" step="0.1" oninput="calcBottleneck()">
+    </div>
+    <div class="calc-field">
+      <label for="idleInput">Ölçülen % Idle Time</label>
+      <input type="number" id="idleInput" value="12" step="1" oninput="calcBottleneck()">
+    </div>
+    <div class="calc-field">
+      <label for="latencyInput">Ölçülen Avg. Disk sec/Transfer (ms)</label>
+      <input type="number" id="latencyInput" value="28" step="1" oninput="calcBottleneck()">
+    </div>
+
+    <div class="calc-result">
+      <div class="result-box">
+        <div class="result-value" id="statusOut">—</div>
+        <div class="result-label">Genel durum</div>
+      </div>
+      <div class="result-box">
+        <div class="result-value" id="scoreOut">0/3</div>
+        <div class="result-label">Aşılan eşik sayısı</div>
+      </div>
+    </div>
+    <p class="calc-note">
+      Sayaç verisini <code>Get-Counter '\PhysicalDisk(*)\Avg. Disk Queue Length'</code> ile
+      veya aşağıdaki teşhis scriptiyle toplayın. Eşikler genel kabul gören sysadmin
+      pratiğine dayanır; ortamınıza göre ayarlayın.
+    </p>
+  </div>
+
+  <h3>Hızlı teşhis scripti</h3>
+  <p>Aşağıdaki script, fiziksel diskler için temel sayaçları 5 saniyelik aralıklarla 12 örnek (1 dakika) toplar ve ortalamayı raporlar:</p>
+
+  <pre><span class="c1"># diskio-diagnose.ps1 — temel disk darboğazı teşhisi</span>
+$counters = @(
+    '\PhysicalDisk(*)\Avg. Disk Queue Length',
+    '\PhysicalDisk(*)\Avg. Disk sec/Transfer',
+    '\PhysicalDisk(*)\% Idle Time',
+    '\PhysicalDisk(*)\Disk Transfers/sec'
+)
+
+$samples = Get-Counter -Counter $counters -SampleInterval 5 -MaxSamples 12
+
+$results = foreach ($sample in $samples) {
+    $sample.CounterSamples | Where-Object { $_.InstanceName -ne '_total' }
+}
+
+$results |
+    Group-Object InstanceName |
+    ForEach-Object {
+        $name = $_.Name
+        $queue = ($_.Group | Where-Object Path -like '*queue length*' |
+            Measure-Object CookedValue -Average).Average
+        $latencyMs = ($_.Group | Where-Object Path -like '*sec/transfer*' |
+            Measure-Object CookedValue -Average).Average * 1000
+        $idle = ($_.Group | Where-Object Path -like '*idle time*' |
+            Measure-Object CookedValue -Average).Average
+
+        [PSCustomObject]@{
+            Disk             = $name
+            AvgQueueLength   = [math]::Round($queue, 2)
+            AvgLatencyMs     = [math]::Round($latencyMs, 2)
+            IdleTimePercent  = [math]::Round($idle, 1)
+            Durum            = if ($queue -gt 2 -and $idle -lt 20) { 'DARBOĞAZ ŞÜPHESİ' } else { 'Normal' }
+        }
+    } | Format-Table -AutoSize</pre>
+
+  <pre><span class="c1"># Örnek çıktı</span>
+Disk        AvgQueueLength AvgLatencyMs IdleTimePercent Durum
+----        -------------- ------------ --------------- -----
+0 C:        3.42           28.6         12.3            DARBOĞAZ ŞÜPHESİ
+1 D:        0.08           1.1          97.8            Normal</pre>
+
+  <h2>Hangi process disk'i tıkıyor: process bazlı izleme</h2>
+
+  <p>
+    Diskin tıkandığını anladıktan sonraki adım, "kim yazıyor" sorusunun cevabı.
+    <code>Win32_PerfFormattedData_PerfProc_Process</code> WMI sınıfı, process bazlı
+    okuma/yazma byte oranını saniyelik olarak verir.
+  </p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">MsMpEng (Defender)</div>
+      <div class="stat-value">19.33 MB/s</div>
+      <div class="stat-sub">ağırlıklı yazma</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">sqlservr</div>
+      <div class="stat-value">14.22 MB/s</div>
+      <div class="stat-sub">ağırlıklı okuma</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">w3wp</div>
+      <div class="stat-value">6.82 MB/s</div>
+      <div class="stat-sub">ağırlıklı yazma</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">explorer</div>
+      <div class="stat-value">0.04 MB/s</div>
+      <div class="stat-sub">ihmal edilebilir</div>
+    </div>
+  </div>
+
+  <pre><span class="c1"># top-disk-io-process.ps1 — en çok disk I/O üreten process'leri listele</span>
+function Get-TopDiskIOProcess {
+    param([int]$Top = 10)
+
+    Get-CimInstance -ClassName Win32_PerfFormattedData_PerfProc_Process |
+        Where-Object { $_.Name -notin '_Total', 'Idle' -and $_.IODataBytesPersec -gt 0 } |
+        Sort-Object IODataBytesPersec -Descending |
+        Select-Object -First $Top -Property `
+            Name,
+            IDProcess,
+            @{N = 'Read MB/s';  E = { [math]::Round($_.IOReadBytesPersec  / 1MB, 2) } },
+            @{N = 'Write MB/s'; E = { [math]::Round($_.IOWriteBytesPersec / 1MB, 2) } },
+            @{N = 'Total MB/s'; E = { [math]::Round($_.IODataBytesPersec  / 1MB, 2) } }
+}
+
+Get-TopDiskIOProcess -Top 10 | Format-Table -AutoSize
+
+<span class="c1"># Sürekli izleme: her 5 saniyede bir top 5 process</span>
+while ($true) {
+    Clear-Host
+    Get-Date | Write-Host -ForegroundColor Cyan
+    Get-TopDiskIOProcess -Top 5 | Format-Table -AutoSize
+    Start-Sleep -Seconds 5
+}</pre>
+
+  <div class="callout">
+    <strong>Önemli not:</strong> Bu sayaçlar saniyelik anlık değerdir; tek bir ölçüm
+    yanıltıcı olabilir. Gerçek darboğaz tespiti için aynı script'i bir döngüde
+    30-60 saniye çalıştırıp ortalama almak daha güvenilir sonuç verir.
+  </div>
+
+  <h2>Disk gecikmesi ile uygulama yanıt süresi ilişkisi</h2>
+
+  <p>
+    <code>Avg. Disk sec/Transfer</code> değeri, kullanıcıların hissettiği yavaşlamayla
+    doğrudan ilişkilidir, ama yorumlama disk tipine göre değişir.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Disk tipi</th><th>Beklenen <code>sec/Transfer</code></th><th>Üzerinde olursa anlamı</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>HDD (7200rpm)</td><td>5-15 ms</td><td>&gt; 25 ms ise ciddi darboğaz</td></tr>
+      <tr><td>SATA SSD</td><td>0.1-1 ms</td><td>&gt; 5 ms ise anormal, controller/sürücü sorunu olabilir</td></tr>
+      <tr><td>NVMe</td><td>0.02-0.2 ms</td><td>&gt; 1 ms sürekliyse darboğaz işareti</td></tr>
+    </tbody>
+  </table>
+
+  <pre><span class="c1"># Disk tipine göre eşik kontrolü ve uyarı</span>
+$threshold = 0.005  <span class="c1"># 5ms — SSD için makul üst sınır (saniye cinsinden)</span>
+
+$latency = (Get-Counter '\PhysicalDisk(0 C:)\Avg. Disk sec/Transfer').CounterSamples.CookedValue
+
+if ($latency -gt $threshold) {
+    Write-Warning "C: sürücüsünde gecikme eşiği aşıldı: $([math]::Round($latency*1000,2)) ms"
+} else {
+    Write-Host "C: sürücüsü normal aralıkta: $([math]::Round($latency*1000,2)) ms" -ForegroundColor Green
+}</pre>
+
+  <hr>
+
+  <h2>Çözümler: tespitten sonra ne yapılır</h2>
+
+  <div class="solution-grid">
+    <div class="solution-card">
+      <h4>Defender tarama zamanlaması</h4>
+      <p>Zamanlanmış taramaları düşük yoğunluklu saatlere kaydır; <code>MsMpEng</code> sık sık en üst sırada çıkar.</p>
+      <span class="impact">I/O çakışmasını önler</span>
+    </div>
+    <div class="solution-card">
+      <h4>Pagefile'ı ayrı diske taşı</h4>
+      <p>Pagefile aktif darboğaz kaynağıysa, sistem disk yerine ayrı bir SSD'ye yönlendir.</p>
+      <span class="impact">Sistem disk yükünü azaltır</span>
+    </div>
+    <div class="solution-card">
+      <h4>SQL Server checkpoint ayarı</h4>
+      <p>Log büyüme ve checkpoint interval ayarlarını disk değişiminden önce gözden geçir.</p>
+      <span class="impact">Donanım değişmeden çözülebilir</span>
+    </div>
+    <div class="solution-card">
+      <h4>Otomatik günlük rapor</h4>
+      <p>Teşhis scriptini zamanlanmış görev olarak kaydet, CSV'ye logla.</p>
+      <span class="impact">Tekil teşhisten sürekli izlemeye geçiş</span>
+    </div>
+  </div>
+
+  <pre><span class="c1"># Defender zamanlanmış tarama saatini değiştir</span>
+Set-MpPreference -ScanScheduleDay Everyday
+Set-MpPreference -ScanScheduleTime 03:00:00
+Set-MpPreference -ScanScheduleQuickScanTime 01:00:00
+
+<span class="c1"># Pagefile durumunu kontrol et</span>
+Get-CimInstance -ClassName Win32_PageFileUsage | Select-Object Name, AllocatedBaseSize, CurrentUsage
+
+<span class="c1"># Görev zamanlayıcıya günlük rapor için kayıt</span>
+$action = New-ScheduledTaskAction -Execute 'powershell.exe' `
+    -Argument '-File C:\Scripts\diskio-diagnose.ps1 -OutFile C:\Logs\diskio-daily.csv'
+$trigger = New-ScheduledTaskTrigger -Daily -At 9am
+Register-ScheduledTask -TaskName 'DiskIO-Daily-Report' -Action $action -Trigger $trigger</pre>
+
+  <h2>Genel disk I/O darboğazı kontrol listesi</h2>
+
+  <ul class="checklist">
+    <li><code>Avg. Disk Queue Length</code> değerini sürekli 2'nin üzerinde olan disk var mı kontrol et</li>
+    <li><code>% Idle Time</code> düşükken (&lt; %20) hangi process'lerin aktif olduğunu <code>Win32_PerfFormattedData_PerfProc_Process</code> ile listele</li>
+    <li>Antivirüs/EDR taramalarının zamanlamasını iş yükü saatlerine göre ayarla</li>
+    <li>SSD/NVMe sürücülerde <code>sec/Transfer</code> değerinin milisaniyenin altında kaldığını doğrula</li>
+    <li>Tek seferlik ölçüm yerine en az 30-60 saniyelik örnekleme ile sonuçları doğrula</li>
+    <li>SQL Server, Exchange gibi I/O-yoğun servislerin kendi log/checkpoint ayarlarını disk değişiminden önce incele</li>
+    <li>Sonuçları periyodik olarak CSV'ye loglayan bir zamanlanmış görev kur, tek seferlik teşhisle yetinme</li>
+    <li>Pagefile ve geçici dosya dizinlerinin (<code>%TEMP%</code>, IIS log'ları) ayrı bir diske taşınmasını değerlendir</li>
+  </ul>
+
+  <p class="cta-line">→ DNS ve ağ gecikmesinde benzer "görünmeyen" darboğazlar için: <a href="#">kmlcck.github.io ↗</a></p>
+
+  <div class="full-version">
+    <h3>Tam interaktif versiyon</h3>
+    <p>Darboğaz eşik hesaplayıcı ve tüm script örnekleri dahil tam versiyon kmlcck.github.io üzerinde yayında.</p>
+    <a href="#">kmlcck.github.io ↗</a>
+  </div>
+
+  <div class="tags">
+    <span>#PowerShell</span><span>#Windows</span><span>#DiskIO</span><span>#Performance</span><span>#SysAdmin</span><span>#Troubleshooting</span>
+  </div>
+
+  <footer class="site">
+    <strong>KMLCCK | Sistem ve Ağ Notları</strong>
+    <a class="gh" href="#">github.com/kmlcck</a>
+    <p class="desc">Windows Server, Linux, WSL, Alpine Linux ve Ağ teknolojileri üzerine teknik incelemeler, Powershell scriptleri ve kişisel gelişim notları.</p>
+  </footer>
+</main>
+
+<script>
+function calcBottleneck(){
+  const queue = parseFloat(document.getElementById('queueInput').value) || 0;
+  const idle = parseFloat(document.getElementById('idleInput').value) || 0;
+  const latency = parseFloat(document.getElementById('latencyInput').value) || 0;
+
+  let score = 0;
+  if (queue > 2) score++;
+  if (idle < 20) score++;
+  if (latency > 5) score++;
+
+  const statusOut = document.getElementById('statusOut');
+  const scoreOut = document.getElementById('scoreOut');
+
+  scoreOut.textContent = score + '/3';
+
+  if (score >= 2) {
+    statusOut.textContent = 'DARBOĞAZ';
+    statusOut.style.color = '#cf222e';
+  } else if (score === 1) {
+    statusOut.textContent = 'İZLE';
+    statusOut.style.color = '#9a6700';
+  } else {
+    statusOut.textContent = 'NORMAL';
+    statusOut.style.color = '#1a7f37';
+  }
+}
+calcBottleneck();
+</script>
+
+</body>
+</html>
