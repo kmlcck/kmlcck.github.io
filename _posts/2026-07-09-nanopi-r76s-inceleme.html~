@@ -332,13 +332,11 @@ date: 2026-07-09
     <p class="hero-sub">Mimari, benchmark ve gerçek güç tüketimi ölçümleriyle mühendis odaklı bir inceleme.</p>
 
     <div class="photo-grid">
-      <img src="../assets/images/nanopi-r76s-angle-1.png" alt="NanoPi R76S açılı görünüm 1">
-      <img src="../assets/images/nanopi-r76s-front.png" alt="NanoPi R76S ön panel">
-      <img src="../assets/images/nanopi-r76s-back.png" alt="NanoPi R76S arka panel">
-      <img src="../assets/images/nanopi-r76s-angle-2.png" alt="NanoPi R76S açılı görünüm 2">
+      <img src="images/nanopi-r76s-angle-1.png" alt="NanoPi R76S açılı görünüm 1">
+      <img src="images/nanopi-r76s-front.png" alt="NanoPi R76S ön panel">
+      <img src="images/nanopi-r76s-back.png" alt="NanoPi R76S arka panel">
+      <img src="images/nanopi-r76s-angle-2.png" alt="NanoPi R76S açılı görünüm 2">
     </div>
-
-
     <p class="photo-caption">NanoPi R76S, CNC alüminyum kasa (heatsink) içinde — farklı açılardan görünüm.</p>
 
     <p class="disclaimer">Bu yazı, FriendlyELEC'in NanoPi R76S kartına ait resmi teknik dokümantasyon, üretici wiki'si ve bağımsız donanım basınında yer alan bulguların derlenmesiyle hazırlanmıştır. Donanım mimarisi, yazılım ekosistemi ve rakip karşılaştırması bölümleri spesifikasyon temellidir; CoreMark, OpenSSL ve güç tüketimi bölümleri ise kartın kendisinde doğrudan ölçülen gerçek sonuçları içerir.</p>
