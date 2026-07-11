@@ -1117,78 +1117,91 @@ date: 2026-07-11
 
         <hr />
 
-        <h2>Güç Tüketimi (OpenWrt Altında Ölçülen)</h2>
-        <p>
-            Pano tipi bir güç ölçüm cihazı üzerinden, FriendlyWrt çalışırken
-            boşta ve gözlemlenen maksimum tüketim değerleri doğrudan ölçüldü.
-        </p>
-        <div class="power-grid">
-            <div class="power-card">
-                <img
-                    src="/assets/images/power-idle.png"
-                    alt="NanoPi R76S boşta güç tüketimi ölçümü — 1.944W"
-                />
-                <div class="power-card-label">
-                    <span>Boşta / tipik yük</span
-                    ><span class="val">1,944 W</span>
-                </div>
-            </div>
-            <div class="power-card">
-                <img
-                    src="/assets/images/power-max.png"
-                    alt="NanoPi R76S maksimum güç tüketimi ölçümü — 3.331W"
-                />
-                <div class="power-card-label">
-                    <span>Gözlemlenen maksimum</span
-                    ><span class="val">3,331 W</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="result">
-            <div class="result-label">Ölçülen Sonuç</div>
-            <div class="table-wrap" style="margin-top: 10px">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Durum</th>
-                            <th>Anlık Güç</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                Boşta / hafif yük (FriendlyWrt, aktif ağ trafiği
-                                yok)
-                            </td>
-                            <td>1,944 W</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Gözlemlenen maksimum (CPU/kripto yükü altında)
-                            </td>
-                            <td>3,331 W</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p style="margin-top: 10px">
-                Priz tipi ölçüm cihazının ekranındaki günlük kümülatif tüketim
-                sayaçları (<code>POWER CONSUMPTION DAILY, 1 BAR = 1 kWh</code>)
-                da bu düşük güç profilini doğruluyor: kart, tam yükte bile
-                3,5W'ın altında kalıyor.
+        <section id="guc">
+            <h2>
+                <span class="num">08</span> Güç Tüketimi (OpenWrt Altında
+                Ölçülen)
+            </h2>
+            <p>
+                Kartın bulunduğu ortamda pano tipi bir güç ölçüm cihazı
+                üzerinden, FriendlyWrt çalışırken tipik/boşta ve gözlemlenen
+                maksimum tüketim değerleri doğrudan ölçüldü.
             </p>
-        </div>
 
-        <p>
-            Bu rakamlar RK3576'nın 8nm süreç teknolojisinin enerji verimliliğini
-            doğruluyor. Karşılaştırma için, x86 tabanlı mini PC router çözümleri
-            (örn. Intel N100) tipik olarak boşta bile 6-10W bandında seyrediyor;
-            R76S bu tüketimin üçte biri ila yarısı kadar bir bütçeyle çalışıyor.
-            Bu hem 7/24 çalışan bir router için elektrik maliyetini önemsiz
-            seviyeye indiriyor hem de fansız kasa tasarımının neden yeterli
-            olduğunu açıklıyor.
-        </p>
+            <div class="power-grid">
+                <div class="power-card">
+                    <img
+                        src="/assets/images/power-idle.png"
+                        alt="NanoPi R76S boşta güç tüketimi ölçümü — 1.944W"
+                    />
+                    <div class="power-card-label">
+                        <span>Boşta / tipik yük</span
+                        ><span class="val">1,944 W</span>
+                    </div>
+                </div>
+                <div class="power-card">
+                    <img
+                        src="/assets/images/power-max.png"
+                        alt="NanoPi R76S maksimum güç tüketimi ölçümü — 3.331W"
+                    />
+                    <div class="power-card-label">
+                        <span>Gözlemlenen maksimum</span
+                        ><span class="val">3,331 W</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result">
+                <div class="result-label">Ölçülen Sonuç</div>
+                <div class="table-wrap" style="margin-top: 10px">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Durum</th>
+                                <th>Anlık Güç</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Boşta / hafif yük (FriendlyWrt, aktif ağ
+                                    trafiği yok)
+                                </td>
+                                <td>1,944 W</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Gözlemlenen maksimum (CPU/kripto yükü
+                                    altında)
+                                </td>
+                                <td>3,331 W</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 10px">
+                    Priz tipi ölçüm cihazının ekranındaki günlük kümülatif
+                    tüketim sayaçları (<code
+                        >POWER CONSUMPTION DAILY, 1 BAR = 1 kWh</code
+                    >) da bu düşük güç profilini doğruluyor: kart, tam yükte
+                    bile 3,5W'ın altında kalıyor.
+                </p>
+            </div>
+
+            <p>
+                Bu rakamlar, RK3576'nın 8nm süreç teknolojisinin enerji
+                verimliliği açısından beklenen sonucu doğruluyor: boşta ~2W, tam
+                yükte ~3,3W'lık bir aralık, router/gateway sınıfı bir cihaz için
+                oldukça düşük. Karşılaştırma için, x86 tabanlı mini PC router
+                çözümleri (örn. Intel N100 tabanlı kartlar) tipik olarak boşta
+                bile 6-10W bandında seyrediyor; R76S bu tüketimin üçte biri ila
+                yarısı kadar bir bütçeyle çalışıyor. Bu, hem 7/24 çalışan bir
+                ev/ofis router'ı için elektrik maliyetini önemsiz seviyeye
+                indiriyor hem de kasanın fansız (pasif) soğutma tasarımının
+                neden yeterli olduğunu açıklıyor — 3,3W'lık bir TDP, küçük bir
+                alüminyum kasa için kolayca dağıtılabilir bir ısı yükü.
+            </p>
+        </section>
 
         <hr />
 
