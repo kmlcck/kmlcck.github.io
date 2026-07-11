@@ -1123,34 +1123,45 @@ date: 2026-07-11
             boşta ve gözlemlenen maksimum tüketim değerleri doğrudan
             ölçüldü.
         </p>
+        <h2>Güç Tüketimi (OpenWrt Altında Ölçülen)</h2>
+        <p>
+            Pano tipi bir güç ölçüm cihazı üzerinden, FriendlyWrt çalışırken
+            boşta ve gözlemlenen maksimum tüketim değerleri doğrudan ölçüldü.
+        </p>
 
         <div class="screen-block">
             <div class="screen-lbl">Boşta / tipik yük ölçümü</div>
-            <div class="screen-frame">
-                <div class="screen-bar">
-                    <span class="screen-bar-title">Güç Ölçüm Cihazı</span>
-                    <span class="screen-bar-url">NanoPi R76S · FriendlyWrt</span>
-                </div>
-                <img
-                    class="screen-img"
-                    src="/assets/images/power-idle.png"
-                    alt="NanoPi R76S boşta güç tüketimi ölçümü — 1.944W"
-                />
-            </div>
-            <div class="ann-row">
-                <div class="ann">
-                    <span class="ann-num">1</span>
-                    <div class="ann-text">
-                        <strong>1,944 W</strong> — Aktif ağ trafiği olmadan,
-                        boşta anlık güç çekişi.
+
+            <div class="power-card">
+                <div class="screen-frame">
+                    <div class="screen-bar">
+                        <span class="screen-bar-title">Güç Ölçüm Cihazı</span>
+                        <span class="screen-bar-url">NanoPi R76S · FriendlyWrt</span>
                     </div>
+
+                    <img
+                        class="screen-img"
+                        src="/assets/images/power-idle.png"
+                        alt="NanoPi R76S boşta güç tüketimi ölçümü — 1.944W"
+                    />
                 </div>
-                <div class="ann">
-                    <span class="ann-num">2</span>
-                    <div class="ann-text">
-                        <strong>POWER CONSUMPTION DAILY</strong> — Alt satır,
-                        günlük kümülatif tüketimi bar grafiği olarak
-                        gösteriyor (1 BAR = 1 kWh).
+
+                <div class="power-info">
+                    <div class="ann">
+                        <span class="ann-num">1</span>
+                        <div class="ann-text">
+                            <strong>1,944 W</strong><br />
+                            Aktif ağ trafiği olmadan boşta anlık güç çekişi.
+                        </div>
+                    </div>
+
+                    <div class="ann">
+                        <span class="ann-num">2</span>
+                        <div class="ann-text">
+                            <strong>POWER CONSUMPTION DAILY</strong><br />
+                            Alt satır günlük kümülatif tüketimi bar grafiği olarak
+                            gösteriyor (1 BAR = 1 kWh).
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1158,30 +1169,37 @@ date: 2026-07-11
 
         <div class="screen-block">
             <div class="screen-lbl">Gözlemlenen maksimum ölçümü</div>
-            <div class="screen-frame">
-                <div class="screen-bar">
-                    <span class="screen-bar-title">Güç Ölçüm Cihazı</span>
-                    <span class="screen-bar-url">NanoPi R76S · FriendlyWrt</span>
-                </div>
-                <img
-                    class="screen-img"
-                    src="/assets/images/power-max.png"
-                    alt="NanoPi R76S maksimum güç tüketimi ölçümü — 3.331W"
-                />
-            </div>
-            <div class="ann-row">
-                <div class="ann">
-                    <span class="ann-num">1</span>
-                    <div class="ann-text">
-                        <strong>MAX 3,331 W</strong> — CPU/kripto benchmark
-                        yükü altında gözlemlenen en yüksek anlık tüketim.
+
+            <div class="power-card">
+                <div class="screen-frame">
+                    <div class="screen-bar">
+                        <span class="screen-bar-title">Güç Ölçüm Cihazı</span>
+                        <span class="screen-bar-url">NanoPi R76S · FriendlyWrt</span>
                     </div>
+
+                    <img
+                        class="screen-img"
+                        src="/assets/images/power-max.png"
+                        alt="NanoPi R76S maksimum güç tüketimi ölçümü — 3.331W"
+                    />
                 </div>
-                <div class="ann">
-                    <span class="ann-num">2</span>
-                    <div class="ann-text">
-                        Tam yükte bile 3,5W'ın altında kalıyor — router sınıfı
-                        bir cihaz için oldukça düşük bir tavan.
+
+                <div class="power-info">
+                    <div class="ann">
+                        <span class="ann-num">1</span>
+                        <div class="ann-text">
+                            <strong>MAX 3,331 W</strong><br />
+                            CPU/kripto benchmark yükü altında gözlemlenen en yüksek
+                            anlık tüketim.
+                        </div>
+                    </div>
+
+                    <div class="ann">
+                        <span class="ann-num">2</span>
+                        <div class="ann-text">
+                            Tam yükte bile <strong>3,5 W</strong>'ın altında kalıyor.
+                            Router sınıfı bir cihaz için oldukça düşük bir güç tüketimi.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1190,16 +1208,16 @@ date: 2026-07-11
         <div class="grade-row">
             <div class="g-card">
                 <div class="gl">Boşta / hafif yük</div>
-                <div class="gv" style="color: #0f6e56">1,94 W</div>
-                <div class="gd">aktif trafik yok</div>
+                <div class="gv" style="color:#0f6e56">1,94 W</div>
+                <div class="gd">Aktif trafik yok</div>
             </div>
+
             <div class="g-card">
                 <div class="gl">Gözlemlenen maksimum</div>
-                <div class="gv" style="color: #185fa5">3,33 W</div>
+                <div class="gv" style="color:#185fa5">3,33 W</div>
                 <div class="gd">CPU/kripto yükü altında</div>
             </div>
         </div>
-
             <p>
                 Bu rakamlar, RK3576'nın 8nm süreç teknolojisinin enerji
                 verimliliği açısından beklenen sonucu doğruluyor: boşta ~2W, tam
