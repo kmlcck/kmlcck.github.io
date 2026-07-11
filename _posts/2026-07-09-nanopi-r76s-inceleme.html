@@ -14,10 +14,22 @@ date: 2026-07-11
         </title>
 
         <meta property="og:type" content="article" />
-        <meta property="og:title" content="NanoPi R76S İncelemesi: RK3576 Tabanlı İkiz 2.5GbE SBC Router" />
-        <meta property="og:description" content="Mimari, gerçek CoreMark/OpenSSL benchmark sonuçları ve ölçülen güç tüketimiyle mühendis odaklı NanoPi R76S incelemesi." />
-        <meta property="og:url" content="https://KULLANICI-ADIN.github.io/REPO-ADIN/nanopi-r76s-inceleme.html" />
-        <meta property="og:image" content="https://KULLANICI-ADIN.github.io/REPO-ADIN/images/nanopi-r76s-front.png" />
+        <meta
+            property="og:title"
+            content="NanoPi R76S İncelemesi: RK3576 Tabanlı İkiz 2.5GbE SBC Router"
+        />
+        <meta
+            property="og:description"
+            content="Mimari, gerçek CoreMark/OpenSSL benchmark sonuçları ve ölçülen güç tüketimiyle mühendis odaklı NanoPi R76S incelemesi."
+        />
+        <meta
+            property="og:url"
+            content="https://KULLANICI-ADIN.github.io/REPO-ADIN/nanopi-r76s-inceleme.html"
+        />
+        <meta
+            property="og:image"
+            content="https://KULLANICI-ADIN.github.io/REPO-ADIN/images/nanopi-r76s-front.png"
+        />
         <meta name="twitter:card" content="summary_large_image" />
 
         <style>
@@ -550,47 +562,48 @@ date: 2026-07-11
     <body>
         <span class="badge">Donanım İncelemesi · SBC / Router</span>
         <h1>
-            NanoPi R76S: RK3576 Tabanlı İkiz 2.5GbE SBC Router Derinlemesine Bakış
+            NanoPi R76S: RK3576 Tabanlı İkiz 2.5GbE SBC Router Derinlemesine
+            Bakış
         </h1>
         <p class="subtitle">
-            Sekiz çekirdek, iki 2.5GbE port, 6 TOPS'luk bir NPU — küçük bir
-            kutu bu kadar iddialı olabilir mi? Gerçek CoreMark, OpenSSL ve
-            güç tüketimi ölçümleriyle test ettik.
+            Sekiz çekirdek, iki 2.5GbE port, 6 TOPS'luk bir NPU — küçük bir kutu
+            bu kadar iddialı olabilir mi? Gerçek CoreMark, OpenSSL ve güç
+            tüketimi ölçümleriyle test ettik.
         </p>
 
         <hr />
 
-                <div class="photo-grid">
-                    <img
-                        src="/assets/images/nanopi-r76s-angle-1.png"
-                        alt="NanoPi R76S açılı görünüm 1"
-                    />
-                    <img
-                        src="/assets/images/nanopi-r76s-front.png"
-                        alt="NanoPi R76S ön panel"
-                    />
-                    <img
-                        src="/assets/images/nanopi-r76s-back.png"
-                        alt="NanoPi R76S arka panel"
-                    />
-                    <img
-                        src="/assets/images/nanopi-r76s-angle-2.png"
-                        alt="NanoPi R76S açılı görünüm 2"
-                    />
-                </div>
+        <div class="photo-grid">
+            <img
+                src="/assets/images/nanopi-r76s-angle-1.png"
+                alt="NanoPi R76S açılı görünüm 1"
+            />
+            <img
+                src="/assets/images/nanopi-r76s-front.png"
+                alt="NanoPi R76S ön panel"
+            />
+            <img
+                src="/assets/images/nanopi-r76s-back.png"
+                alt="NanoPi R76S arka panel"
+            />
+            <img
+                src="/assets/images/nanopi-r76s-angle-2.png"
+                alt="NanoPi R76S açılı görünüm 2"
+            />
+        </div>
 
         <p>
             Tek kart bilgisayar (SBC) pazarında router/gateway odaklı ürünler
             son birkaç yıldır ciddi bir ivme kazandı. NanoPi R76S,
             FriendlyELEC'in R serisinin en yeni ve en güçlü üyesi: Rockchip
-            RK3576 SoC, çift 2.5GbE bağlantı, HDMI 2.0 çıkış ve entegre bir
-            NPU ile klasik router/firewall görevlerini hafif kenar (edge) AI
-            iş yükleriyle tek kartta birleştiriyor.
+            RK3576 SoC, çift 2.5GbE bağlantı, HDMI 2.0 çıkış ve entegre bir NPU
+            ile klasik router/firewall görevlerini hafif kenar (edge) AI iş
+            yükleriyle tek kartta birleştiriyor.
         </p>
         <p>
-            Bu incelemede donanım mimarisi, rakip karşılaştırması ve —
-            en önemlisi — kartın kendisinde ölçülen gerçek CoreMark, OpenSSL
-            ve güç tüketimi sonuçlarını ele alıyoruz.
+            Bu incelemede donanım mimarisi, rakip karşılaştırması ve — en
+            önemlisi — kartın kendisinde ölçülen gerçek CoreMark, OpenSSL ve güç
+            tüketimi sonuçlarını ele alıyoruz.
         </p>
 
         <h2>Genel Bakış ve Konumlandırma</h2>
@@ -598,39 +611,37 @@ date: 2026-07-11
             NanoPi R76S, öncülü NanoPi R3S LTS'nin (RK3566 tabanlı) bir üst
             segmentteki karşılığı. R3S LTS hafif yönlendirme görevlerini
             hedeflerken, R76S sekiz çekirdekli RK3576 ile hesaplama gücünü
-            belirgin biçimde artırıyor ve donanım hızlandırmalı video işleme
-            ile AI çıkarım yeteneği ekliyor. Kart fansız (fanless) pasif
-            soğutmalı bir CNC alüminyum kasa ile geliyor — sürekli çalışan
-            bir ağ cihazı için sessizlik ve güvenilirlik açısından önemli
-            bir tasarım kararı.
+            belirgin biçimde artırıyor ve donanım hızlandırmalı video işleme ile
+            AI çıkarım yeteneği ekliyor. Kart fansız (fanless) pasif soğutmalı
+            bir CNC alüminyum kasa ile geliyor — sürekli çalışan bir ağ cihazı
+            için sessizlik ve güvenilirlik açısından önemli bir tasarım kararı.
         </p>
 
         <h2>Donanım Mimarisi</h2>
         <p>
             Kartın kalbinde, 4× Cortex-A72 (2.2 GHz'e kadar) + 4× Cortex-A53
-            (1.8–2.0 GHz aralığında raporlanıyor) çekirdek kombinasyonuna
-            sahip sekiz çekirdekli RK3576 SoC bulunuyor. Üretici, işlemcinin
-            yaklaşık 58.000 DMIPS hesaplama performansı sunduğunu belirtiyor.
+            (1.8–2.0 GHz aralığında raporlanıyor) çekirdek kombinasyonuna sahip
+            sekiz çekirdekli RK3576 SoC bulunuyor. Üretici, işlemcinin yaklaşık
+            58.000 DMIPS hesaplama performansı sunduğunu belirtiyor.
         </p>
         <div class="analogy">
             <div class="lbl">Gerçek hayat benzetmesi</div>
             <p>
-                big.LITTLE mimarisini iki farklı çalışana benzetebilirsiniz:
-                A72 çekirdekleri hızlı ama daha "pahalı" (güç açısından) usta
+                big.LITTLE mimarisini iki farklı çalışana benzetebilirsiniz: A72
+                çekirdekleri hızlı ama daha "pahalı" (güç açısından) usta
                 işçiler, A53 çekirdekleri ise yavaş ama son derece verimli
                 yardımcılardır. Ağır bir iş geldiğinde ustalar devreye girer;
                 arka planda sürekli çalışan hafif görevler ise yardımcılara
-                bırakılır. Sonuç: hem performans hem pil/güç bütçesi
-                korunmuş olur.
+                bırakılır. Sonuç: hem performans hem pil/güç bütçesi korunmuş
+                olur.
             </p>
         </div>
-        <p>
-            Kartın kendisinde ölçülen gerçek çekirdek frekansları
-            şöyle:
-        </p>
+        <p>Kartın kendisinde ölçülen gerçek çekirdek frekansları şöyle:</p>
         <div class="code">
-            root@FriendlyWrt:~# for cpu in /sys/devices/system/cpu/cpu[0-7]; do<br />
-            &nbsp;&nbsp;echo -n "$(basename $cpu): "; cat $cpu/cpufreq/scaling_cur_freq<br />
+            root@FriendlyWrt:~# for cpu in /sys/devices/system/cpu/cpu[0-7];
+            do<br />
+            &nbsp;&nbsp;echo -n "$(basename $cpu): "; cat
+            $cpu/cpufreq/scaling_cur_freq<br />
             done
         </div>
         <div class="grade-row">
@@ -646,81 +657,78 @@ date: 2026-07-11
             </div>
         </div>
         <p>
-            Ölçülen değerler, üretici tarafından belirtilen teorik
-            maksimumlara oldukça yakın — A53 kümesi raporlanan üst sınırın
-            biraz üzerinde çıkıyor, ki bu da PVTM (silikon lotarya) kaynaklı
-            üretici-arası küçük varyasyonlarla açıklanabilir.
+            Ölçülen değerler, üretici tarafından belirtilen teorik maksimumlara
+            oldukça yakın — A53 kümesi raporlanan üst sınırın biraz üzerinde
+            çıkıyor, ki bu da PVTM (silikon lotarya) kaynaklı üretici-arası
+            küçük varyasyonlarla açıklanabilir.
         </p>
 
         <p>
             Grafik tarafında Arm Mali-G52 MC3 GPU yer alıyor; OpenGL ES
-            1.1/2.0/3.2, OpenCL 2.0 ve Vulkan 1.2 desteği sunuyor. Video
-            işleme birimi (VPU) tarafında ise 8K@30fps H.265/VP9 donanımsal
-            video çözme ve 4K@60fps donanımsal kodlama desteği bulunuyor —
-            bir router/gateway kartı için oldukça cömert bir multimedya
-            kapasitesi. HDMI 2.0 çıkışı sayesinde kart, aynı zamanda dijital
-            tabela (digital signage), medya merkezi veya headless olmayan
-            bir dashboard cihazı olarak da konumlandırılabiliyor; bu,
-            rakiplerinin çoğunda (örneğin Radxa E52C) bulunmayan bir
-            farklılaşma noktası.
+            1.1/2.0/3.2, OpenCL 2.0 ve Vulkan 1.2 desteği sunuyor. Video işleme
+            birimi (VPU) tarafında ise 8K@30fps H.265/VP9 donanımsal video çözme
+            ve 4K@60fps donanımsal kodlama desteği bulunuyor — bir
+            router/gateway kartı için oldukça cömert bir multimedya kapasitesi.
+            HDMI 2.0 çıkışı sayesinde kart, aynı zamanda dijital tabela (digital
+            signage), medya merkezi veya headless olmayan bir dashboard cihazı
+            olarak da konumlandırılabiliyor; bu, rakiplerinin çoğunda (örneğin
+            Radxa E52C) bulunmayan bir farklılaşma noktası.
         </p>
         <p>
             RK3576, INT4/INT8/INT16/BF16/TF32 karışık hassasiyet destekli,
-            INT8'de 6 TOPS performans sunan bir NPU içeriyor. Bu, kartı
-            yalnızca bir ağ cihazı olmaktan çıkarıp kenar AI çıkarımı
-            (nesne tanıma, hafif LLM çalıştırma gibi TinyLLaMA/ChatGLM3
-            sınıfı modeller) için de kullanılabilir hale getiriyor.
+            INT8'de 6 TOPS performans sunan bir NPU içeriyor. Bu, kartı yalnızca
+            bir ağ cihazı olmaktan çıkarıp kenar AI çıkarımı (nesne tanıma,
+            hafif LLM çalıştırma gibi TinyLLaMA/ChatGLM3 sınıfı modeller) için
+            de kullanılabilir hale getiriyor.
         </p>
         <div class="warn-box">
             <strong>Not:</strong> 6 TOPS, büyük dil modelleri için yeterli
-            değil. TinyLLaMA/ChatGLM3 sınıfı küçük modeller veya nesne
-            tespiti gibi hafif çıkarım görevleri için makul bir bütçe.
+            değil. TinyLLaMA/ChatGLM3 sınıfı küçük modeller veya nesne tespiti
+            gibi hafif çıkarım görevleri için makul bir bütçe.
         </div>
 
         <p>
-            Bellek tarafında dikkat edilmesi gereken önemli bir nokta var:
-            giriş seviyesi 2GB ve 4GB varyantları <strong>LPDDR4X</strong>,
-            en üst seviye 16GB varyant ise <strong>LPDDR5</strong> bellek
-            kullanıyor.
+            Bellek tarafında dikkat edilmesi gereken önemli bir nokta var: giriş
+            seviyesi 2GB ve 4GB varyantları <strong>LPDDR4X</strong>, en üst
+            seviye 16GB varyant ise <strong>LPDDR5</strong> bellek kullanıyor.
         </p>
         <div class="callout">
             <strong>Bant genişliği farkı:</strong> Bu sadece kapasite değil,
-            bellek bant genişliği farkı da yaratıyor. Yoğun sanallaştırma
-            veya çoklu container senaryosu planlıyorsanız 16GB modelin
-            avantajını göz önünde bulundurun.
+            bellek bant genişliği farkı da yaratıyor. Yoğun sanallaştırma veya
+            çoklu container senaryosu planlıyorsanız 16GB modelin avantajını göz
+            önünde bulundurun.
         </div>
         <p>
-            Depolama tarafında tüm varyantlar 32GB eMMC ile geliyor (bazı
-            satış kanallarında 64GB seçeneği de mevcut), microSD kart yuvası
-            ve M.2 E-Key soketi üzerinden ek WiFi modülü veya depolama
-            genişletmesi destekleniyor.
+            Depolama tarafında tüm varyantlar 32GB eMMC ile geliyor (bazı satış
+            kanallarında 64GB seçeneği de mevcut), microSD kart yuvası ve M.2
+            E-Key soketi üzerinden ek WiFi modülü veya depolama genişletmesi
+            destekleniyor.
         </p>
 
         <p><strong>Ağ ve genişletme arayüzleri:</strong></p>
         <ul>
             <li>
-                <strong>2× 2.5GbE RJ45</strong> — RTL8125BG PCIe
-                denetleyicileri üzerinden, iperf3 testlerinde yaklaşık 2.30
-                Gbps Rx / 2.10 Gbps Tx olarak raporlanmış.
+                <strong>2× 2.5GbE RJ45</strong> — RTL8125BG PCIe denetleyicileri
+                üzerinden, iperf3 testlerinde yaklaşık 2.30 Gbps Rx / 2.10 Gbps
+                Tx olarak raporlanmış.
             </li>
             <li>
-                <strong>M.2 E-Key soketi</strong> — SDIO WiFi/Bluetooth
-                modülü (örn. AC200, WiFi 5 + BT 5.0) için; NanoPi ailesinin
-                çoğu üyesinde bulunmayan bir özellik.
+                <strong>M.2 E-Key soketi</strong> — SDIO WiFi/Bluetooth modülü
+                (örn. AC200, WiFi 5 + BT 5.0) için; NanoPi ailesinin çoğu
+                üyesinde bulunmayan bir özellik.
             </li>
             <li>
                 <strong>USB 3.2 Gen 1 Type-A</strong> — harici depolama veya
                 kablosuz genişletme için.
             </li>
             <li>
-                <strong>USB-C</strong> — güç girişi ve firmware
-                güncellemeleri için.
+                <strong>USB-C</strong> — güç girişi ve firmware güncellemeleri
+                için.
             </li>
             <li><strong>HDMI 2.0</strong> — 4K@60Hz çıkış.</li>
             <li>
                 <strong>8-pin GPIO FPC konnektörü</strong> — 3.3V lojik
-                seviyeli, düşük akım (300mA) sınırlı genel amaçlı
-                giriş/çıkış.
+                seviyeli, düşük akım (300mA) sınırlı genel amaçlı giriş/çıkış.
             </li>
             <li>
                 <strong>UART (debug)</strong> — seri konsola kasa açılmadan
@@ -728,10 +736,10 @@ date: 2026-07-11
             </li>
         </ul>
         <div class="callout">
-            <strong>UART erişimi:</strong> Rakip Radxa E52C, harici bir
-            USB-C debug portu sunarak bu konuda avantajlı; ancak E52C'de
-            HDMI çıkışı ve M.2 WiFi soketi bulunmuyor. Yani her iki kart da
-            farklı önceliklere göre tasarım ödünleşimi (trade-off) yapmış.
+            <strong>UART erişimi:</strong> Rakip Radxa E52C, harici bir USB-C
+            debug portu sunarak bu konuda avantajlı; ancak E52C'de HDMI çıkışı
+            ve M.2 WiFi soketi bulunmuyor. Yani her iki kart da farklı
+            önceliklere göre tasarım ödünleşimi (trade-off) yapmış.
         </div>
 
         <hr />
@@ -752,15 +760,13 @@ date: 2026-07-11
                 anlamına geliyor
             </li>
             <li>
-                <strong>Proxmox VE</strong> — hafif sanallaştırma host'u
-                olarak kullanım imkânı
+                <strong>Proxmox VE</strong> — hafif sanallaştırma host'u olarak
+                kullanım imkânı
             </li>
+            <li><strong>OpenMediaVault</strong> — NAS senaryoları için</li>
             <li>
-                <strong>OpenMediaVault</strong> — NAS senaryoları için
-            </li>
-            <li>
-                <strong>Buildroot, Alpine Linux</strong> — gömülü/minimal
-                sistem ihtiyaçları için
+                <strong>Buildroot, Alpine Linux</strong> — gömülü/minimal sistem
+                ihtiyaçları için
             </li>
         </ul>
         <div class="specs">
@@ -776,11 +782,11 @@ date: 2026-07-11
         </div>
         <p>
             Tüm dağıtımlar Linux 6.1 LTS çekirdeği ve u-boot 2017.09 ile
-            geliyor. Kurulum; web tarayıcı üzerinden eFlasher aracı, USB
-            kablo veya microSD kart yoluyla yapılabiliyor — headless kurulum
+            geliyor. Kurulum; web tarayıcı üzerinden eFlasher aracı, USB kablo
+            veya microSD kart yoluyla yapılabiliyor — headless kurulum
             senaryoları için pratik bir akış sunuyor. OpenWrt topluluğu
-            tarafında da resmi snapshot firmware imajları mevcut, bu da
-            topluluk desteğinin aktif olduğunu gösteriyor.
+            tarafında da resmi snapshot firmware imajları mevcut, bu da topluluk
+            desteğinin aktif olduğunu gösteriyor.
         </p>
 
         <h2>Tipik Kullanım Senaryoları</h2>
@@ -804,22 +810,22 @@ date: 2026-07-11
             <li>
                 <span class="snum">3</span
                 ><span
-                    ><strong>Hafif NAS</strong> — USB 3.2 üzerinden bağlanan
-                    SSD ile taşınabilir yedekleme.</span
+                    ><strong>Hafif NAS</strong> — USB 3.2 üzerinden bağlanan SSD
+                    ile taşınabilir yedekleme.</span
                 >
             </li>
             <li>
                 <span class="snum">4</span
                 ><span
-                    ><strong>Kenar AI cihazı</strong> — 6 TOPS NPU ile
-                    görüntü sınıflandırma, nesne tespiti.</span
+                    ><strong>Kenar AI cihazı</strong> — 6 TOPS NPU ile görüntü
+                    sınıflandırma, nesne tespiti.</span
                 >
             </li>
             <li>
                 <span class="snum">5</span
                 ><span
-                    ><strong>Dijital tabela / medya merkezi</strong> — HDMI
-                    2.0 + donanımsal 4K/8K video çözme.</span
+                    ><strong>Dijital tabela / medya merkezi</strong> — HDMI 2.0
+                    + donanımsal 4K/8K video çözme.</span
                 >
             </li>
         </ol>
@@ -892,16 +898,16 @@ date: 2026-07-11
         </div>
         <div class="callout">
             Saf headless router + kolay seri konsol isteyen bir mühendis
-            E52C'ye; multimedya çıkışı, WiFi genişletmesi ve daha yüksek
-            NPU/CPU performansı isteyen bir kullanıcı R76S'e yönelebilir.
+            E52C'ye; multimedya çıkışı, WiFi genişletmesi ve daha yüksek NPU/CPU
+            performansı isteyen bir kullanıcı R76S'e yönelebilir.
         </div>
 
         <hr />
 
         <h2>Performans: CoreMark ve OpenSSL Benchmarkları</h2>
         <p>
-            Bu bölümdeki tüm sonuçlar, FriendlyWrt çalıştıran gerçek bir
-            NanoPi R76S üzerinde doğrudan ölçüldü.
+            Bu bölümdeki tüm sonuçlar, FriendlyWrt çalıştıran gerçek bir NanoPi
+            R76S üzerinde doğrudan ölçüldü.
         </p>
 
         <p class="sec-lbl">1. CoreMark</p>
@@ -923,10 +929,10 @@ date: 2026-07-11
         </div>
         <p>
             GCC 14.3.0, aarch64_generic_musl derlemesi — FriendlyWrt'nin apk
-            paket deposundaki hazır <strong>coremark</strong> paketi
-            kullanıldı. Paket varsayılan olarak tek çekirdekte çalışıyor; bu
-            değer RK3576'nın sekiz çekirdeğinden yalnızca birinin
-            kapasitesini gösteriyor.
+            paket deposundaki hazır <strong>coremark</strong> paketi kullanıldı.
+            Paket varsayılan olarak tek çekirdekte çalışıyor; bu değer
+            RK3576'nın sekiz çekirdeğinden yalnızca birinin kapasitesini
+            gösteriyor.
         </p>
 
         <p class="sec-lbl">2. OpenSSL — Simetrik Şifreleme (AES-256-CBC)</p>
@@ -959,13 +965,13 @@ date: 2026-07-11
             <span class="sp">Decrypt/s: 35,6</span>
         </div>
         <div class="callout">
-            <strong>Mühendislik notu:</strong> OpenSSL derleme bilgisinde
-            hedef mimari <code>-mcpu=cortex-a53</code> görünüyor — yani
-            öntanımlı paket, RK3576'nın güçlü A72 çekirdekleri için değil,
-            verimlilik odaklı A53 çekirdekleri için derlenmiş.
+            <strong>Mühendislik notu:</strong> OpenSSL derleme bilgisinde hedef
+            mimari <code>-mcpu=cortex-a53</code> görünüyor — yani öntanımlı
+            paket, RK3576'nın güçlü A72 çekirdekleri için değil, verimlilik
+            odaklı A53 çekirdekleri için derlenmiş.
             <code>openssl speed</code> varsayılan olarak tek işlemi
-            zamanlayıcıya bırakır; tek-çekirdek sonucu bu yüzden rastgele
-            atanan bir çekirdeği yansıtıyor olabilir.
+            zamanlayıcıya bırakır; tek-çekirdek sonucu bu yüzden rastgele atanan
+            bir çekirdeği yansıtıyor olabilir.
         </div>
         <p>
             Router senaryosunda asıl önemli olan, sekiz çekirdeğin (4×A72 +
@@ -992,12 +998,16 @@ date: 2026-07-11
             </div>
         </div>
         <p>
-            8 çekirdekli teorik maksimuma oldukça yakın bir paralel
-            verimlilik. Pratik anlamı net: <strong>R76S saniyede ~250
-            RSA4096 imzalama işlemini kaldırabiliyor</strong> — yoğun
-            çok-istemcili TLS sonlandırma veya VPN gateway senaryolarında
-            gerçekçi üst sınır bu civarda. (8 çekirdek toplamında verify/s
-            16.901,1, encrypt/s 16.670,5, decrypt/s 249,4 olarak ölçüldü.)
+            8 çekirdekli teorik maksimuma oldukça yakın bir paralel verimlilik.
+            Pratik anlamı net:
+            <strong
+                >R76S saniyede ~250 RSA4096 imzalama işlemini
+                kaldırabiliyor</strong
+            >
+            — yoğun çok-istemcili TLS sonlandırma veya VPN gateway
+            senaryolarında gerçekçi üst sınır bu civarda. (8 çekirdek toplamında
+            verify/s 16.901,1, encrypt/s 16.670,5, decrypt/s 249,4 olarak
+            ölçüldü.)
         </p>
 
         <p class="sec-lbl">Karşılaştırma: OpenSSL AES-256-CBC (16384B blok)</p>
@@ -1022,7 +1032,10 @@ date: 2026-07-11
                         >
                     </div>
                     <div class="sqm-track">
-                        <div class="sqm-fill" style="width: 90%; background: #1d9e75"></div>
+                        <div
+                            class="sqm-fill"
+                            style="width: 90%; background: #1d9e75"
+                        ></div>
                     </div>
                 </div>
             </div>
@@ -1042,7 +1055,10 @@ date: 2026-07-11
                         >
                     </div>
                     <div class="sqm-track">
-                        <div class="sqm-fill" style="width: 98%; background: #1d9e75"></div>
+                        <div
+                            class="sqm-fill"
+                            style="width: 98%; background: #1d9e75"
+                        ></div>
                     </div>
                 </div>
             </div>
@@ -1062,7 +1078,10 @@ date: 2026-07-11
                         >
                     </div>
                     <div class="sqm-track">
-                        <div class="sqm-fill" style="width: 81%; background: #ba7517"></div>
+                        <div
+                            class="sqm-fill"
+                            style="width: 81%; background: #ba7517"
+                        ></div>
                     </div>
                 </div>
             </div>
@@ -1082,16 +1101,18 @@ date: 2026-07-11
                         >
                     </div>
                     <div class="sqm-track">
-                        <div class="sqm-fill" style="width: 65%; background: #ba7517"></div>
+                        <div
+                            class="sqm-fill"
+                            style="width: 65%; background: #ba7517"
+                        ></div>
                     </div>
                 </div>
             </div>
         </div>
         <p>
-            R76S'in ölçülen değeri RPi5'in ~%7-8 gerisinde, ama NanoPi
-            R5S'in %38, NanoPi R4S'in ~%11-13 üzerinde — kendi ailesindeki
-            önceki nesil kartlara göre gerçek, doğrulanmış bir performans
-            kazancı.
+            R76S'in ölçülen değeri RPi5'in ~%7-8 gerisinde, ama NanoPi R5S'in
+            %38, NanoPi R4S'in ~%11-13 üzerinde — kendi ailesindeki önceki nesil
+            kartlara göre gerçek, doğrulanmış bir performans kazancı.
         </p>
 
         <hr />
@@ -1099,19 +1120,20 @@ date: 2026-07-11
         <h2>Güç Tüketimi (OpenWrt Altında Ölçülen)</h2>
         <p>
             Pano tipi bir güç ölçüm cihazı üzerinden, FriendlyWrt çalışırken
-            boşta ve gözlemlenen maksimum tüketim değerleri doğrudan
-            ölçüldü.
+            boşta ve gözlemlenen maksimum tüketim değerleri doğrudan ölçüldü.
         </p>
         <div class="screen-block">
             <div class="screen-lbl">Boşta / tipik yük ölçümü</div>
             <div class="screen-frame">
                 <div class="screen-bar">
                     <span class="screen-bar-title">Güç Ölçüm Cihazı</span>
-                    <span class="screen-bar-url">NanoPi R76S · FriendlyWrt</span>
+                    <span class="screen-bar-url"
+                        >NanoPi R76S · FriendlyWrt</span
+                    >
                 </div>
                 <img
                     class="screen-img"
-                    src="images/power-idle.png"
+                    src="/assets/images/power-idle.png"
                     alt="NanoPi R76S boşta güç tüketimi ölçümü — 1.944W"
                 />
             </div>
@@ -1127,8 +1149,8 @@ date: 2026-07-11
                     <span class="ann-num">2</span>
                     <div class="ann-text">
                         <strong>POWER CONSUMPTION DAILY</strong> — Alt satır,
-                        günlük kümülatif tüketimi bar grafiği olarak
-                        gösteriyor (1 BAR = 1 kWh).
+                        günlük kümülatif tüketimi bar grafiği olarak gösteriyor
+                        (1 BAR = 1 kWh).
                     </div>
                 </div>
             </div>
@@ -1139,11 +1161,13 @@ date: 2026-07-11
             <div class="screen-frame">
                 <div class="screen-bar">
                     <span class="screen-bar-title">Güç Ölçüm Cihazı</span>
-                    <span class="screen-bar-url">NanoPi R76S · FriendlyWrt</span>
+                    <span class="screen-bar-url"
+                        >NanoPi R76S · FriendlyWrt</span
+                    >
                 </div>
                 <img
                     class="screen-img"
-                    src="images/power-max.png"
+                    src="/assets/images/power-max.png"
                     alt="NanoPi R76S maksimum güç tüketimi ölçümü — 3.331W"
                 />
             </div>
@@ -1151,8 +1175,8 @@ date: 2026-07-11
                 <div class="ann">
                     <span class="ann-num">1</span>
                     <div class="ann-text">
-                        <strong>MAX 3,331 W</strong> — CPU/kripto benchmark
-                        yükü altında gözlemlenen en yüksek anlık tüketim.
+                        <strong>MAX 3,331 W</strong> — CPU/kripto benchmark yükü
+                        altında gözlemlenen en yüksek anlık tüketim.
                     </div>
                 </div>
                 <div class="ann">
@@ -1178,13 +1202,13 @@ date: 2026-07-11
             </div>
         </div>
         <p>
-            Bu rakamlar RK3576'nın 8nm süreç teknolojisinin enerji
-            verimliliğini doğruluyor. Karşılaştırma için, x86 tabanlı mini
-            PC router çözümleri (örn. Intel N100) tipik olarak boşta bile
-            6-10W bandında seyrediyor; R76S bu tüketimin üçte biri ila yarısı
-            kadar bir bütçeyle çalışıyor. Bu hem 7/24 çalışan bir router için
-            elektrik maliyetini önemsiz seviyeye indiriyor hem de fansız
-            kasa tasarımının neden yeterli olduğunu açıklıyor.
+            Bu rakamlar RK3576'nın 8nm süreç teknolojisinin enerji verimliliğini
+            doğruluyor. Karşılaştırma için, x86 tabanlı mini PC router çözümleri
+            (örn. Intel N100) tipik olarak boşta bile 6-10W bandında seyrediyor;
+            R76S bu tüketimin üçte biri ila yarısı kadar bir bütçeyle çalışıyor.
+            Bu hem 7/24 çalışan bir router için elektrik maliyetini önemsiz
+            seviyeye indiriyor hem de fansız kasa tasarımının neden yeterli
+            olduğunu açıklıyor.
         </p>
 
         <hr />
@@ -1207,47 +1231,45 @@ date: 2026-07-11
             <li>
                 <span class="ck">✓</span
                 ><span
-                    >Ölçülen CoreMark, OpenSSL ve güç tüketimi rakamları,
-                    teorik potansiyeli büyük ölçüde karşılıyor.</span
+                    >Ölçülen CoreMark, OpenSSL ve güç tüketimi rakamları, teorik
+                    potansiyeli büyük ölçüde karşılıyor.</span
                 >
             </li>
             <li>
                 <span class="ck">✓</span
                 ><span
-                    >~3,3W'lık tam yük tüketimi, 7/24 çalışan bir ev/ofis
-                    cihazı için son derece elverişli.</span
+                    >~3,3W'lık tam yük tüketimi, 7/24 çalışan bir ev/ofis cihazı
+                    için son derece elverişli.</span
                 >
             </li>
             <li>
                 <span class="ck">✓</span
                 ><span
-                    >Kasa içinde UART erişiminin olmaması ve WiFi modülünün
-                    ayrı satılması, "headless debug-friendly" arayan
-                    mühendisler için değerlendirilmesi gereken
-                    ödünleşimler.</span
+                    >Kasa içinde UART erişiminin olmaması ve WiFi modülünün ayrı
+                    satılması, "headless debug-friendly" arayan mühendisler için
+                    değerlendirilmesi gereken ödünleşimler.</span
                 >
             </li>
         </ul>
         <p>
-            Genel olarak R76S, çok yönlülüğü ön planda tutan, ağ + hesaplama
-            + multimedya işlevlerini tek kartta birleştirmek isteyen
-            homelab ve edge computing projeleri için güçlü bir aday olarak
-            öne çıkıyor.
+            Genel olarak R76S, çok yönlülüğü ön planda tutan, ağ + hesaplama +
+            multimedya işlevlerini tek kartta birleştirmek isteyen homelab ve
+            edge computing projeleri için güçlü bir aday olarak öne çıkıyor.
         </p>
 
         <h2>Nereden Satın Alınır</h2>
         <div class="cta-box">
             <h3>NanoPi R76S'i incelemek ister misiniz?</h3>
             <p>
-                NanoPi R76S'i Türkiye'de resmi/güvenilir kanaldan satın
-                almak isteyenler için şu anda tek adres
+                NanoPi R76S'i Türkiye'de resmi/güvenilir kanaldan satın almak
+                isteyenler için şu anda tek adres
                 <strong>Genova Donanım</strong>. Genova Donanım'a, Türkiye'de
-                nadir bulunan bu tür niş/geliştirici odaklı SBC ürünlerini
-                yurt dışı tedarik ve gümrük süreciyle uğraşmadan yerel
-                olarak erişilebilir kıldıkları için teşekkür ederim —
-                FriendlyELEC gibi üreticilerin ürünlerini Türkiye pazarına
-                taşımaları, embedded/homelab camiasındaki mühendis ve
-                hobicilerin işini gerçekten kolaylaştırıyor.
+                nadir bulunan bu tür niş/geliştirici odaklı SBC ürünlerini yurt
+                dışı tedarik ve gümrük süreciyle uğraşmadan yerel olarak
+                erişilebilir kıldıkları için teşekkür ederim — FriendlyELEC gibi
+                üreticilerin ürünlerini Türkiye pazarına taşımaları,
+                embedded/homelab camiasındaki mühendis ve hobicilerin işini
+                gerçekten kolaylaştırıyor.
             </p>
             <a
                 class="cta-btn"
@@ -1260,12 +1282,11 @@ date: 2026-07-11
         <p style="font-size: 12px; color: #888; margin-top: 2rem">
             <strong>Not:</strong> Donanım mimarisi ve rakip karşılaştırması
             bölümleri üretici dokümantasyonu ve bağımsız donanım basınından
-            derlenmiştir. CoreMark, OpenSSL ve güç tüketimi sonuçları
-            NanoPi R76S'in kendisinde, FriendlyWrt üzerinde doğrudan
-            ölçülmüştür.<br />
-            <strong>Kaynaklar:</strong> FriendlyELEC resmi wiki · CNX
-            Software · Liliputing · LinuxGizmos · Notebookcheck · Armbian
-            resmi blog · OpenWrt forumu
+            derlenmiştir. CoreMark, OpenSSL ve güç tüketimi sonuçları NanoPi
+            R76S'in kendisinde, FriendlyWrt üzerinde doğrudan ölçülmüştür.<br />
+            <strong>Kaynaklar:</strong> FriendlyELEC resmi wiki · CNX Software ·
+            Liliputing · LinuxGizmos · Notebookcheck · Armbian resmi blog ·
+            OpenWrt forumu
         </p>
 
         <div class="tag-row">
