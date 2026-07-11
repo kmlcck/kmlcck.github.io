@@ -1,7 +1,7 @@
 ---
 layout: page
-title: "NanoPi R76S İncelemesi"
-date: 2026-07-09
+title: "NanoPi R76S İncelemesi: RK3576 Tabanlı İkiz 2.5GbE SBC Router"
+date: 2026-07-11
 ---
 
 <!doctype html>
@@ -10,418 +10,555 @@ date: 2026-07-09
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>
-            NanoPi R76S İncelemesi — RK3576 Tabanlı İkiz 2.5GbE SBC Router
+            NanoPi R76S İncelemesi: RK3576 Tabanlı İkiz 2.5GbE SBC Router
         </title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
-            rel="stylesheet"
-        />
-        <style>
-            :root {
-                --paper: #eef1ea;
-                --paper-alt: #e4e8df;
-                --ink: #141c17;
-                --ink-soft: #3e4a42;
-                --pcb: #16281f;
-                --pcb-soft: #20362b;
-                --amber: #e8a33d;
-                --amber-bright: #ffc857;
-                --line: #c7cfc1;
-                --term-bg: #0b120e;
-                --term-text: #8fd9a8;
-                --term-dim: #4e6b5a;
-                --danger: #b5533c;
-                --max-w: 760px;
-            }
-            * {
-                box-sizing: border-box;
-            }
-            html {
-                scroll-behavior: smooth;
-            }
-            body {
-                margin: 0;
-                background: var(--paper);
-                color: var(--ink);
-                font-family: "IBM Plex Sans", sans-serif;
-                font-size: 17px;
-                line-height: 1.68;
-                -webkit-font-smoothing: antialiased;
-            }
-            a {
-                color: var(--pcb);
-                text-decoration-thickness: 1.5px;
-                text-underline-offset: 3px;
-            }
-            a:hover {
-                color: var(--amber);
-            }
 
-            /* ---------- HERO ---------- */
-            .hero {
-                background:
-                    linear-gradient(
-                        180deg,
-                        rgba(22, 40, 31, 0) 0%,
-                        rgba(22, 40, 31, 0) 100%
-                    ),
-                    repeating-linear-gradient(
-                        90deg,
-                        rgba(255, 255, 255, 0.03) 0px,
-                        rgba(255, 255, 255, 0.03) 1px,
-                        transparent 1px,
-                        transparent 64px
-                    ),
-                    var(--pcb);
-                color: #eaf1eb;
-                padding: 64px 24px 48px;
-            }
-            .hero-inner {
-                max-width: var(--max-w);
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="NanoPi R76S İncelemesi: RK3576 Tabanlı İkiz 2.5GbE SBC Router" />
+        <meta property="og:description" content="Mimari, gerçek CoreMark/OpenSSL benchmark sonuçları ve ölçülen güç tüketimiyle mühendis odaklı NanoPi R76S incelemesi." />
+        <meta property="og:url" content="https://KULLANICI-ADIN.github.io/REPO-ADIN/nanopi-r76s-inceleme.html" />
+        <meta property="og:image" content="https://KULLANICI-ADIN.github.io/REPO-ADIN/images/nanopi-r76s-front.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+
+        <style>
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    sans-serif;
+                max-width: 740px;
                 margin: 0 auto;
+                padding: 2rem 1.5rem;
+                color: #1a1a1a;
+                background: #fff;
+                line-height: 1.8;
             }
-            .eyebrow {
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 13px;
-                letter-spacing: 0.14em;
+            h1 {
+                font-size: 28px;
+                font-weight: 600;
+                line-height: 1.3;
+                margin-bottom: 0.75rem;
+            }
+            h2 {
+                font-size: 21px;
+                font-weight: 600;
+                margin: 2.5rem 0 0.75rem;
+            }
+            p {
+                font-size: 16px;
+                margin-bottom: 1rem;
+            }
+            hr {
+                border: none;
+                border-top: 1px solid #e5e5e5;
+                margin: 2rem 0;
+            }
+            .subtitle {
+                font-size: 17px;
+                color: #555;
+                line-height: 1.7;
+                margin-bottom: 0;
+            }
+            .badge {
+                display: inline-block;
+                background: #e6f1fb;
+                color: #185fa5;
+                font-size: 12px;
+                font-weight: 600;
+                padding: 4px 12px;
+                border-radius: 20px;
+                margin-bottom: 1rem;
+            }
+            .analogy {
+                background: #f7f7f5;
+                border-radius: 10px;
+                border: 1px solid #e5e5e5;
+                padding: 1.1rem 1.3rem;
+                margin: 1.25rem 0;
+            }
+            .analogy .lbl {
+                font-size: 11px;
+                font-weight: 600;
+                color: #888;
                 text-transform: uppercase;
-                color: var(--amber);
-                margin: 0 0 18px;
+                letter-spacing: 0.07em;
+                margin-bottom: 0.5rem;
+            }
+            .analogy p {
+                margin: 0;
+                font-size: 14px;
+            }
+            .callout {
+                background: #f0f6ff;
+                border-left: 3px solid #378add;
+                padding: 1rem 1.25rem;
+                margin: 1.5rem 0;
+                font-size: 14px;
+                color: #333;
+                line-height: 1.7;
+            }
+            .callout strong {
+                color: #111;
+            }
+            .code {
+                background: #1a1a1a;
+                color: #d8e6d8;
+                border-radius: 8px;
+                padding: 0.9rem 1.1rem;
+                margin: 1rem 0;
+                font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+                font-size: 13px;
+                line-height: 1.6;
+                overflow-x: auto;
+            }
+            .code .p {
+                color: #6b8f6b;
+            }
+            .grade-row {
+                display: flex;
+                gap: 10px;
+                margin: 1.5rem 0;
+            }
+            .g-card {
+                flex: 1;
+                border-radius: 8px;
+                padding: 1rem;
+                text-align: center;
+                border: 1px solid #e5e5e5;
+            }
+            .g-card .gl {
+                font-size: 11px;
+                color: #888;
+                margin-bottom: 5px;
+            }
+            .g-card .gv {
+                font-size: 30px;
+                font-weight: 700;
+            }
+            .g-card .gd {
+                font-size: 11px;
+                color: #888;
+                margin-top: 3px;
+            }
+            .metrics-row {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+                margin: 1.5rem 0;
+            }
+            .m-card {
+                background: #f7f7f5;
+                border-radius: 8px;
+                padding: 1rem;
+                text-align: center;
+            }
+            .m-lbl {
+                font-size: 12px;
+                color: #888;
+                margin-bottom: 5px;
+            }
+            .m-b {
+                font-size: 21px;
+                font-weight: 700;
+                color: #a32d2d;
+            }
+            .m-a {
+                font-size: 21px;
+                font-weight: 700;
+                color: #0f6e56;
+            }
+            .m-arr {
+                font-size: 13px;
+                color: #888;
+                margin: 2px 0;
+            }
+            .result-box {
+                background: #f0faf5;
+                border-radius: 10px;
+                border: 1px solid #9fe1cb;
+                padding: 1.1rem 1.3rem;
+                margin: 1.25rem 0;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+            .result-grade {
+                font-size: 40px;
+                font-weight: 700;
+                color: #0f6e56;
+                line-height: 1;
+                flex-shrink: 0;
+            }
+            .result-title {
+                font-size: 14px;
+                font-weight: 600;
+                color: #111;
+                margin-bottom: 3px;
+            }
+            .result-sub {
+                font-size: 13px;
+                color: #555;
+                line-height: 1.6;
+            }
+            .result-link {
+                font-size: 12px;
+                color: #185fa5;
+                margin-top: 5px;
+                display: block;
+            }
+            .step-list {
+                list-style: none;
+                padding: 0;
+                counter-reset: s;
+                margin: 1rem 0 1.5rem;
+            }
+            .step-list li {
+                counter-increment: s;
+                display: flex;
+                gap: 12px;
+                align-items: flex-start;
+                padding: 0.7rem 0;
+                border-bottom: 1px solid #eee;
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            .step-list li:last-child {
+                border-bottom: none;
+            }
+            .snum {
+                min-width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                background: #e6f1fb;
+                color: #185fa5;
+                font-size: 13px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                margin-top: 2px;
+            }
+            .screen-block {
+                margin: 1.5rem 0;
+            }
+            .screen-lbl {
+                font-size: 11px;
+                font-weight: 600;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.07em;
+                margin-bottom: 0.6rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .screen-lbl::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: #e5e5e5;
+            }
+            .screen-frame {
+                border: 1px solid #e5e5e5;
+                border-radius: 10px;
+                overflow: hidden;
+            }
+            .screen-bar {
+                background: #1a1a1a;
+                padding: 7px 14px;
                 display: flex;
                 align-items: center;
                 gap: 10px;
             }
-            .eyebrow::before {
-                content: "●";
-                color: var(--term-text);
-                font-size: 10px;
-            }
-            h1 {
-                font-family: "IBM Plex Mono", monospace;
+            .screen-bar-title {
+                font-size: 12px;
+                color: #8faacc;
                 font-weight: 600;
-                font-size: clamp(28px, 5vw, 40px);
-                line-height: 1.22;
-                margin: 0 0 16px;
-                letter-spacing: -0.01em;
             }
-            .hero-sub {
-                font-size: 17px;
-                color: #c9d6cc;
-                max-width: 60ch;
-                margin: 0 0 32px;
+            .screen-bar-url {
+                font-size: 11px;
+                color: #555;
+                margin-left: auto;
             }
-            .photo-grid {
+            .screen-img {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+            .ann-row {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 10px;
-                border: 1px solid rgba(255, 255, 255, 0.12);
-                padding: 10px;
-                background: rgba(0, 0, 0, 0.15);
-                border-radius: 4px;
+                margin-top: 0.75rem;
+            }
+            .ann {
+                background: #f7f7f5;
+                border-radius: 8px;
+                padding: 0.75rem 1rem;
+                display: flex;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            .ann-num {
+                min-width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background: #e6f1fb;
+                color: #185fa5;
+                font-size: 12px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+            .ann-text {
+                font-size: 12px;
+                color: #555;
+                line-height: 1.6;
+            }
+            .ann-text strong {
+                color: #111;
+            }
+            .sec-lbl {
+                font-size: 11px;
+                font-weight: 600;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.07em;
+                margin-bottom: 0.9rem;
+            }
+            .device-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                margin: 0.75rem 0 1.25rem;
+            }
+            .d-card {
+                background: #fff;
+                border: 1px solid #e5e5e5;
+                border-radius: 10px;
+                padding: 1rem 1.1rem;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .d-card.feat {
+                border-color: #378add;
+                border-width: 2px;
+            }
+            .d-card.top {
+                border-color: #1d9e75;
+                border-width: 2px;
+            }
+            .d-head {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 8px;
+            }
+            .d-name {
+                font-size: 14px;
+                font-weight: 600;
+            }
+            .d-sub {
+                font-size: 11px;
+                color: #888;
+                margin-top: 1px;
+            }
+            .db {
+                font-size: 11px;
+                font-weight: 600;
+                padding: 3px 9px;
+                border-radius: 20px;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            .db-sbc {
+                background: #e1f5ee;
+                color: #0f6e56;
+            }
+            .db-router {
+                background: #e6f1fb;
+                color: #185fa5;
+            }
+            .db-best {
+                background: #faeeda;
+                color: #854f0b;
+            }
+            .db-new {
+                background: #eeedfe;
+                color: #3c3489;
+            }
+            .specs {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .sp {
+                font-size: 11px;
+                color: #555;
+                background: #f7f7f5;
+                border: 1px solid #e5e5e5;
+                padding: 3px 8px;
+                border-radius: 20px;
+            }
+            .sp.hi {
+                color: #185fa5;
+                background: #e6f1fb;
+                border-color: #b5d4f4;
+            }
+            .sqm-wrap {
+                margin-top: 2px;
+            }
+            .sqm-lr {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 4px;
+            }
+            .sqm-lbl {
+                font-size: 11px;
+                color: #888;
+            }
+            .sqm-val {
+                font-size: 12px;
+                font-weight: 700;
+            }
+            .sqm-track {
+                height: 6px;
+                background: #eee;
+                border-radius: 3px;
+                overflow: hidden;
+            }
+            .sqm-fill {
+                height: 100%;
+                border-radius: 3px;
+            }
+            .d-note {
+                font-size: 12px;
+                color: #555;
+                line-height: 1.6;
+                border-top: 1px solid #eee;
+                padding-top: 7px;
+            }
+            .warn-box {
+                background: #faeeda;
+                border-radius: 8px;
+                padding: 0.9rem 1.1rem;
+                margin: 1rem 0;
+                font-size: 13px;
+                color: #633806;
+                line-height: 1.6;
+            }
+            .warn-box strong {
+                color: #412402;
+            }
+            .photo-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                margin: 1rem 0 1.5rem;
             }
             .photo-grid img {
                 width: 100%;
                 display: block;
-                border-radius: 2px;
-                background: #fff;
+                border-radius: 10px;
+                border: 1px solid #e5e5e5;
             }
-            .photo-caption {
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 12.5px;
-                color: var(--term-dim);
-                margin-top: 10px;
-                letter-spacing: 0.02em;
+            .check-list {
+                list-style: none;
+                padding: 0;
+                margin: 0.75rem 0 1.25rem;
             }
-            .disclaimer {
-                font-size: 14.5px;
-                color: #a9b8ae;
-                border-left: 2px solid var(--amber);
-                padding-left: 14px;
-                margin-top: 28px;
-                max-width: 60ch;
-            }
-
-            /* ---------- ARTICLE BODY ---------- */
-            .article {
-                max-width: var(--max-w);
-                margin: 0 auto;
-                padding: 56px 24px 40px;
-            }
-            h2 {
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 22px;
-                font-weight: 600;
-                margin: 56px 0 18px;
-                padding-bottom: 12px;
-                border-bottom: 2px solid var(--pcb);
+            .check-list li {
                 display: flex;
-                align-items: baseline;
                 gap: 10px;
-            }
-            h2 .num {
-                color: var(--amber);
-                font-size: 15px;
-            }
-            h3 {
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 17px;
-                font-weight: 600;
-                margin: 34px 0 12px;
-                color: var(--pcb-soft);
-            }
-            h4 {
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 15px;
-                font-weight: 600;
-                margin: 26px 0 10px;
-                color: var(--ink-soft);
-            }
-            p {
-                margin: 0 0 16px;
-            }
-            ul,
-            ol {
-                margin: 0 0 16px;
-                padding-left: 22px;
-            }
-            li {
-                margin-bottom: 8px;
-            }
-            strong {
-                font-weight: 600;
-            }
-            em {
-                color: var(--ink-soft);
-            }
-
-            /* intro italic block under h1 in article (first disclaimer already in hero) */
-            .lede {
-                font-size: 16.5px;
-                color: var(--ink-soft);
-                border-left: 3px solid var(--line);
-                padding-left: 16px;
-                margin: 0 0 32px;
-            }
-
-            /* ---------- TABLES ---------- */
-            .table-wrap {
-                overflow-x: auto;
-                margin: 0 0 24px;
-                border: 1px solid var(--line);
-                border-radius: 3px;
-            }
-            table {
-                border-collapse: collapse;
-                width: 100%;
-                font-size: 14.5px;
-                font-family: "IBM Plex Mono", monospace;
-            }
-            thead th {
-                background: var(--pcb);
-                color: var(--amber-bright);
-                text-align: left;
-                padding: 10px 14px;
-                font-weight: 500;
-                letter-spacing: 0.01em;
-                white-space: nowrap;
-            }
-            tbody td {
-                padding: 9px 14px;
-                border-top: 1px solid var(--line);
-                white-space: nowrap;
-            }
-            tbody tr:nth-child(odd) {
-                background: var(--paper-alt);
-            }
-            tbody tr.highlight td {
-                background: #fbefd9;
-                font-weight: 600;
-                color: var(--pcb);
-            }
-
-            /* ---------- CODE / TERMINAL ---------- */
-            .cmd {
-                background: var(--term-bg);
-                border-radius: 5px;
-                margin: 0 0 18px;
-                overflow: hidden;
-                border: 1px solid #1d2c22;
-            }
-            .cmd-bar {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                padding: 8px 12px;
-                background: #101a14;
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 11.5px;
-                color: var(--term-dim);
-                letter-spacing: 0.03em;
-            }
-            .cmd-bar span.dot {
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: #2b3d32;
-            }
-            .cmd pre {
-                margin: 0;
-                padding: 14px 16px 16px;
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 13.5px;
+                align-items: flex-start;
+                font-size: 14px;
                 line-height: 1.6;
-                color: var(--term-text);
-                overflow-x: auto;
+                padding: 0.3rem 0;
             }
-
-            .result {
-                border-left: 3px solid var(--amber);
-                background: #fbf6ea;
-                padding: 14px 18px;
-                margin: 0 0 24px;
-                border-radius: 0 3px 3px 0;
+            .check-list li .ck {
+                color: #1d9e75;
+                font-size: 16px;
+                margin-top: 1px;
+                flex-shrink: 0;
             }
-            .result-label {
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 11px;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
-                color: #a8752a;
-                margin-bottom: 6px;
+            .cta-box {
+                background: #f7f7f5;
+                border-radius: 10px;
+                border: 1px solid #e5e5e5;
+                padding: 1.5rem;
+                margin: 2rem 0 1rem;
+            }
+            .cta-box h3 {
+                font-size: 16px;
                 font-weight: 600;
+                margin: 0 0 0.5rem;
             }
-            .result p {
-                margin: 0;
+            .cta-box p {
+                margin: 0 0 1rem;
+                font-size: 14px;
+                color: #555;
             }
-
-            .note {
-                border-left: 3px solid var(--line);
-                background: var(--paper-alt);
-                padding: 14px 18px;
-                margin: 0 0 24px;
-                border-radius: 0 3px 3px 0;
-                font-size: 15.5px;
-                color: var(--ink-soft);
-            }
-            .note-label {
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 11px;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
-                color: var(--ink-soft);
-                margin-bottom: 6px;
-                font-weight: 600;
-            }
-
-            code {
-                font-family: "IBM Plex Mono", monospace;
-                background: var(--paper-alt);
-                padding: 2px 6px;
-                border-radius: 3px;
-                font-size: 0.88em;
-            }
-
-            /* ---------- power section ---------- */
-            .power-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 16px;
-                margin: 0 0 20px;
-            }
-            .power-card {
-                border: 1px solid var(--line);
-                border-radius: 6px;
-                overflow: hidden;
-                background: #fff;
-            }
-            .power-card img {
-                width: 100%;
-                display: block;
-            }
-            .power-card-label {
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 13px;
-                padding: 12px 14px;
-                background: var(--pcb);
-                color: var(--amber-bright);
-                display: flex;
-                justify-content: space-between;
-            }
-            .power-card-label .val {
-                color: #fff;
-                font-weight: 600;
-            }
-
-            @media (max-width: 560px) {
-                .photo-grid {
-                    grid-template-columns: 1fr 1fr;
-                }
-                .power-grid {
-                    grid-template-columns: 1fr;
-                }
-                table {
-                    font-size: 13px;
-                }
-            }
-
-            /* ---------- footer / purchase ---------- */
-            .buy-box {
-                border: 1.5px solid var(--pcb);
-                border-radius: 6px;
-                padding: 22px 22px;
-                margin: 0 0 24px;
-                background: var(--paper-alt);
-            }
-            .buy-box a.btn {
+            .cta-btn {
                 display: inline-block;
-                margin-top: 12px;
-                padding: 11px 20px;
-                background: var(--pcb);
-                color: #eaf1eb !important;
-                font-family: "IBM Plex Mono", monospace;
+                padding: 9px 20px;
                 font-size: 14px;
                 font-weight: 600;
-                border-radius: 4px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                cursor: pointer;
+                background: #fff;
+                color: #111;
                 text-decoration: none;
-                letter-spacing: 0.01em;
             }
-            .buy-box a.btn:hover {
-                background: var(--amber);
-                color: var(--pcb) !important;
+            .tag-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 1.5rem;
             }
-
-            footer {
-                max-width: var(--max-w);
-                margin: 0 auto;
-                padding: 0 24px 64px;
-                font-family: "IBM Plex Mono", monospace;
-                font-size: 13px;
-                color: var(--ink-soft);
-                border-top: 1px solid var(--line);
-                padding-top: 24px;
+            .tag {
+                font-size: 12px;
+                color: #555;
+                background: #f7f7f5;
+                border: 1px solid #e5e5e5;
+                padding: 4px 10px;
+                border-radius: 20px;
             }
-
-            hr.rule {
-                border: none;
-                border-top: 1px solid var(--line);
-                margin: 40px 0;
+            @media (max-width: 600px) {
+                .device-grid,
+                .ann-row,
+                .photo-grid {
+                    grid-template-columns: 1fr;
+                }
+                .grade-row {
+                    flex-direction: column;
+                }
+                .metrics-row {
+                    grid-template-columns: 1fr;
+                }
+                .result-box {
+                    flex-direction: column;
+                    text-align: center;
+                }
             }
         </style>
     </head>
     <body>
-        <header class="hero">
-            <div class="hero-inner">
-                <p class="eyebrow">Donanım İncelemesi · SBC / Router</p>
-                <h1>
-                    NanoPi R76S: RK3576 Tabanlı İkiz 2.5GbE SBC Router
-                    Derinlemesine Bakış
-                </h1>
-                <p class="hero-sub">
-                    Mimari, benchmark ve gerçek güç tüketimi ölçümleriyle
-                    mühendis odaklı bir inceleme.
-                </p>
+        <span class="badge">Donanım İncelemesi · SBC / Router</span>
+        <h1>
+            NanoPi R76S: RK3576 Tabanlı İkiz 2.5GbE SBC Router Derinlemesine Bakış
+        </h1>
+        <p class="subtitle">
+            Sekiz çekirdek, iki 2.5GbE port, 6 TOPS'luk bir NPU — küçük bir
+            kutu bu kadar iddialı olabilir mi? Gerçek CoreMark, OpenSSL ve
+            güç tüketimi ölçümleriyle test ettik.
+        </p>
+
+        <hr />
 
                 <div class="photo-grid">
                     <img
@@ -442,631 +579,529 @@ date: 2026-07-09
                     />
                 </div>
 
-                <p class="photo-caption">
-                    NanoPi R76S, CNC alüminyum kasa (heatsink) içinde — farklı
-                    açılardan görünüm.
-                </p>
+        <p>
+            Tek kart bilgisayar (SBC) pazarında router/gateway odaklı ürünler
+            son birkaç yıldır ciddi bir ivme kazandı. NanoPi R76S,
+            FriendlyELEC'in R serisinin en yeni ve en güçlü üyesi: Rockchip
+            RK3576 SoC, çift 2.5GbE bağlantı, HDMI 2.0 çıkış ve entegre bir
+            NPU ile klasik router/firewall görevlerini hafif kenar (edge) AI
+            iş yükleriyle tek kartta birleştiriyor.
+        </p>
+        <p>
+            Bu incelemede donanım mimarisi, rakip karşılaştırması ve —
+            en önemlisi — kartın kendisinde ölçülen gerçek CoreMark, OpenSSL
+            ve güç tüketimi sonuçlarını ele alıyoruz.
+        </p>
 
-                <p class="disclaimer">
-                    Bu yazı, FriendlyELEC'in NanoPi R76S kartına ait resmi
-                    teknik dokümantasyon, üretici wiki'si ve bağımsız donanım
-                    basınında yer alan bulguların derlenmesiyle hazırlanmıştır.
-                    Donanım mimarisi, yazılım ekosistemi ve rakip
-                    karşılaştırması bölümleri spesifikasyon temellidir;
-                    CoreMark, OpenSSL ve güç tüketimi bölümleri ise kartın
-                    kendisinde doğrudan ölçülen gerçek sonuçları içerir.
-                </p>
+        <h2>Genel Bakış ve Konumlandırma</h2>
+        <p>
+            NanoPi R76S, öncülü NanoPi R3S LTS'nin (RK3566 tabanlı) bir üst
+            segmentteki karşılığı. R3S LTS hafif yönlendirme görevlerini
+            hedeflerken, R76S sekiz çekirdekli RK3576 ile hesaplama gücünü
+            belirgin biçimde artırıyor ve donanım hızlandırmalı video işleme
+            ile AI çıkarım yeteneği ekliyor. Kart fansız (fanless) pasif
+            soğutmalı bir CNC alüminyum kasa ile geliyor — sürekli çalışan
+            bir ağ cihazı için sessizlik ve güvenilirlik açısından önemli
+            bir tasarım kararı.
+        </p>
+
+        <h2>Donanım Mimarisi</h2>
+        <p>
+            Kartın kalbinde, 4× Cortex-A72 (2.2 GHz'e kadar) + 4× Cortex-A53
+            (1.8–2.0 GHz aralığında raporlanıyor) çekirdek kombinasyonuna
+            sahip sekiz çekirdekli RK3576 SoC bulunuyor. Üretici, işlemcinin
+            yaklaşık 58.000 DMIPS hesaplama performansı sunduğunu belirtiyor.
+        </p>
+        <div class="analogy">
+            <div class="lbl">Gerçek hayat benzetmesi</div>
+            <p>
+                big.LITTLE mimarisini iki farklı çalışana benzetebilirsiniz:
+                A72 çekirdekleri hızlı ama daha "pahalı" (güç açısından) usta
+                işçiler, A53 çekirdekleri ise yavaş ama son derece verimli
+                yardımcılardır. Ağır bir iş geldiğinde ustalar devreye girer;
+                arka planda sürekli çalışan hafif görevler ise yardımcılara
+                bırakılır. Sonuç: hem performans hem pil/güç bütçesi
+                korunmuş olur.
+            </p>
+        </div>
+        <p>
+            Kartın kendisinde ölçülen gerçek çekirdek frekansları
+            şöyle:
+        </p>
+        <div class="code">
+            root@FriendlyWrt:~# for cpu in /sys/devices/system/cpu/cpu[0-7]; do<br />
+            &nbsp;&nbsp;echo -n "$(basename $cpu): "; cat $cpu/cpufreq/scaling_cur_freq<br />
+            done
+        </div>
+        <div class="grade-row">
+            <div class="g-card">
+                <div class="gl">cpu0–cpu3</div>
+                <div class="gv" style="color: #185fa5">2016</div>
+                <div class="gd">MHz · Cortex-A53 kümesi</div>
             </div>
-        </header>
+            <div class="g-card">
+                <div class="gl">cpu4–cpu7</div>
+                <div class="gv" style="color: #0f6e56">2208</div>
+                <div class="gd">MHz · Cortex-A72 kümesi</div>
+            </div>
+        </div>
+        <p>
+            Ölçülen değerler, üretici tarafından belirtilen teorik
+            maksimumlara oldukça yakın — A53 kümesi raporlanan üst sınırın
+            biraz üzerinde çıkıyor, ki bu da PVTM (silikon lotarya) kaynaklı
+            üretici-arası küçük varyasyonlarla açıklanabilir.
+        </p>
 
-        <main class="article">
-            <section id="giris">
-                <h2><span class="num">01</span> Giriş</h2>
-                <p>
-                    Tek kart bilgisayar (SBC) pazarında router/gateway odaklı
-                    ürünler son birkaç yıldır ciddi bir ivme kazandı. Raspberry
-                    Pi'nin genel amaçlı hakimiyetine karşılık, FriendlyELEC'in
-                    NanoPi R serisi, özellikle ağ donanımı (dual Ethernet,
-                    yönlendirme, güvenlik duvarı, VPN sonlandırma) odaklı bir
-                    niş yarattı. NanoPi R76S, bu serinin en yeni ve en güçlü
-                    üyesi olarak konumlanıyor: Rockchip RK3576 SoC, çift 2.5GbE
-                    bağlantı, HDMI 2.0 video çıkışı ve entegre bir NPU ile hem
-                    klasik router/firewall görevlerini hem de hafif kenar (edge)
-                    AI iş yüklerini tek kartta birleştiriyor.
-                </p>
-                <p>
-                    Bu yazıda kartı katman katman inceleyeceğiz: işlemci
-                    mimarisi, bellek/depolama seçenekleri, ağ ve genişletme
-                    arayüzleri, yazılım ekosistemi, tipik kullanım senaryoları,
-                    rakip karşılaştırması, kartın kendisinde ölçülen gerçek
-                    CoreMark/OpenSSL benchmark sonuçları ve OpenWrt altında
-                    ölçülen güç tüketimi.
-                </p>
-            </section>
+        <p>
+            Grafik tarafında Arm Mali-G52 MC3 GPU yer alıyor; OpenGL ES
+            1.1/2.0/3.2, OpenCL 2.0 ve Vulkan 1.2 desteği sunuyor. Video
+            işleme birimi (VPU) tarafında ise 8K@30fps H.265/VP9 donanımsal
+            video çözme ve 4K@60fps donanımsal kodlama desteği bulunuyor —
+            bir router/gateway kartı için oldukça cömert bir multimedya
+            kapasitesi. HDMI 2.0 çıkışı sayesinde kart, aynı zamanda dijital
+            tabela (digital signage), medya merkezi veya headless olmayan
+            bir dashboard cihazı olarak da konumlandırılabiliyor; bu,
+            rakiplerinin çoğunda (örneğin Radxa E52C) bulunmayan bir
+            farklılaşma noktası.
+        </p>
+        <p>
+            RK3576, INT4/INT8/INT16/BF16/TF32 karışık hassasiyet destekli,
+            INT8'de 6 TOPS performans sunan bir NPU içeriyor. Bu, kartı
+            yalnızca bir ağ cihazı olmaktan çıkarıp kenar AI çıkarımı
+            (nesne tanıma, hafif LLM çalıştırma gibi TinyLLaMA/ChatGLM3
+            sınıfı modeller) için de kullanılabilir hale getiriyor.
+        </p>
+        <div class="warn-box">
+            <strong>Not:</strong> 6 TOPS, büyük dil modelleri için yeterli
+            değil. TinyLLaMA/ChatGLM3 sınıfı küçük modeller veya nesne
+            tespiti gibi hafif çıkarım görevleri için makul bir bütçe.
+        </div>
 
-            <section id="genel-bakis">
-                <h2>
-                    <span class="num">02</span> Genel Bakış ve Konumlandırma
-                </h2>
-                <p>
-                    NanoPi R76S, öncülü NanoPi R3S LTS'nin (RK3566 tabanlı) bir
-                    üst segmentteki karşılığı olarak tasarlanmış. R3S LTS hafif
-                    yönlendirme görevlerini hedeflerken, R76S sekiz çekirdekli
-                    RK3576 ile hesaplama gücünü belirgin biçimde artırıyor ve
-                    donanım hızlandırmalı video işleme ile AI çıkarım
-                    (inference) yeteneği ekliyor. Kart, çıplak devre kartı (bare
-                    board) veya özel tasarım CNC alüminyum kasa ile birlikte
-                    satışa sunuluyor; fansız (fanless) pasif soğutma tercih
-                    edilmiş, bu da sürekli çalışan bir ağ cihazı için sessizlik
-                    ve güvenilirlik açısından önemli bir tasarım kararı.
-                </p>
-            </section>
+        <p>
+            Bellek tarafında dikkat edilmesi gereken önemli bir nokta var:
+            giriş seviyesi 2GB ve 4GB varyantları <strong>LPDDR4X</strong>,
+            en üst seviye 16GB varyant ise <strong>LPDDR5</strong> bellek
+            kullanıyor.
+        </p>
+        <div class="callout">
+            <strong>Bant genişliği farkı:</strong> Bu sadece kapasite değil,
+            bellek bant genişliği farkı da yaratıyor. Yoğun sanallaştırma
+            veya çoklu container senaryosu planlıyorsanız 16GB modelin
+            avantajını göz önünde bulundurun.
+        </div>
+        <p>
+            Depolama tarafında tüm varyantlar 32GB eMMC ile geliyor (bazı
+            satış kanallarında 64GB seçeneği de mevcut), microSD kart yuvası
+            ve M.2 E-Key soketi üzerinden ek WiFi modülü veya depolama
+            genişletmesi destekleniyor.
+        </p>
 
-            <section id="donanim">
-                <h2><span class="num">03</span> Donanım Mimarisi</h2>
+        <p><strong>Ağ ve genişletme arayüzleri:</strong></p>
+        <ul>
+            <li>
+                <strong>2× 2.5GbE RJ45</strong> — RTL8125BG PCIe
+                denetleyicileri üzerinden, iperf3 testlerinde yaklaşık 2.30
+                Gbps Rx / 2.10 Gbps Tx olarak raporlanmış.
+            </li>
+            <li>
+                <strong>M.2 E-Key soketi</strong> — SDIO WiFi/Bluetooth
+                modülü (örn. AC200, WiFi 5 + BT 5.0) için; NanoPi ailesinin
+                çoğu üyesinde bulunmayan bir özellik.
+            </li>
+            <li>
+                <strong>USB 3.2 Gen 1 Type-A</strong> — harici depolama veya
+                kablosuz genişletme için.
+            </li>
+            <li>
+                <strong>USB-C</strong> — güç girişi ve firmware
+                güncellemeleri için.
+            </li>
+            <li><strong>HDMI 2.0</strong> — 4K@60Hz çıkış.</li>
+            <li>
+                <strong>8-pin GPIO FPC konnektörü</strong> — 3.3V lojik
+                seviyeli, düşük akım (300mA) sınırlı genel amaçlı
+                giriş/çıkış.
+            </li>
+            <li>
+                <strong>UART (debug)</strong> — seri konsola kasa açılmadan
+                erişilemiyor.
+            </li>
+        </ul>
+        <div class="callout">
+            <strong>UART erişimi:</strong> Rakip Radxa E52C, harici bir
+            USB-C debug portu sunarak bu konuda avantajlı; ancak E52C'de
+            HDMI çıkışı ve M.2 WiFi soketi bulunmuyor. Yani her iki kart da
+            farklı önceliklere göre tasarım ödünleşimi (trade-off) yapmış.
+        </div>
 
-                <h3>İşlemci: Rockchip RK3576</h3>
-                <p>
-                    Kartın kalbinde, 4× Cortex-A72 (2.2 GHz'e kadar) + 4×
-                    Cortex-A53 (1.8–2.0 GHz aralığında raporlanıyor, kaynaklar
-                    arasında küçük farklar mevcut) çekirdek kombinasyonuna sahip
-                    sekiz çekirdekli RK3576 SoC bulunuyor. Üretici, işlemcinin
-                    yaklaşık 58.000 DMIPS hesaplama performansı sunduğunu
-                    belirtiyor. Bu big.LITTLE mimarisi, yüksek performans
-                    gerektiren anlık işler için A72 çekirdeklerini, arka planda
-                    çalışan sürekli görevler için ise düşük güç tüketimli A53
-                    çekirdeklerini devreye sokan tipik bir asimetrik tasarım.
-                </p>
+        <hr />
 
-                <div class="cmd">
-                    <div class="cmd-bar">
-                        <span class="dot"></span> root@FriendlyWrt:~#
+        <h2>Yazılım Ekosistemi</h2>
+        <p>NanoPi R76S, geniş bir işletim sistemi yelpazesini destekliyor:</p>
+        <ul>
+            <li>
+                <strong>FriendlyWrt</strong> (21.02 / 23.05 / 24.10, OpenWrt
+                tabanlı) — router/firewall senaryoları için birincil hedef
+            </li>
+            <li><strong>Ubuntu</strong> (20.04, 24.04 Desktop ve Core)</li>
+            <li><strong>Debian</strong> 11/12 (Desktop ve Core)</li>
+            <li><strong>Android 14</strong> (Tablet/TV)</li>
+            <li>
+                <strong>Armbian</strong> — Platinum seviyesinde resmi destek
+                alıyor, bu da uzun vadeli bakım ve öncelikli yazılım desteği
+                anlamına geliyor
+            </li>
+            <li>
+                <strong>Proxmox VE</strong> — hafif sanallaştırma host'u
+                olarak kullanım imkânı
+            </li>
+            <li>
+                <strong>OpenMediaVault</strong> — NAS senaryoları için
+            </li>
+            <li>
+                <strong>Buildroot, Alpine Linux</strong> — gömülü/minimal
+                sistem ihtiyaçları için
+            </li>
+        </ul>
+        <div class="specs">
+            <span class="sp hi">FriendlyWrt</span>
+            <span class="sp">Ubuntu</span>
+            <span class="sp">Debian</span>
+            <span class="sp">Android 14</span>
+            <span class="sp">Armbian (Platinum)</span>
+            <span class="sp">Proxmox VE</span>
+            <span class="sp">OpenMediaVault</span>
+            <span class="sp">Buildroot</span>
+            <span class="sp">Alpine Linux</span>
+        </div>
+        <p>
+            Tüm dağıtımlar Linux 6.1 LTS çekirdeği ve u-boot 2017.09 ile
+            geliyor. Kurulum; web tarayıcı üzerinden eFlasher aracı, USB
+            kablo veya microSD kart yoluyla yapılabiliyor — headless kurulum
+            senaryoları için pratik bir akış sunuyor. OpenWrt topluluğu
+            tarafında da resmi snapshot firmware imajları mevcut, bu da
+            topluluk desteğinin aktif olduğunu gösteriyor.
+        </p>
+
+        <h2>Tipik Kullanım Senaryoları</h2>
+        <ol class="step-list">
+            <li>
+                <span class="snum">1</span
+                ><span
+                    ><strong>Gelişmiş ev/ofis router'ı</strong> — çift 2.5GbE
+                    port, VPN (WireGuard/OpenVPN) trafiğinin donanım
+                    hızlandırmalı şifrelenmesinde belirgin fayda.</span
+                >
+            </li>
+            <li>
+                <span class="snum">2</span
+                ><span
+                    ><strong>Segmentli homelab</strong> — Proxmox/Docker ile
+                    Pi-hole, Home Assistant, Nextcloud gibi hizmetlerin tek
+                    kartta barındırılması.</span
+                >
+            </li>
+            <li>
+                <span class="snum">3</span
+                ><span
+                    ><strong>Hafif NAS</strong> — USB 3.2 üzerinden bağlanan
+                    SSD ile taşınabilir yedekleme.</span
+                >
+            </li>
+            <li>
+                <span class="snum">4</span
+                ><span
+                    ><strong>Kenar AI cihazı</strong> — 6 TOPS NPU ile
+                    görüntü sınıflandırma, nesne tespiti.</span
+                >
+            </li>
+            <li>
+                <span class="snum">5</span
+                ><span
+                    ><strong>Dijital tabela / medya merkezi</strong> — HDMI
+                    2.0 + donanımsal 4K/8K video çözme.</span
+                >
+            </li>
+        </ol>
+
+        <hr />
+
+        <h2>Rakip Karşılaştırması</h2>
+        <p class="sec-lbl">2.5GbE SBC router segmenti</p>
+        <div class="device-grid">
+            <div class="d-card top">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">NanoPi R76S</div>
+                        <div class="d-sub">RK3576 · 8 çekirdek</div>
                     </div>
-                    <pre>
-for cpu in /sys/devices/system/cpu/cpu[0-7]; do
-  echo -n "$(basename $cpu): "
-  cat $cpu/cpufreq/scaling_cur_freq
-done</pre>
+                    <span class="db db-new">Bu inceleme</span>
                 </div>
-
-                <div class="result">
-                    <div class="result-label">Ölçülen Sonuç</div>
-                    <div class="table-wrap" style="margin-top: 10px">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Çekirdek</th>
-                                    <th>Ölçülen Frekans</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>cpu0–cpu3 (Cortex-A53 kümesi)</td>
-                                    <td>2016 MHz</td>
-                                </tr>
-                                <tr>
-                                    <td>cpu4–cpu7 (Cortex-A72 kümesi)</td>
-                                    <td>2208 MHz</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="specs">
+                    <span class="sp hi">2x 2.5GbE</span>
+                    <span class="sp">6 TOPS NPU</span>
+                    <span class="sp">HDMI 2.0</span>
+                    <span class="sp">M.2 WiFi: var</span>
+                    <span class="sp">UART: kasa açmadan yok</span>
+                </div>
+                <div class="d-note">
+                    Ham hesaplama gücü ve multimedya/WiFi esnekliği en güçlü
+                    seçenek.
+                </div>
+            </div>
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">NanoPi R3S LTS</div>
+                        <div class="d-sub">RK3566</div>
                     </div>
-                    <p style="margin-top: 10px">
-                        Ölçülen değerler, üretici tarafından belirtilen teorik
-                        maksimumlara (A72 için 2,2–2,3 GHz, A53 için 1,8–2,0
-                        GHz) oldukça yakın — hatta A53 kümesi raporlanan üst
-                        sınırın biraz üzerinde çalışıyor gibi görünüyor, ki bu
-                        da devicetree/PVTM (silikon lotarya) kaynaklı
-                        üretici-arası küçük varyasyonlarla açıklanabilir.
-                    </p>
+                    <span class="db db-sbc">SBC</span>
                 </div>
-
-                <h3>GPU ve VPU</h3>
-                <p>
-                    Grafik tarafında Arm Mali-G52 MC3 GPU yer alıyor; OpenGL ES
-                    1.1/2.0/3.2, OpenCL 2.0 ve Vulkan 1.2 desteği sunuyor. Video
-                    işleme birimi (VPU) tarafında ise 8K@30fps H.265/VP9
-                    donanımsal video çözme ve 4K@60fps donanımsal kodlama
-                    desteği bulunuyor — bir router/gateway kartı için oldukça
-                    cömert bir multimedya kapasitesi. HDMI 2.0 çıkışı sayesinde
-                    kart, aynı zamanda dijital tabela (digital signage), medya
-                    merkezi veya headless olmayan bir dashboard cihazı olarak da
-                    konumlandırılabiliyor; bu, rakiplerinin çoğunda (örneğin
-                    Radxa E52C) bulunmayan bir farklılaşma noktası.
-                </p>
-
-                <h3>NPU: 6 TOPS AI Hızlandırma</h3>
-                <p>
-                    RK3576, INT4/INT8/INT16/BF16/TF32 karışık hassasiyet
-                    destekli, INT8'de 6 TOPS performans sunan bir NPU içeriyor.
-                    Bu, kartı yalnızca bir ağ cihazı olmaktan çıkarıp kenar AI
-                    çıkarımı (nesne tanıma, hafif LLM çalıştırma gibi
-                    TinyLLaMA/ChatGLM3 sınıfı modeller) için de kullanılabilir
-                    hale getiriyor. Elbette 6 TOPS, büyük modeller için yeterli
-                    değil; ancak IoT gateway + hafif görüntü işleme kombinasyonu
-                    düşünüldüğünde makul bir bütçe.
-                </p>
-
-                <h3>Bellek ve Depolama</h3>
-                <p>
-                    Bellek tarafında dikkat edilmesi gereken önemli bir nokta
-                    var: giriş seviyesi 2GB ve 4GB varyantları
-                    <strong>LPDDR4X</strong>, en üst seviye 16GB varyant ise
-                    <strong>LPDDR5</strong> bellek kullanıyor. Bu, sadece
-                    kapasite değil bant genişliği açısından da bir fark
-                    yaratıyor — yoğun sanallaştırma veya çoklu container
-                    senaryosu planlıyorsanız 16GB modelin bant genişliği
-                    avantajını göz önünde bulundurmak gerekir. Depolama
-                    tarafında tüm varyantlar 32GB eMMC ile geliyor (bazı satış
-                    kanallarında 64GB seçeneği de mevcut), microSD kart yuvası
-                    ve M.2 E-Key soketi üzerinden ek WiFi modülü veya depolama
-                    genişletmesi destekleniyor.
-                </p>
-
-                <h3>Ağ ve Genişletme Arayüzleri</h3>
-                <ul>
-                    <li>
-                        <strong>2× 2.5GbE RJ45</strong> — RTL8125BG PCIe
-                        denetleyicileri üzerinden, iperf3 testlerinde yaklaşık
-                        2.30 Gbps Rx / 2.10 Gbps Tx olarak raporlanmış.
-                    </li>
-                    <li>
-                        <strong>M.2 E-Key soketi</strong> — SDIO WiFi/Bluetooth
-                        modülü (örn. AC200, WiFi 5 + BT 5.0) için; NanoPi
-                        ailesinin çoğu üyesinde bulunmayan bir özellik.
-                    </li>
-                    <li>
-                        <strong>USB 3.2 Gen 1 Type-A</strong> — harici depolama
-                        veya kablosuz genişletme için.
-                    </li>
-                    <li>
-                        <strong>USB-C</strong> — güç girişi ve firmware
-                        güncellemeleri için.
-                    </li>
-                    <li><strong>HDMI 2.0</strong> — 4K@60Hz çıkış.</li>
-                    <li>
-                        <strong>8-pin GPIO FPC konnektörü</strong> — 3.3V lojik
-                        seviyeli, düşük akım (300mA) sınırlı genel amaçlı
-                        giriş/çıkış.
-                    </li>
-                    <li>
-                        <strong>UART (debug)</strong> — burada önemli bir
-                        eleştiri noktası var: seri konsola erişim, kasa
-                        açılmadan mümkün değil. Rakip Radxa E52C, harici bir
-                        USB-C debug portu sunarak bu konuda avantajlı; ancak
-                        E52C'de HDMI çıkışı ve M.2 WiFi soketi bulunmuyor. Yani
-                        her iki kart da farklı önceliklere göre tasarım
-                        ödünleşimi (trade-off) yapmış.
-                    </li>
-                </ul>
-            </section>
-
-            <section id="yazilim">
-                <h2><span class="num">04</span> Yazılım Ekosistemi</h2>
-                <p>
-                    NanoPi R76S, geniş bir işletim sistemi yelpazesini
-                    destekliyor:
-                </p>
-                <ul>
-                    <li>
-                        <strong>FriendlyWrt</strong> (21.02 / 23.05 / 24.10,
-                        OpenWrt tabanlı) — router/firewall senaryoları için
-                        birincil hedef
-                    </li>
-                    <li>
-                        <strong>Ubuntu</strong> (20.04, 24.04 Desktop ve Core)
-                    </li>
-                    <li><strong>Debian</strong> 11/12 (Desktop ve Core)</li>
-                    <li><strong>Android 14</strong> (Tablet/TV)</li>
-                    <li>
-                        <strong>Armbian</strong> — Platinum seviyesinde resmi
-                        destek alıyor, bu da uzun vadeli bakım ve öncelikli
-                        yazılım desteği anlamına geliyor
-                    </li>
-                    <li>
-                        <strong>Proxmox VE</strong> — hafif sanallaştırma host'u
-                        olarak kullanım imkânı
-                    </li>
-                    <li>
-                        <strong>OpenMediaVault</strong> — NAS senaryoları için
-                    </li>
-                    <li>
-                        <strong>Buildroot, Alpine Linux</strong> —
-                        gömülü/minimal sistem ihtiyaçları için
-                    </li>
-                </ul>
-                <p>
-                    Tüm bu dağıtımlar Linux 6.1 LTS çekirdeği ve u-boot 2017.09
-                    ile geliyor. Kurulum; web tarayıcı üzerinden eFlasher aracı,
-                    USB kablo veya microSD kart yoluyla yapılabiliyor — headless
-                    kurulum senaryoları için pratik bir akış sunuluyor. OpenWrt
-                    topluluğu tarafında da resmi snapshot firmware imajları
-                    mevcut, bu da topluluk desteğinin aktif olduğunu gösteriyor.
-                </p>
-            </section>
-
-            <section id="kullanim">
-                <h2><span class="num">05</span> Tipik Kullanım Senaryoları</h2>
-                <p>
-                    Donanım profili göz önüne alındığında kart, aşağıdaki
-                    kullanım alanlarında öne çıkıyor:
-                </p>
-                <ol>
-                    <li>
-                        <strong>Gelişmiş ev/ofis router'ı</strong> — çift 2.5GbE
-                        port, WAN/LAN ayrımı yaparak multi-gig internet
-                        bağlantılarını tam kapasite kullanmaya olanak tanır;
-                        RK3576'nın hesaplama gücü, VPN (WireGuard/OpenVPN)
-                        trafiğinin donanım hızlandırmalı şifrelenmesinde
-                        belirgin fayda sağlar.
-                    </li>
-                    <li>
-                        <strong>Segmentli homelab / geliştirme ortamı</strong> —
-                        Proxmox veya Docker ile container tabanlı hizmetlerin
-                        (Pi-hole, Home Assistant, Nextcloud) tek kartta
-                        barındırılması.
-                    </li>
-                    <li>
-                        <strong>Hafif NAS</strong> — USB 3.2 üzerinden bağlanan
-                        bir SSD ile taşınabilir/mobil yedekleme çözümü.
-                    </li>
-                    <li>
-                        <strong>Kenar AI cihazı</strong> — 6 TOPS NPU ile
-                        görüntü sınıflandırma, nesne tespiti gibi hafif çıkarım
-                        görevleri; IoT gateway ile AI'nın aynı kartta
-                        birleşmesi.
-                    </li>
-                    <li>
-                        <strong>Dijital tabela / medya merkezi</strong> — HDMI
-                        2.0 ve donanımsal 4K/8K video çözme desteği sayesinde,
-                        çoğu router-SBC'sinin sunmadığı bir esneklik.
-                    </li>
-                </ol>
-            </section>
-
-            <section id="rakip">
-                <h2><span class="num">06</span> Rakip Karşılaştırması</h2>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Özellik</th>
-                                <th>NanoPi R76S</th>
-                                <th>NanoPi R3S LTS</th>
-                                <th>Radxa E52C</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>SoC</td>
-                                <td>RK3576 (8 çekirdek)</td>
-                                <td>RK3566</td>
-                                <td>RK3582</td>
-                            </tr>
-                            <tr>
-                                <td>Ethernet</td>
-                                <td>2× 2.5GbE</td>
-                                <td>2× GbE</td>
-                                <td>2× 2.5GbE</td>
-                            </tr>
-                            <tr>
-                                <td>NPU</td>
-                                <td>6 TOPS</td>
-                                <td>Yok/düşük</td>
-                                <td>Var (benzer sınıf)</td>
-                            </tr>
-                            <tr>
-                                <td>HDMI</td>
-                                <td>Var (2.0)</td>
-                                <td>Var</td>
-                                <td>Yok</td>
-                            </tr>
-                            <tr>
-                                <td>M.2 WiFi soketi</td>
-                                <td>Var</td>
-                                <td>Yok</td>
-                                <td>Yok</td>
-                            </tr>
-                            <tr>
-                                <td>Debug UART erişimi</td>
-                                <td>Kasa açmadan erişilemiyor</td>
-                                <td>—</td>
-                                <td>USB-C debug portu ile kolay erişim</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="specs">
+                    <span class="sp">2x GbE</span>
+                    <span class="sp">NPU: yok/düşük</span>
+                    <span class="sp">HDMI: var</span>
+                    <span class="sp">M.2 WiFi: yok</span>
+                    <span class="sp">UART: —</span>
                 </div>
-                <p>
-                    Bu tablo, R76S'in ham hesaplama gücü ve multimedya/WiFi
-                    esnekliği açısından güçlü olduğunu, ancak geliştirici/debug
-                    deneyimi açısından Radxa E52C'nin daha pratik bir yaklaşım
-                    sunduğunu gösteriyor. Seçim, projenin önceliklerine göre
-                    değişir: saf headless router/firewall + kolay seri konsol
-                    erişimi isteyen bir mühendis E52C'ye; multimedya çıkışı,
-                    WiFi genişletmesi ve daha yüksek NPU/CPU performansı isteyen
-                    bir kullanıcı ise R76S'e yönelebilir.
-                </p>
-            </section>
-
-            <section id="benchmark">
-                <h2>
-                    <span class="num">07</span> Performans: CoreMark ve OpenSSL
-                    Benchmarkları
-                </h2>
-                <p>
-                    Bu bölümdeki tüm sonuçlar, FriendlyWrt (OpenWrt tabanlı)
-                    çalıştıran gerçek bir NanoPi R76S üzerinde doğrudan ölçüldü.
-                    Aşağıda hem elde edilen sonuçlar hem de tekrarlamak
-                    isteyenler için kullanılan komutlar yer alıyor.
-                </p>
-
-                <h3>1. CoreMark</h3>
-                <div class="cmd">
-                    <div class="cmd-bar">
-                        <span class="dot"></span> root@FriendlyWrt:~#
+                <div class="d-note">
+                    Daha hafif yönlendirme görevleri için giriş seviyesi
+                    seçenek.
+                </div>
+            </div>
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">Radxa E52C</div>
+                        <div class="d-sub">RK3582</div>
                     </div>
-                    <pre>
-apk add coremark
-coremark</pre>
+                    <span class="db db-best">Debug dostu</span>
                 </div>
-                <div class="result">
-                    <div class="result-label">Ölçülen Sonuç</div>
-                    <p>
-                        CoreMark 1.0 skoru
-                        <strong>11.398,61 Iterations/Sec</strong> (GCC 14.3.0,
-                        aarch64_generic_musl derlemesi — FriendlyWrt'nin apk
-                        paket deposundaki hazır <code>coremark</code> paketi
-                        kullanıldı). Paket varsayılan olarak tek çekirdekte
-                        (single-thread) çalışıyor; bu değer RK3576'nın sekiz
-                        çekirdeğinden yalnızca birinin kapasitesini gösteriyor.
-                        Aynı testin ikinci bir çalıştırmasında 11.377,21 elde
-                        edildi; iki sonuç arasındaki %0,2'lik fark, ölçümün
-                        tutarlı olduğunu gösteriyor.
-                    </p>
+                <div class="specs">
+                    <span class="sp hi">2x 2.5GbE</span>
+                    <span class="sp">NPU: benzer sınıf</span>
+                    <span class="sp">HDMI: yok</span>
+                    <span class="sp">M.2 WiFi: yok</span>
+                    <span class="sp hi">UART: USB-C debug, kolay</span>
                 </div>
+                <div class="d-note">
+                    HDMI ve M.2 WiFi yok, ama USB-C üzerinden kolay debug
+                    erişimi sunuyor — saf headless router için pratik.
+                </div>
+            </div>
+        </div>
+        <div class="callout">
+            Saf headless router + kolay seri konsol isteyen bir mühendis
+            E52C'ye; multimedya çıkışı, WiFi genişletmesi ve daha yüksek
+            NPU/CPU performansı isteyen bir kullanıcı R76S'e yönelebilir.
+        </div>
 
-                <h3>2. OpenSSL — Simetrik Şifreleme (AES-256-CBC)</h3>
-                <div class="cmd">
-                    <div class="cmd-bar">
-                        <span class="dot"></span> root@FriendlyWrt:~#
-                    </div>
-                    <pre>openssl speed -elapsed -evp aes-256-cbc</pre>
-                </div>
-                <div class="result">
-                    <div class="result-label">
-                        Ölçülen Sonuç — Blok Boyutuna Göre Verim
-                    </div>
-                    <div class="table-wrap" style="margin-top: 10px">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Blok Boyutu</th>
-                                    <th>Verim (KB/s)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>16 bayt</td>
-                                    <td>375.903,57</td>
-                                </tr>
-                                <tr>
-                                    <td>64 bayt</td>
-                                    <td>837.984,66</td>
-                                </tr>
-                                <tr>
-                                    <td>256 bayt</td>
-                                    <td>1.133.310,21</td>
-                                </tr>
-                                <tr>
-                                    <td>1024 bayt</td>
-                                    <td>1.223.818,58</td>
-                                </tr>
-                                <tr>
-                                    <td>8192 bayt</td>
-                                    <td>1.273.350,83</td>
-                                </tr>
-                                <tr>
-                                    <td>16384 bayt</td>
-                                    <td>1.264.855,72</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <p style="margin-top: 10px">
-                        Büyük blok boyutlarında (8-16KB) verim ~1,27 milyon
-                        KB/s'ye (yaklaşık 1,27 GB/s) doygunlaşıyor — bu,
-                        VPN/tünel trafiğinde tipik paket boyutlarının çok
-                        üzerinde bir kapasite anlamına geliyor ve tek başına AES
-                        şifrelemenin router senaryosunda darboğaz
-                        oluşturmayacağını gösteriyor.
-                    </p>
-                </div>
+        <hr />
 
-                <h3>
-                    3. OpenSSL — Asimetrik Şifreleme (RSA4096, TLS Handshake)
-                </h3>
-                <div class="cmd">
-                    <div class="cmd-bar">
-                        <span class="dot"></span> root@FriendlyWrt:~#
-                    </div>
-                    <pre>openssl speed -elapsed rsa4096</pre>
-                </div>
-                <div class="result">
-                    <div class="result-label">Ölçülen Sonuç — Tek Çekirdek</div>
-                    <div class="table-wrap" style="margin-top: 10px">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Metrik</th>
-                                    <th>Değer</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>RSA4096 Sign/s</td>
-                                    <td>35,3–35,7</td>
-                                </tr>
-                                <tr>
-                                    <td>RSA4096 Verify/s</td>
-                                    <td>2.434,4–2.434,5</td>
-                                </tr>
-                                <tr>
-                                    <td>RSA4096 Encrypt/s</td>
-                                    <td>2.403,0</td>
-                                </tr>
-                                <tr>
-                                    <td>RSA4096 Decrypt/s</td>
-                                    <td>35,6</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <h2>Performans: CoreMark ve OpenSSL Benchmarkları</h2>
+        <p>
+            Bu bölümdeki tüm sonuçlar, FriendlyWrt çalıştıran gerçek bir
+            NanoPi R76S üzerinde doğrudan ölçüldü.
+        </p>
 
-                <div class="note">
-                    <div class="note-label">Mühendislik Notu</div>
-                    <p>
-                        OpenSSL'in derleme bilgisinde hedef mimari
-                        <code>-mcpu=cortex-a53</code> olarak görünüyor — yani
-                        FriendlyWrt'nin öntanımlı OpenSSL paketi, RK3576'nın
-                        güçlü A72 çekirdekleri için değil, verimlilik odaklı A53
-                        çekirdekleri için derlenmiş/optimize edilmiş durumda.
-                        <code>openssl speed</code> varsayılan olarak tek bir
-                        işlemi işletim sistemi zamanlayıcısına bırakır; bu
-                        yüzden yukarıdaki tek-çekirdek sonucu SoC'nin en güçlü
-                        A72 çekirdeğini değil, rastgele atanmış bir çekirdeği
-                        yansıtıyor olabilir.
-                    </p>
-                </div>
+        <p class="sec-lbl">1. CoreMark</p>
+        <div class="code">
+            root@FriendlyWrt:~# apk add coremark<br />
+            root@FriendlyWrt:~# coremark
+        </div>
+        <div class="grade-row">
+            <div class="g-card">
+                <div class="gl">1. ölçüm</div>
+                <div class="gv" style="color: #0f6e56">11.398,61</div>
+                <div class="gd">Iterations/Sec · tek çekirdek</div>
+            </div>
+            <div class="g-card">
+                <div class="gl">2. ölçüm</div>
+                <div class="gv" style="color: #0f6e56">11.377,21</div>
+                <div class="gd">%0,2 sapma · tutarlı</div>
+            </div>
+        </div>
+        <p>
+            GCC 14.3.0, aarch64_generic_musl derlemesi — FriendlyWrt'nin apk
+            paket deposundaki hazır <strong>coremark</strong> paketi
+            kullanıldı. Paket varsayılan olarak tek çekirdekte çalışıyor; bu
+            değer RK3576'nın sekiz çekirdeğinden yalnızca birinin
+            kapasitesini gösteriyor.
+        </p>
 
-                <h4>Çoklu Çekirdek (8 Process): Gerçekçi Router Kapasitesi</h4>
-                <p>
-                    Router/gateway senaryosunda asıl önemli olan, tüm sekiz
-                    çekirdeği (4× A72 + 4× A53) aynı anda kullanan toplam TLS
-                    handshake kapasitesi. Bunu ölçmek için OpenSSL'in
-                    <code>-multi</code> bayrağıyla 8 ayrı process fork edip
-                    paralel çalıştırdık:
-                </p>
-                <div class="cmd">
-                    <div class="cmd-bar">
-                        <span class="dot"></span> root@FriendlyWrt:~#
+        <p class="sec-lbl">2. OpenSSL — Simetrik Şifreleme (AES-256-CBC)</p>
+        <div class="code">
+            root@FriendlyWrt:~# openssl speed -elapsed -evp aes-256-cbc
+        </div>
+        <div class="specs" style="margin-bottom: 0.75rem">
+            <span class="sp">16B: 375.903 KB/s</span>
+            <span class="sp">64B: 837.984 KB/s</span>
+            <span class="sp">256B: 1.133.310 KB/s</span>
+            <span class="sp">1024B: 1.223.818 KB/s</span>
+            <span class="sp hi">8192B: 1.273.350 KB/s</span>
+            <span class="sp hi">16384B: 1.264.855 KB/s</span>
+        </div>
+        <p>
+            Büyük blok boyutlarında (8-16KB) verim ~1,27 milyon KB/s'ye
+            (yaklaşık 1,27 GB/s) doygunlaşıyor — VPN/tünel trafiğinde tipik
+            paket boyutlarının çok üzerinde bir kapasite, yani AES şifreleme
+            router senaryosunda darboğaz oluşturmuyor.
+        </p>
+
+        <p class="sec-lbl">3. OpenSSL — Asimetrik Şifreleme (RSA4096)</p>
+        <div class="code">
+            root@FriendlyWrt:~# openssl speed -elapsed rsa4096
+        </div>
+        <div class="specs" style="margin-bottom: 0.75rem">
+            <span class="sp">Sign/s: 35,3–35,7</span>
+            <span class="sp">Verify/s: 2.434,4–2.434,5</span>
+            <span class="sp">Encrypt/s: 2.403,0</span>
+            <span class="sp">Decrypt/s: 35,6</span>
+        </div>
+        <div class="callout">
+            <strong>Mühendislik notu:</strong> OpenSSL derleme bilgisinde
+            hedef mimari <code>-mcpu=cortex-a53</code> görünüyor — yani
+            öntanımlı paket, RK3576'nın güçlü A72 çekirdekleri için değil,
+            verimlilik odaklı A53 çekirdekleri için derlenmiş.
+            <code>openssl speed</code> varsayılan olarak tek işlemi
+            zamanlayıcıya bırakır; tek-çekirdek sonucu bu yüzden rastgele
+            atanan bir çekirdeği yansıtıyor olabilir.
+        </div>
+        <p>
+            Router senaryosunda asıl önemli olan, sekiz çekirdeğin (4×A72 +
+            4×A53) tamamını kullanan toplam TLS handshake kapasitesi:
+        </p>
+        <div class="code">
+            root@FriendlyWrt:~# openssl speed -elapsed -multi 8 rsa4096
+        </div>
+        <div class="metrics-row">
+            <div class="m-card">
+                <div class="m-lbl">Tek çekirdek</div>
+                <div class="m-b">35,3</div>
+                <div class="m-arr">sign/s</div>
+            </div>
+            <div class="m-card">
+                <div class="m-lbl">8 çekirdek (paralel)</div>
+                <div class="m-a">250,1</div>
+                <div class="m-arr">sign/s</div>
+            </div>
+            <div class="m-card">
+                <div class="m-lbl">Ölçeklenme</div>
+                <div class="m-a">~7,3×</div>
+                <div class="m-arr">8× teorik maks.</div>
+            </div>
+        </div>
+        <p>
+            8 çekirdekli teorik maksimuma oldukça yakın bir paralel
+            verimlilik. Pratik anlamı net: <strong>R76S saniyede ~250
+            RSA4096 imzalama işlemini kaldırabiliyor</strong> — yoğun
+            çok-istemcili TLS sonlandırma veya VPN gateway senaryolarında
+            gerçekçi üst sınır bu civarda. (8 çekirdek toplamında verify/s
+            16.901,1, encrypt/s 16.670,5, decrypt/s 249,4 olarak ölçüldü.)
+        </p>
+
+        <p class="sec-lbl">Karşılaştırma: OpenSSL AES-256-CBC (16384B blok)</p>
+        <p style="font-size: 13px; color: #888; margin-top: -0.5rem">
+            Kaynak: ThomasKaiser, sbc-bench Results.md — aynı
+            <code>openssl speed -evp aes-256-cbc</code> metodolojisi.
+        </p>
+        <div class="device-grid">
+            <div class="d-card top">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">NanoPi R76S</div>
+                        <div class="d-sub">RK3576 — ölçülen</div>
                     </div>
-                    <pre>openssl speed -elapsed -multi 8 rsa4096</pre>
+                    <span class="db db-new">Bu inceleme</span>
                 </div>
-                <div class="result">
-                    <div class="result-label">
-                        Ölçülen Sonuç — 8 Çekirdek Toplamı
-                    </div>
-                    <div class="table-wrap" style="margin-top: 10px">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Metrik</th>
-                                    <th>Değer</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>RSA4096 Sign/s (toplam)</td>
-                                    <td>250,1–257,4</td>
-                                </tr>
-                                <tr>
-                                    <td>RSA4096 Verify/s (toplam)</td>
-                                    <td>16.901,1–18.443,7</td>
-                                </tr>
-                                <tr>
-                                    <td>RSA4096 Encrypt/s (toplam)</td>
-                                    <td>16.670,5</td>
-                                </tr>
-                                <tr>
-                                    <td>RSA4096 Decrypt/s (toplam)</td>
-                                    <td>249,4</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <p style="margin-top: 10px">
-                        Bu, tek-çekirdek sonucuna göre yaklaşık
-                        <strong>7-7,3×</strong> bir ölçeklenme anlamına geliyor
-                        (35,3 → 250,1 sign/s) — 8 çekirdekli teorik maksimuma
-                        (8×) oldukça yakın, heterojen A72/A53 çekirdek karışımı
-                        ve zamanlayıcı yükü göz önüne alındığında güçlü bir
-                        paralel verimlilik. Pratik anlamı net:
-                        <strong
-                            >R76S, saniyede ~250 RSA4096 imzalama işlemini
-                            kaldırabiliyor</strong
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">AES-256-CBC</span
+                        ><span class="sqm-val" style="color: #0f6e56"
+                            >1.264.856 KB/s</span
                         >
-                        — yoğun çok-istemcili TLS sonlandırma veya VPN gateway
-                        senaryolarında router'ın gerçekçi bir üst sınırı bu
-                        civarda.
-                    </p>
+                    </div>
+                    <div class="sqm-track">
+                        <div class="sqm-fill" style="width: 90%; background: #1d9e75"></div>
+                    </div>
                 </div>
-
-                <h3>Karşılaştırma: OpenSSL AES-256-CBC (16384 bayt blok)</h3>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Kart (SoC)</th>
-                                <th>Saat Hızı</th>
-                                <th>AES-256-CBC, 16384B (KB/s)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="highlight">
-                                <td>NanoPi R76S (RK3576) — ölçülen</td>
-                                <td>—</td>
-                                <td>1.264.855,72</td>
-                            </tr>
-                            <tr>
-                                <td>Raspberry Pi 5 (BCM2712, Cortex-A76)</td>
-                                <td>2400 MHz</td>
-                                <td>1.367.740–1.368.160</td>
-                            </tr>
-                            <tr>
-                                <td>NanoPi R5S (RK3568, Cortex-A55)</td>
-                                <td>1960 MHz</td>
-                                <td>914.340</td>
-                            </tr>
-                            <tr>
-                                <td>NanoPi R4S (RK3399, referans: M4/NEO4)</td>
-                                <td>2000/1500 MHz</td>
-                                <td>~1.120.000–1.145.000</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            </div>
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">Raspberry Pi 5</div>
+                        <div class="d-sub">BCM2712, Cortex-A76 · 2400MHz</div>
+                    </div>
+                    <span class="db db-sbc">SBC</span>
                 </div>
-                <p style="font-size: 14px; color: var(--ink-soft)">
-                    <em
-                        >Karşılaştırma kaynağı: ThomasKaiser, sbc-bench
-                        Results.md (bağımsız, standartlaştırılmış SBC benchmark
-                        veritabanı — aynı
-                        <code>openssl speed -evp aes-256-cbc</code>
-                        metodolojisi).</em
-                    >
-                </p>
-                <p>
-                    R76S'in ölçülen AES-256-CBC değeri, Raspberry Pi 5'in
-                    yaklaşık %7-8 gerisinde ama NanoPi R5S'in %38, NanoPi R4S'in
-                    ise yaklaşık %11-13 üzerinde konumlanıyor. Bu, RK3576'nın
-                    kendi ailesindeki önceki nesil FriendlyELEC router
-                    kartlarına göre gerçek, doğrulanmış bir performans kazancı
-                    sunduğunu; RPi 5'e ise (daha yeni Cortex-A76 mimarisine
-                    rağmen) oldukça yakın bir bant genişliğinde kaldığını
-                    gösteriyor.
-                </p>
-            </section>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">AES-256-CBC</span
+                        ><span class="sqm-val" style="color: #0f6e56"
+                            >~1.368.000 KB/s</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div class="sqm-fill" style="width: 98%; background: #1d9e75"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">NanoPi R4S</div>
+                        <div class="d-sub">RK3399, ref: M4/NEO4 · ~2000MHz</div>
+                    </div>
+                    <span class="db db-sbc">SBC</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">AES-256-CBC</span
+                        ><span class="sqm-val" style="color: #854f0b"
+                            >~1.130.000 KB/s</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div class="sqm-fill" style="width: 81%; background: #ba7517"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-card">
+                <div class="d-head">
+                    <div>
+                        <div class="d-name">NanoPi R5S</div>
+                        <div class="d-sub">RK3568, Cortex-A55 · 1960MHz</div>
+                    </div>
+                    <span class="db db-sbc">SBC</span>
+                </div>
+                <div class="sqm-wrap">
+                    <div class="sqm-lr">
+                        <span class="sqm-lbl">AES-256-CBC</span
+                        ><span class="sqm-val" style="color: #854f0b"
+                            >914.340 KB/s</span
+                        >
+                    </div>
+                    <div class="sqm-track">
+                        <div class="sqm-fill" style="width: 65%; background: #ba7517"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p>
+            R76S'in ölçülen değeri RPi5'in ~%7-8 gerisinde, ama NanoPi
+            R5S'in %38, NanoPi R4S'in ~%11-13 üzerinde — kendi ailesindeki
+            önceki nesil kartlara göre gerçek, doğrulanmış bir performans
+            kazancı.
+        </p>
 
-            <section id="guc">
-                <h2>
-                    <span class="num">08</span> Güç Tüketimi (OpenWrt Altında
-                    Ölçülen)
-                </h2>
-                <p>
-                    Kartın bulunduğu ortamda pano tipi bir güç ölçüm cihazı
-                    üzerinden, FriendlyWrt çalışırken tipik/boşta ve gözlemlenen
-                    maksimum tüketim değerleri doğrudan ölçüldü.
-                </p>
+        <hr />
+
+        <h2>Güç Tüketimi (OpenWrt Altında Ölçülen)</h2>
+        <p>
+            Pano tipi bir güç ölçüm cihazı üzerinden, FriendlyWrt çalışırken
+            boşta ve gözlemlenen maksimum tüketim değerleri doğrudan
+            ölçüldü.
+        </p>
 
                 <div class="power-grid">
                     <div class="power-card">
@@ -1128,88 +1163,108 @@ coremark</pre>
                     </p>
                 </div>
 
-                <p>
-                    Bu rakamlar, RK3576'nın 8nm süreç teknolojisinin enerji
-                    verimliliği açısından beklenen sonucu doğruluyor: boşta ~2W,
-                    tam yükte ~3,3W'lık bir aralık, router/gateway sınıfı bir
-                    cihaz için oldukça düşük. Karşılaştırma için, x86 tabanlı
-                    mini PC router çözümleri (örn. Intel N100 tabanlı kartlar)
-                    tipik olarak boşta bile 6-10W bandında seyrediyor; R76S bu
-                    tüketimin üçte biri ila yarısı kadar bir bütçeyle çalışıyor.
-                    Bu, hem 7/24 çalışan bir ev/ofis router'ı için elektrik
-                    maliyetini önemsiz seviyeye indiriyor hem de kasanın fansız
-                    (pasif) soğutma tasarımının neden yeterli olduğunu açıklıyor
-                    — 3,3W'lık bir TDP, küçük bir alüminyum kasa için kolayca
-                    dağıtılabilir bir ısı yükü.
-                </p>
-            </section>
+        <p>
+            Bu rakamlar RK3576'nın 8nm süreç teknolojisinin enerji
+            verimliliğini doğruluyor. Karşılaştırma için, x86 tabanlı mini
+            PC router çözümleri (örn. Intel N100) tipik olarak boşta bile
+            6-10W bandında seyrediyor; R76S bu tüketimin üçte biri ila yarısı
+            kadar bir bütçeyle çalışıyor. Bu hem 7/24 çalışan bir router için
+            elektrik maliyetini önemsiz seviyeye indiriyor hem de fansız
+            kasa tasarımının neden yeterli olduğunu açıklıyor.
+        </p>
 
-            <section id="sonuc">
-                <h2><span class="num">09</span> Sonuç</h2>
-                <p>
-                    NanoPi R76S, hem spesifikasyon hem de kartın kendisinde
-                    ölçülen gerçek verilerle birlikte değerlendirildiğinde,
-                    kompakt ağ donanımı segmentinde dikkate değer bir adım.
-                    RK3576'nın hesaplama gücü, çift 2.5GbE bağlantısı, HDMI
-                    çıkışı ve 6 TOPS NPU kombinasyonu; kartı sadece bir router
-                    değil, aynı zamanda hafif bir sanallaştırma/AI/medya
-                    platformu olarak konumlandırıyor. Ölçülen CoreMark, OpenSSL
-                    ve güç tüketimi rakamları, kartın teorik potansiyelini
-                    gerçek kullanımda büyük ölçüde karşıladığını gösteriyor —
-                    özellikle ~3,3W'lık tam yük tüketimi, 7/24 çalışan bir
-                    ev/ofis cihazı için son derece elverişli.
-                </p>
-                <p>
-                    Buna karşılık, kasa içinde UART erişiminin olmaması ve WiFi
-                    modülünün ayrı satılması gibi noktalar, saf "headless
-                    debug-friendly" bir router arayan mühendisler için
-                    değerlendirilmesi gereken ödünleşimler. Genel olarak R76S,
-                    çok yönlülüğü ön planda tutan, ağ + hesaplama + multimedya
-                    işlevlerini tek kartta birleştirmek isteyen homelab ve edge
-                    computing projeleri için güçlü bir aday olarak öne çıkıyor.
-                </p>
-            </section>
+        <hr />
 
-            <section id="satin-al">
-                <h2><span class="num">10</span> Nereden Satın Alınır</h2>
-                <div class="buy-box">
-                    <p style="margin: 0 0 4px">
-                        NanoPi R76S'i Türkiye'de resmi/güvenilir kanaldan satın
-                        almak isteyenler için şu anda tek adres
-                        <strong>Genova Donanım</strong>:
-                    </p>
-                    <a
-                        class="btn"
-                        href="https://www.genovadonanim.com.tr/products/friendly-elec-nanopi-r76s-ai-router-edge-computing-platform"
-                        target="_blank"
-                        rel="noopener"
-                        >NanoPi R76S — Genova Donanım'da İncele →</a
-                    >
-                </div>
-                <p>
-                    Genova Donanım'a, Türkiye'de nadir bulunan bu tür
-                    niş/geliştirici odaklı SBC ürünlerini yurt dışı tedarik ve
-                    gümrük süreciyle uğraşmadan yerel olarak erişilebilir
-                    kıldıkları için teşekkür ederim — FriendlyELEC gibi
-                    üreticilerin ürünlerini Türkiye pazarına taşımaları,
-                    embedded/homelab camiasındaki mühendis ve hobicilerin işini
-                    gerçekten kolaylaştırıyor.
-                </p>
-            </section>
-        </main>
+        <h2>Sonuç</h2>
+        <p>
+            NanoPi R76S, hem spesifikasyon hem de kartın kendisinde ölçülen
+            gerçek verilerle değerlendirildiğinde, kompakt ağ donanımı
+            segmentinde dikkate değer bir adım.
+        </p>
+        <ul class="check-list">
+            <li>
+                <span class="ck">✓</span
+                ><span
+                    >RK3576'nın hesaplama gücü, çift 2.5GbE, HDMI çıkışı ve 6
+                    TOPS NPU kombinasyonu — sadece router değil, hafif
+                    sanallaştırma/AI/medya platformu.</span
+                >
+            </li>
+            <li>
+                <span class="ck">✓</span
+                ><span
+                    >Ölçülen CoreMark, OpenSSL ve güç tüketimi rakamları,
+                    teorik potansiyeli büyük ölçüde karşılıyor.</span
+                >
+            </li>
+            <li>
+                <span class="ck">✓</span
+                ><span
+                    >~3,3W'lık tam yük tüketimi, 7/24 çalışan bir ev/ofis
+                    cihazı için son derece elverişli.</span
+                >
+            </li>
+            <li>
+                <span class="ck">✓</span
+                ><span
+                    >Kasa içinde UART erişiminin olmaması ve WiFi modülünün
+                    ayrı satılması, "headless debug-friendly" arayan
+                    mühendisler için değerlendirilmesi gereken
+                    ödünleşimler.</span
+                >
+            </li>
+        </ul>
+        <p>
+            Genel olarak R76S, çok yönlülüğü ön planda tutan, ağ + hesaplama
+            + multimedya işlevlerini tek kartta birleştirmek isteyen
+            homelab ve edge computing projeleri için güçlü bir aday olarak
+            öne çıkıyor.
+        </p>
 
-        <footer>
+        <h2>Nereden Satın Alınır</h2>
+        <div class="cta-box">
+            <h3>NanoPi R76S'i incelemek ister misiniz?</h3>
             <p>
-                Not: Bu incelemenin donanım mimarisi ve rakip karşılaştırması
-                bölümleri üretici dokümantasyonu ve bağımsız donanım basınından
-                derlenmiştir. CoreMark, OpenSSL ve güç tüketimi sonuçları NanoPi
-                R76S'in kendisinde, FriendlyWrt üzerinde doğrudan ölçülmüştür.
+                NanoPi R76S'i Türkiye'de resmi/güvenilir kanaldan satın
+                almak isteyenler için şu anda tek adres
+                <strong>Genova Donanım</strong>. Genova Donanım'a, Türkiye'de
+                nadir bulunan bu tür niş/geliştirici odaklı SBC ürünlerini
+                yurt dışı tedarik ve gümrük süreciyle uğraşmadan yerel
+                olarak erişilebilir kıldıkları için teşekkür ederim —
+                FriendlyELEC gibi üreticilerin ürünlerini Türkiye pazarına
+                taşımaları, embedded/homelab camiasındaki mühendis ve
+                hobicilerin işini gerçekten kolaylaştırıyor.
             </p>
-            <p>
-                Kaynaklar: FriendlyELEC resmi wiki · CNX Software · Liliputing ·
-                LinuxGizmos · Notebookcheck · Armbian resmi blog · OpenWrt
-                forumu
-            </p>
-        </footer>
+            <a
+                class="cta-btn"
+                href="https://www.genovadonanim.com.tr/products/friendly-elec-nanopi-r76s-ai-router-edge-computing-platform"
+                target="_blank"
+                >NanoPi R76S — Genova Donanım'da İncele ↗</a
+            >
+        </div>
+
+        <p style="font-size: 12px; color: #888; margin-top: 2rem">
+            <strong>Not:</strong> Donanım mimarisi ve rakip karşılaştırması
+            bölümleri üretici dokümantasyonu ve bağımsız donanım basınından
+            derlenmiştir. CoreMark, OpenSSL ve güç tüketimi sonuçları
+            NanoPi R76S'in kendisinde, FriendlyWrt üzerinde doğrudan
+            ölçülmüştür.<br />
+            <strong>Kaynaklar:</strong> FriendlyELEC resmi wiki · CNX
+            Software · Liliputing · LinuxGizmos · Notebookcheck · Armbian
+            resmi blog · OpenWrt forumu
+        </p>
+
+        <div class="tag-row">
+            <span class="tag">#NanoPi</span>
+            <span class="tag">#NanoPiR76S</span>
+            <span class="tag">#RK3576</span>
+            <span class="tag">#SBC</span>
+            <span class="tag">#OpenWrt</span>
+            <span class="tag">#FriendlyWrt</span>
+            <span class="tag">#Router</span>
+            <span class="tag">#Networking</span>
+            <span class="tag">#EdgeAI</span>
+            <span class="tag">#Homelab</span>
+        </div>
     </body>
 </html>
